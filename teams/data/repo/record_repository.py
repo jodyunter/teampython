@@ -1,5 +1,3 @@
-from sqlalchemy import select
-
 from teams.data.dto.dto_record import RecordDTO
 from teams.data.repo.base_repository import BaseRepository
 from teams.data.repo.team_repository import TeamRepository
