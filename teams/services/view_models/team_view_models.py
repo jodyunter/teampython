@@ -6,7 +6,7 @@ class TeamViewModel:
         self.oid = oid
 
 
-class RecordVsiewModel:
+class RecordViewModel:
 
     def __init__(self, oid, team_id, team_name, year, wins, loses, ties, goals_for, goals_against, points, games):
         self.oid = oid

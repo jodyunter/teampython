@@ -39,6 +39,10 @@ class RecordService(BaseService):
                      for r in self.repo.get_by_year(year, session)]
         return view_list
 
+    def get_by_team_and_year(self, team_id, year):
+        session = self.repo.get_session()
+        return self.repo.get_by_team_and_year(team_id, year, session)
+
     def get_by_year_range(self, first_year, last_year):
         raise NotImplementedError
 

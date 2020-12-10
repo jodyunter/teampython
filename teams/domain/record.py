@@ -20,3 +20,14 @@ class Record:
     @property
     def goal_difference(self):
         return self.goals_for - self.goals_against
+
+    def process_game(self, us, them):
+        if us == them:
+            self.ties += 1
+        elif us > them:
+            self.wins += 1
+        else:
+            self.loses += 1
+
+        self.goals_for += us
+        self.goals_against += them
