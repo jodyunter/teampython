@@ -1,6 +1,5 @@
 from teams.data.database import Creation, Database, ClearData
 
-from teams.data.dto.dto_team import TeamDTO
 from teams.services.record_service import RecordService
 from teams.services.team_service import TeamService
 

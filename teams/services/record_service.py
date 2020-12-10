@@ -2,7 +2,7 @@ from teams.data.dto.dto_record import RecordDTO
 from teams.data.repo.record_repository import RecordRepository
 from teams.data.repo.team_repository import TeamRepository
 from teams.services.base_service import BaseService
-from teams.services.view_models.team_views import RecordView
+from teams.services.view_models.team_view_models import RecordViewModel
 
 
 class RecordService(BaseService):
@@ -34,8 +34,8 @@ class RecordService(BaseService):
 
     def get_by_year(self, year):
         session = self.repo.get_session()
-        view_list = [RecordView(r.oid, r.team.oid, r.team.name, r.year, r.wins,
-                                r.loses, r.ties, r.goals_for, r.goals_against, r.points, r.games)
+        view_list = [RecordViewModel(r.oid, r.team.oid, r.team.name, r.year, r.wins,
+                                     r.loses, r.ties, r.goals_for, r.goals_against, r.points, r.games)
                      for r in self.repo.get_by_year(year, session)]
         return view_list
 
