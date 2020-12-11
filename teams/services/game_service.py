@@ -1,5 +1,6 @@
 from random import randint
 
+from teams.domain.game import Game
 from teams.services.record_service import RecordService
 from teams.services.team_service import TeamService
 from teams.services.view_models.game_view_models import GameViewModel
@@ -13,8 +14,7 @@ class GameService:
         home_team = self.team_service.get_by_id(home_team_id)
         away_team = self.team_service.get_by_id(away_team_id)
 
-        home_score = randint(0, 6)
-        away_score = randint(0, 6)
+        game = Game()
         return GameViewModel(year, day, home_team.name, home_team_id,
                              away_team.name, away_team_id,
                              home_score, away_score, "Complete")

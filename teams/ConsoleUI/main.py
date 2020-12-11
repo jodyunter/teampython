@@ -28,8 +28,13 @@ for a in range(len(team_list) - 1):
         game_service.process_game(year, gvm.home_id, gvm.home_score, gvm.away_id, gvm.away_score)
         print(GameView.get_basic_view(gvm))
 
+
+table = record_service.get_by_year(year)
+
+table.sort(key=lambda x: (-x.points, -x.wins, x.games, -x.goal_difference))
+
 print(RecordView.get_table_header())
-for r in record_service.get_by_year(year):
+for r in table:
     print(RecordView.get_table_row(r))
 
 

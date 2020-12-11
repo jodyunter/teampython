@@ -3,14 +3,15 @@ from unittest import TestCase
 
 from teams.data.dto.dto_team import TeamDTO
 from teams.data.repo.team_repository import TeamRepository
+from teams.domain.team import Team
 from tests.teams.repo.test_base_repository import TestBaseRepository
 
 
-class TestTeamBaseRepository(TestBaseRepository, TestCase):
+class TestTeamRepository(TestBaseRepository, TestCase):
     def test_get_by_name(self):
         name = "team 1 by name"
         session = self.setup_basic_test()
-        session.add(TeamDTO(name, 12))
+        session.add(TeamDTO(Team(name, 12, str(uuid.uuid4()))))
         session.commit()
 
         repo = TeamRepository()
@@ -25,7 +26,7 @@ class TestTeamBaseRepository(TestBaseRepository, TestCase):
 
         repo = TeamRepository()
         for i in range(5):
-            repo.add(TeamDTO("team " + str(i) + " add_all", i, str(uuid.uuid4())), session)
+            repo.add(TeamDTO(Team("team " + str(i) + " add_all", i, str(uuid.uuid4()))), session)
 
         session.commit()
 
@@ -40,7 +41,7 @@ class TestTeamBaseRepository(TestBaseRepository, TestCase):
 
         for i in range(5):
             oid = str(uuid.uuid4())
-            repo.add(TeamDTO("team " + str(i) + " add_all", i, oid), session)
+            repo.add(TeamDTO(Team("team " + str(i) + " add_all", i, oid)), session)
 
         session.commit()
 

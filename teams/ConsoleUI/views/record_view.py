@@ -1,11 +1,11 @@
 class RecordView:
     @staticmethod
     def format_string():
-        return "{0:<15} {1:3} {2:3} {3:3} {4:3} {5:4} {6:4} {7:4}"
+        return "{0:<15} {1:3} {2:3} {3:3} {4:3} {5:4} {6:4} {7:4} {8:4}"
 
     @staticmethod
     def get_table_header():
-        return str.format(RecordView.format_string(), "Name", "W", "L", "T", "Pts", "GP", "GF", "GA")
+        return str.format(RecordView.format_string(), "Name", "W", "L", "T", "Pts", "GP", "GF", "GA", "GD")
 
     @staticmethod
     def get_table_row(model):
@@ -17,5 +17,6 @@ class RecordView:
                           model.points,
                           model.games,
                           model.goals_for,
-                          model.goals_against)
+                          model.goals_against,
+                          model.goal_difference)
 

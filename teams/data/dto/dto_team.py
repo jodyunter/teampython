@@ -13,8 +13,20 @@ class TeamDTO(Base, Team):
     name = Column(String, unique=True)
     skill = Column(Integer, default=5)
 
-    def __init__(self, name, skill, oid=str(uuid.uuid4())):
+    def __init__(self, team):
+        Team.__init__(self, team.name, team.skill, team.oid)
+
+    def __init__local(self, name, skill, oid=str(uuid.uuid4())):
         self.oid = oid
         self.name = name
         self.skill = skill
+
+    @staticmethod
+    def get_dto(team):
+        if not team.__class__ == TeamDTO:
+            team_dto = TeamDTO(team)
+        else:
+            team_dto = team
+
+        return team_dto
 

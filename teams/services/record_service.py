@@ -35,7 +35,8 @@ class RecordService(BaseService):
     def get_by_year(self, year):
         session = self.repo.get_session()
         view_list = [RecordViewModel(r.oid, r.team.oid, r.team.name, r.year, r.wins,
-                                     r.loses, r.ties, r.goals_for, r.goals_against, r.points, r.games)
+                                     r.loses, r.ties, r.goals_for, r.goals_against, r.points, r.games,
+                                     r.goal_difference)
                      for r in self.repo.get_by_year(year, session)]
         return view_list
 

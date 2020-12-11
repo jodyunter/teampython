@@ -1,5 +1,6 @@
 from teams.data.dto.dto_team import TeamDTO
 from teams.data.repo.team_repository import TeamRepository
+from teams.domain.team import Team
 from teams.services.base_service import BaseService
 from teams.services.view_models.team_view_models import TeamViewModel
 
@@ -9,7 +10,7 @@ class TeamService(BaseService):
 
     def create(self, name, skill):
         session = self.repo.get_session()
-        dto = TeamDTO(name, skill, self.get_new_id())
+        dto = Team(name, skill, self.get_new_id())
         self.repo.add(dto, session)
         session.commit()
 

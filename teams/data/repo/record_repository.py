@@ -9,7 +9,8 @@ class RecordRepository(BaseRepository):
     def get_type(self):
         return RecordDTO
 
-    def add(self, record_dto, session):
+    def add(self, record, session):
+        record_dto = RecordDTO.get_dto(record)
         session.add(record_dto)
         session.commit()
 

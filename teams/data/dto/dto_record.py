@@ -2,6 +2,7 @@ from sqlalchemy import String, Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 
 from teams.data.dto.dto_base import Base
+from teams.data.dto.dto_team import TeamDTO
 from teams.domain.record import Record
 
 
@@ -18,7 +19,12 @@ class RecordDTO(Base, Record):
     team_id = Column(Integer, ForeignKey('teams.oid'))
     team = relationship("TeamDTO")
 
-    def __init__(self, team, year, wins, loses, ties, goals_for, goals_against, oid):
+    def __init__(self, record):
+        team_dto = TeamDTO.get_dto(record.team)
+        Record.__init__(self, team_dto, record.year, record.wins, record.loses, record.ties, record.goals_for,
+                        record.goals_against, record.oid)
+
+    def __init__local(self, team, year, wins, loses, ties, goals_for, goals_against, oid):
         self.oid = oid
         self.year = year
         self.team = team
@@ -27,3 +33,10 @@ class RecordDTO(Base, Record):
         self.ties = ties
         self.goals_for = goals_for
         self.goals_against = goals_against
+
+    @staticmethod
+    def get_dto(record):
+        if record.__class__ == RecordDTO:
+            return record
+        else:
+            return RecordDTO(record)
