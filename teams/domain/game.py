@@ -1,6 +1,3 @@
-from teams.domain.team import Team
-
-
 class GameRules:
     def __init__(self, name, can_tie):
         self.name = name
@@ -8,7 +5,7 @@ class GameRules:
 
 
 class Game:
-    def __init__(self, year, day, home_team, away_team, home_score, away_score, complete):
+    def __init__(self, year, day, home_team, away_team, home_score, away_score, complete, processed, rules, oid):
         self.year = year
         self.day = day
         self.home_team = home_team
@@ -16,12 +13,15 @@ class Game:
         self.home_score = home_score
         self.away_score = away_score
         self.complete = complete
+        self.oid = oid
+        self.rules = rules
+        self.processed = processed
 
     def play(self, random):
         if not self.complete:
             self.home_score = random.randint(0, 6)
             self.away_score = random.randint(0, 6)
-            while self.home_score == self.away_score and self.can_tie:
+            while self.home_score == self.away_score and self.rules.can_tie:
                 a = random.randint(-6, 6)
                 if a < 0:
                     self.away_score += 1

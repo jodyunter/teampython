@@ -1,29 +1,89 @@
-from random import randint
+from random import Random
 
-from teams.domain.game import Game
+from teams.data.repo.game_repository import GameRepository
+from teams.data.repo.record_repository import RecordRepository
+from teams.data.repo.team_repository import TeamRepository
+from teams.domain.game import Game, GameRules
+from teams.services.base_service import BaseService
 from teams.services.record_service import RecordService
 from teams.services.team_service import TeamService
 from teams.services.view_models.game_view_models import GameViewModel
 
 
-class GameService:
+class GameService(BaseService):
     team_service = TeamService()
     record_service = RecordService()
+    repo = GameRepository()
+    team_repo = TeamRepository()
+    record_repo = RecordRepository()
 
-    def play_game(self, home_team_id, away_team_id, year, day, rules):
-        home_team = self.team_service.get_by_id(home_team_id)
-        away_team = self.team_service.get_by_id(away_team_id)
+    def create_games(self, team_list, year, start_day, rules, home_and_away):
+        session = self.repo.get_session()
 
-        game = Game()
-        return GameViewModel(year, day, home_team.name, home_team_id,
-                             away_team.name, away_team_id,
-                             home_score, away_score, "Complete")
+        game_list = []
 
-    def process_game(self, year, home_team_id, home_score, away_team_id, away_score):
-        home_record = self.record_service.get_by_team_and_year(home_team_id, year)
-        away_record = self.record_service.get_by_team_and_year(away_team_id, year)
+        day = start_day
+        for a in range(len(team_list) - 1):
+            for b in range(len(team_list) - a - 1):
+                i = a + b + 1
+                team_a = self.team_repo.get_by_oid(team_list[a].oid, session)
+                team_b = self.team_repo.get_by_oid(team_list[i].oid, session)
+                if team_a is None:
+                    raise AttributeError("Team A cannot be none.")
+                if team_b is None:
+                    raise AttributeError("Team B cannot be none.")
 
-        home_record.process_game(home_score, away_score)
-        away_record.process_game(away_score, home_score)
+                game_list.append(Game(year, -1, team_a, team_b, 0, 0, False, False, rules, self.get_new_id()))
+                if home_and_away:
+                    game_list.append(Game(year, -1, team_b, team_a, 0, 0, False, False, rules, self.get_new_id()))
 
-        self.record_service.update_records([home_record, away_record])
+        # schedule the games
+        for g in game_list:
+            g.day = day
+            self.repo.add(g, session)
+
+        session.commit()
+
+        return [self.game_to_vm(g) for g in game_list]
+
+    @staticmethod
+    def game_to_vm(g):
+        return GameViewModel(g.oid, g.year, g.day, g.home_team.name, g.home_team.oid,
+                             g.away_team.name, g.away_team.oid, g.home_score,
+                             g.away_score, g.complete)
+
+    def get_all_games(self):
+        session = self.repo.get_session()
+        return [self.game_to_vm(g) for g in self.repo.get_all(session)]
+
+    def play_game(self, game_list, random):
+        session = self.repo.get_session()
+
+        for g in game_list:
+            game = self.repo.get_by_oid(g.oid, session)
+            #temporary!
+            game.rules = GameRules("Rules", False)
+            game.play(random)
+
+        session.commit()
+
+    def get_games_to_process(self, session=None):
+        if session is None:
+            session = self.repo.get_session()
+
+        return self.repo.get_by_unprocessed_and_complete(session)
+
+    def process_games(self):
+        session = self.repo.get_session()
+        game_list = list(self.get_games_to_process(session))
+
+        for g in game_list:
+            home_record = self.record_repo.get_by_team_and_year(g.home_team.oid, g.year, session)
+            away_record = self.record_repo.get_by_team_and_year(g.away_team.oid, g.year, session)
+
+            home_record.process_game(g.home_score, g.away_score)
+            away_record.process_game(g.away_score, g.home_score)
+
+            self.record_service.update_records([home_record, away_record])
+
+        session.commit()

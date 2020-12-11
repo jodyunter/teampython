@@ -1,12 +1,15 @@
+import random
+
 from teams.ConsoleUI import data_setup
 from teams.ConsoleUI.views.game_view import GameView
 from teams.ConsoleUI.views.record_view import RecordView
-from teams.data.database import Creation
+from teams.data.database import Database
+from teams.domain.game import GameRules
 from teams.services.game_service import GameService
 from teams.services.record_service import RecordService
 from teams.services.team_service import TeamService
 
-Creation.create_db("sqlite:///:memory:")
+Database.create_db("sqlite:///:memory:")
 data_setup.setup()
 
 team_service = TeamService()
@@ -17,17 +20,14 @@ team_list = team_service.get_all()
 year = 1
 
 record_service.add(team_list, year)
+r = random.SystemRandom()
 
-for a in range(len(team_list) - 1):
-    for b in range(len(team_list) - a - 1):
-        i = a + b + 1
-        gvm = game_service.play_game(team_list[a].oid, team_list[i].oid, year, 15, None)
-        game_service.process_game(year, gvm.home_id, gvm.home_score, gvm.away_id, gvm.away_score)
-        print(GameView.get_basic_view(gvm))
-        gvm = game_service.play_game(team_list[i].oid, team_list[a].oid, year, 15, None)
-        game_service.process_game(year, gvm.home_id, gvm.home_score, gvm.away_id, gvm.away_score)
-        print(GameView.get_basic_view(gvm))
+game_service.create_games(team_service.get_all(), 1, 10, GameRules("Rules", False), True)
+game_service.play_game(game_service.get_all_games(), r)
+game_service.process_games()
 
+for x in game_service.get_all_games():
+    print(GameView.get_basic_view(x))
 
 table = record_service.get_by_year(year)
 

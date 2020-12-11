@@ -31,7 +31,9 @@ class TeamService(BaseService):
         team = self.repo.get_by_name(name, session)
         return TeamViewModel(team.oid, team.name, team.skill)
 
-    def get_by_id(self, oid):
-        session = self.repo.get_session()
+    def get_by_id(self, oid, session=None):
+        if session is None:
+            session = self.repo.get_session()
+
         team = self.repo.get_by_oid(oid, session)
         return TeamViewModel(team.oid, team.name, team.skill)

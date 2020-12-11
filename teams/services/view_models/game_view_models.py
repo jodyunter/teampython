@@ -1,5 +1,6 @@
 class GameViewModel:
-    def __init__(self, year, day, home_name, home_id, away_name, away_id, home_score, away_score, status):
+    def __init__(self, oid, year, day, home_name, home_id, away_name, away_id, home_score, away_score, status):
+        self.oid = oid
         self.year = year
         self.day = day
         self.home_name = home_name

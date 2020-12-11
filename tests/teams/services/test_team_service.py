@@ -1,13 +1,13 @@
 from unittest import TestCase
 
-from teams.data.database import Creation
+from teams.data.database import Database
 from teams.services.team_service import TeamService
 
 
 class BaseTestService:
     @staticmethod
     def setup_test():
-        Creation.create_db("sqlite:///:memory:")
+        Database.create_db("sqlite:///:memory:")
 
 
 class TestTeamService(TestCase):
