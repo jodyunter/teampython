@@ -1,5 +1,6 @@
 class GameRules:
-    def __init__(self, name, can_tie):
+    def __init__(self, name, can_tie, oid):
+        self.oid = oid
         self.name = name
         self.can_tie = can_tie
 

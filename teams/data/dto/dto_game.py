@@ -2,6 +2,7 @@ from sqlalchemy import String, Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 
 from teams.data.dto.dto_base import Base
+from teams.data.dto.dto_game_rules import GameRulesDTO
 from teams.data.dto.dto_team import TeamDTO
 from teams.domain.game import Game, GameRules
 
@@ -24,8 +25,9 @@ class GameDTO(Base, Game):
     def __init__(self, game):
         home_team_dto = TeamDTO.get_dto(game.home_team)
         away_team_dto = TeamDTO.get_dto(game.away_team)
+        game_rules_dto = GameRulesDTO.get_dto(game.rules)
 
         Game.__init__(self, game.year, game.day, home_team_dto, away_team_dto,
                       game.home_score, game.away_score, game.complete, game.processed,
-                      GameRules("Rules", True), game.oid)
+                      game_rules_dto, game.oid)
 

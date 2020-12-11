@@ -23,7 +23,8 @@ class TestGameRepository(TestBaseRepository, TestCase):
         team_1 = team_repo.get_by_name(name_1, session)
         team_2 = team_repo.get_by_name(name_2, session)
 
-        self.repo.add(Game(1, 15, team_1, team_2, 5, 4, True, False, GameRules("Rules", True), self.get_id()), session)
+        self.repo.add(Game(1, 15, team_1, team_2, 5, 4, True, False, GameRules("Rules", True, self.get_id()),
+                           self.get_id()), session)
         session.commit()
 
         g_list = self.repo.get_all(session)
@@ -38,7 +39,8 @@ class TestGameRepository(TestBaseRepository, TestCase):
         team_1 = Team(name_1, 12, self.get_id())
         team_2 = Team(name_2, 12, self.get_id())
 
-        self.repo.add(Game(1, 15, team_1, team_2, 5, 4, True, False, GameRules("Rules", True), self.get_id()), session)
+        self.repo.add(Game(1, 15, team_1, team_2, 5, 4, True, False, GameRules("Rules", True, self.get_id()),
+                           self.get_id()), session)
         session.commit()
 
         g_list = self.repo.get_all(session)
@@ -57,7 +59,8 @@ class TestGameRepository(TestBaseRepository, TestCase):
         team_1 = team_repo.get_by_name(name_1, session)
         team_2 = Team(name_2, 12, self.get_id())
 
-        self.repo.add(Game(1, 15, team_1, team_2, 5, 4, True, False, GameRules("Rules", True), self.get_id()), session)
+        self.repo.add(Game(1, 15, team_1, team_2, 5, 4, True, False, GameRules("Rules", True, self.get_id()),
+                           self.get_id()), session)
         session.commit()
 
         g_list = self.repo.get_all(session)

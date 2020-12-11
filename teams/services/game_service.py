@@ -1,6 +1,7 @@
 from random import Random
 
 from teams.data.repo.game_repository import GameRepository
+from teams.data.repo.game_rules_repository import GameRulesRepository
 from teams.data.repo.record_repository import RecordRepository
 from teams.data.repo.team_repository import TeamRepository
 from teams.domain.game import Game, GameRules
@@ -8,6 +9,15 @@ from teams.services.base_service import BaseService
 from teams.services.record_service import RecordService
 from teams.services.team_service import TeamService
 from teams.services.view_models.game_view_models import GameViewModel
+
+
+class GameRulesService(BaseService):
+    repo = GameRulesRepository()
+
+    def create(self, name, can_tie):
+        session = self.repo.get_session()
+        self.repo.add(GameRules(name, can_tie, self.get_new_id()))
+        session.commit()
 
 
 class GameService(BaseService):
@@ -61,7 +71,7 @@ class GameService(BaseService):
 
         for g in game_list:
             game = self.repo.get_by_oid(g.oid, session)
-            #temporary!
+            # temporary!
             game.rules = GameRules("Rules", False)
             game.play(random)
 

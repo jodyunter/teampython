@@ -1,3 +1,10 @@
+class GameRulesViewModel:
+    def __init__(self, oid, name, can_tie):
+        self.oid = oid
+        self.name = name
+        self.can_tie = can_tie
+
+
 class GameViewModel:
     def __init__(self, oid, year, day, home_name, home_id, away_name, away_id, home_score, away_score, status):
         self.oid = oid
