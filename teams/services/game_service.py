@@ -8,16 +8,24 @@ from teams.domain.game import Game, GameRules
 from teams.services.base_service import BaseService
 from teams.services.record_service import RecordService
 from teams.services.team_service import TeamService
-from teams.services.view_models.game_view_models import GameViewModel
+from teams.services.view_models.game_view_models import GameViewModel, GameRulesViewModel
 
 
 class GameRulesService(BaseService):
     repo = GameRulesRepository()
 
-    def create(self, name, can_tie):
-        session = self.repo.get_session()
-        self.repo.add(GameRules(name, can_tie, self.get_new_id()))
+    def create(self, name, can_tie, session=None):
+        if session is None:
+            session = self.repo.get_session()
+        self.repo.add(GameRules(name, can_tie, self.get_new_id()), session)
         session.commit()
+
+    def get_by_name(self, name, session=None):
+        if session is None:
+            session = self.repo.get_session()
+
+        rules = self.repo.get_by_name(name, session)
+        return GameRulesViewModel(rules.oid, rules.name, rules.can_tie)
 
 
 class GameService(BaseService):
@@ -26,9 +34,26 @@ class GameService(BaseService):
     repo = GameRepository()
     team_repo = TeamRepository()
     record_repo = RecordRepository()
+    game_rules_repo = GameRulesRepository()
 
-    def create_games(self, team_list, year, start_day, rules, home_and_away):
-        session = self.repo.get_session()
+    def create_game_from_schedule_game(self, schedule_game, session=None):
+        if session is None:
+            session = self.repo.get_session()
+
+        team_a = self.team_repo.get_by_oid(schedule_game.home_id, session)
+        team_b = self.team_repo.get_by_oid(schedule_game.away_id, session)
+        rules = self.game_rules_repo.get_by_oid(schedule_game.rules_id, session)
+
+        if team_a is None:
+            raise AttributeError("Team A cannot be none.")
+        if team_b is None:
+            raise AttributeError("Team B cannot be none.")
+
+        return Game(schedule_game.year, schedule_game.day, team_a, team_b, 0, 0, False, False, rules, self.get_new_id())
+
+    def create_games(self, team_list, year, start_day, rules, home_and_away, session=None):
+        if session is None:
+            session = self.repo.get_session()
 
         game_list = []
 
@@ -38,6 +63,8 @@ class GameService(BaseService):
                 i = a + b + 1
                 team_a = self.team_repo.get_by_oid(team_list[a].oid, session)
                 team_b = self.team_repo.get_by_oid(team_list[i].oid, session)
+                rules = self.game_rules_repo.get_by_oid(rules.oid, session)
+
                 if team_a is None:
                     raise AttributeError("Team A cannot be none.")
                 if team_b is None:
@@ -71,8 +98,6 @@ class GameService(BaseService):
 
         for g in game_list:
             game = self.repo.get_by_oid(g.oid, session)
-            # temporary!
-            game.rules = GameRules("Rules", False)
             game.play(random)
 
         session.commit()

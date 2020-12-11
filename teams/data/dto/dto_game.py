@@ -21,6 +21,8 @@ class GameDTO(Base, Game):
     home_team = relationship("TeamDTO", foreign_keys=[home_team_id])
     away_team_id = Column(Integer, ForeignKey('teams.oid'))
     away_team = relationship("TeamDTO", foreign_keys=[away_team_id])
+    rules_id = Column(Integer, ForeignKey('gamerules.oid'))
+    rules = relationship("GameRulesDTO", foreign_keys=[rules_id])
 
     def __init__(self, game):
         home_team_dto = TeamDTO.get_dto(game.home_team)

@@ -22,7 +22,7 @@ class Game:
         if not self.complete:
             self.home_score = random.randint(0, 6)
             self.away_score = random.randint(0, 6)
-            while self.home_score == self.away_score and self.rules.can_tie:
+            while self.home_score == self.away_score and not self.rules.can_tie:
                 a = random.randint(-6, 6)
                 if a < 0:
                     self.away_score += 1

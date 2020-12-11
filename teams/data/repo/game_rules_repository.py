@@ -11,4 +11,7 @@ class GameRulesRepository(BaseRepository):
         session.add(dto);
         session.commit()
 
+    def get_by_name(self, name, session):
+        return session.query(self.get_type()).filter_by(name = name).first()
+
 

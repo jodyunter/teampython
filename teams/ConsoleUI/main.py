@@ -5,7 +5,7 @@ from teams.ConsoleUI.views.game_view import GameView
 from teams.ConsoleUI.views.record_view import RecordView
 from teams.data.database import Database
 from teams.domain.game import GameRules
-from teams.services.game_service import GameService
+from teams.services.game_service import GameService, GameRulesService
 from teams.services.record_service import RecordService
 from teams.services.team_service import TeamService
 
@@ -15,6 +15,8 @@ data_setup.setup()
 team_service = TeamService()
 game_service = GameService()
 record_service = RecordService()
+game_rules_service = GameRulesService()
+rules = game_rules_service.get_by_name("Season")
 
 team_list = team_service.get_all()
 year = 1
@@ -22,7 +24,7 @@ year = 1
 record_service.add(team_list, year)
 r = random.SystemRandom()
 
-game_service.create_games(team_service.get_all(), 1, 10, GameRules("Rules", False), True)
+game_service.create_games(team_service.get_all(), 1, 10, rules, True)
 game_service.play_game(game_service.get_all_games(), r)
 game_service.process_games()
 
