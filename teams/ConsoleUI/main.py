@@ -5,17 +5,21 @@ from teams.ConsoleUI.views.game_view import GameView
 from teams.ConsoleUI.views.record_view import RecordView
 from teams.data.database import Database
 from teams.domain.game import GameRules
+from teams.services.app_service import AppService
 from teams.services.game_service import GameService, GameRulesService
 from teams.services.record_service import RecordService
 from teams.services.team_service import TeamService
 
-Database.create_db("sqlite:///:memory:")
+# Database.create_db("sqlite:///:memory:")
+Database.create_db("sqlite:///D:\\Coding\\teampython\\mydb.db")
+Database.clean_up_database(Database.get_session())
 data_setup.setup()
 
 team_service = TeamService()
 game_service = GameService()
 record_service = RecordService()
 game_rules_service = GameRulesService()
+controller_service = AppService()
 rules = game_rules_service.get_by_name("Season")
 
 team_list = team_service.get_all()

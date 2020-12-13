@@ -20,7 +20,7 @@ class RecordService(BaseService):
     def update_records(self, updated_records, session=None):
         if session is None:
             session = self.repo.get_session()
-        [self.update_record(r.oid, r.team_id, r.wins, r.loses, r.ties, r.goals_for, r.goals_against)
+        [self.update_record(r.oid, r.team_id, r.wins, r.loses, r.ties, r.goals_for, r.goals_against, session)
          for r in updated_records]
 
         session.commit

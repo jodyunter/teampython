@@ -119,6 +119,6 @@ class GameService(BaseService):
             home_record.process_game(g.home_score, g.away_score)
             away_record.process_game(g.away_score, g.home_score)
 
-            self.record_service.update_records([home_record, away_record])
+            self.record_service.update_records([home_record, away_record], session)
 
         session.commit()
