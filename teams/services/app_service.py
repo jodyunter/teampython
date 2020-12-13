@@ -10,3 +10,9 @@ class AppService(BaseService):
         session = self.get_session()
         dto = self.repo.get_current_data(session)
         return ControllerViewModel(dto.current_year, dto.current_day)
+
+    def setup_data(self, year, day):
+        session = self.get_session()
+        dto = ControllerViewModel(year, day)
+        self.repo.add(dto, session)
+        return

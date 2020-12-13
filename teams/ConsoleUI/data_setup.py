@@ -1,4 +1,5 @@
 # create teams
+from teams.services.app_service import AppService
 from teams.services.game_service import GameRulesService
 from teams.services.team_service import TeamService
 
@@ -13,4 +14,5 @@ def setup():
     [team_service.create(n, 0) for n in team_name_list]
     game_rules_service = GameRulesService()
     game_rules_service.create("Season", True)
+    app_service = AppService()
 
