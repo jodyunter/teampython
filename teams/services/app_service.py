@@ -1,4 +1,4 @@
-from teams.data.repo.controller_repository import ControllerRepository
+from teams.data.repo.configuration_repository import ControllerRepository
 from teams.services.base_service import BaseService
 from teams.services.view_models.controller_view_models import ControllerViewModel
 
