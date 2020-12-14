@@ -14,5 +14,5 @@ def setup():
     game_rules_service = GameRulesService()
     game_rules_service.create("Season", True)
     app_service = AppService()
-    app_service.setup_data(1, 1)
+    app_service.setup_data(0, 0, True, True)
 

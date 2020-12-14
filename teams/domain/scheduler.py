@@ -61,8 +61,6 @@ class Scheduler:
 
             current_day += days_to_add
 
-        print(current_day)
-
         return result
 
     def populate_matrix(self):

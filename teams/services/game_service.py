@@ -63,8 +63,6 @@ class GameService(BaseService):
         if session is None:
             session = self.repo.get_session()
 
-        game_list = []
-
         scheduler = Scheduler()
         team_ids = [i.oid for i in team_list]
 
@@ -81,29 +79,68 @@ class GameService(BaseService):
                              g.away_score, g.complete)
 
     def get_all_games(self):
-        session = self.repo.get_session()
+        session = self.get_session()
         return [self.game_to_vm(g) for g in self.repo.get_all(session)]
 
-    def play_game(self, game_list, random):
-        session = self.repo.get_session()
+    def play_game(self, game_list, random, session=None):
+        commit = session is None
+        session = self.get_session(session)
 
         for g in game_list:
             game = self.repo.get_by_oid(g.oid, session)
             game.play(random)
 
-        session.commit()
+        self.commit(session, commit)
 
-    def get_games_for_days(self, year, first_day, last_day, session):
+    def get_games_for_days(self, year, first_day, last_day, session=None):
+        commit = session is None
+        session = self.get_session()
+
+        result = self.repo.get_games_by_day(year, first_day, last_day, session)
+
+        self.commit(session, commit)
+
+        return [self.game_to_vm(g) for g in result]
+
+    def play_games_for_days(self, year, first_day, last_day, random, session=None):
+        commit = session is None
+        session = self.get_session(session)
+
+        games = self.repo.get_games_by_day(year, first_day, last_day, session)
+
+        self.play_game(games, random, session)
+
+        self.commit(session, commit)
+
+        return [self.game_to_vm(g) for g in self.repo.get_games_by_day(year, first_day, last_day, session)]
+
+    def get_complete_and_unprocessed_games_for_days(self, year, first_day, last_day, session=None):
+        session = self.get_session(session)
+
+        return [self.game_to_vm(g)
+                for g in self.repo.get_by_unprocessed_and_complete(year, first_day, last_day, session)]
+
+    def process_games_for_days(self, year, first_day, last_day, session=None):
+        commit = session is None
+        session = self.get_session(session)
+
+        games_to_process = self.repo.get_by_unprocessed_and_complete(year, first_day, last_day, session)
+
+        for game in games_to_process:
+            home_record = self.record_repo.get_by_team_and_year(game.home_team.oid, year, session)
+            away_record = self.record_repo.get_by_team_and_year(game.away_team.oid, year, session)
+
+            home_record.process_game(game.home_score, game.away_score)
+            away_record.process_game(game.away_score, game.home_score)
+
+            game.processed = True
+
+        self.commit(session, commit)
+
+    def process_games_before(self, year, before_this_day, session=None):
         raise NotImplementedError
 
-    def play_games_for_days(self, year, first_day, last_day, session):
-        raise NotImplementedError
-
-    def get_complete_and_unprocessed_games_for_days(self, year, first_day, last_day, session):
-        raise NotImplementedError
-
-    def process_games_for_days(self, year, first_day, last_day, session):
-        raise NotImplementedError
-
-    def process_games_before(self, year, before_this_day, session):
-        raise NotImplementedError
+    def get_incomplete_games_by_year_count(self, year, session=None):
+        session = self.get_session(session)
+        repo = GameRepository()
+        return repo.get_incomplete_or_unprocessed_games_by_year_count(year, session)

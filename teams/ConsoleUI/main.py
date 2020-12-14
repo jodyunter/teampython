@@ -20,26 +20,42 @@ team_service = TeamService()
 game_service = GameService()
 record_service = RecordService()
 game_rules_service = GameRulesService()
-controller_service = AppService()
+app_service = AppService()
 rules = game_rules_service.get_by_name("Season")
 
-team_list = team_service.get_all()
-year = 1
+print("Is Year complete? " + str(app_service.is_year_complete()))
 
-record_service.add(team_list, year)
+if app_service.is_year_complete():
+    app_service.go_to_next_year()
+    game_data = app_service.get_current_data()
+
+    if not game_data.is_year_setup:
+        app_service.setup_year(rules)
+
 r = random.SystemRandom()
 
-game_service.create_games(team_service.get_all(), 1, 1, rules, True)
-game_service.play_game(game_service.get_all_games(), r)
-game_service.process_games()
+game_data = app_service.get_current_data()
+current_year = game_data.current_year
+current_day = game_data.current_day
 
-for x in game_service.get_all_games():
-    print(GameView.get_view_with_day(x))
+while not app_service.is_year_complete():
+    print("Playing games on day " + str(current_day))
 
-table = record_service.get_by_year(year)
+    app_service.play_and_process_games_for_current_day(r)
+
+    for x in game_service.get_games_for_days(current_year, current_day, current_day):
+        print(GameView.get_view_with_day(x))
+
+    game_data = app_service.get_current_data()
+    current_year = game_data.current_year
+    current_day = game_data.current_day
+
+game_data = app_service.get_current_data()
+table = record_service.get_by_year(game_data.current_year)
 
 table.sort(key=lambda x: (-x.points, -x.wins, x.games, -x.goal_difference))
 
+print("Year: " + str(game_data.current_year))
 print(RecordView.get_table_header())
 for r in table:
     print(RecordView.get_table_row(r))

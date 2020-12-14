@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from teams.data.dto.dto_base import Base
+from teams.data.dto.dto_configuration import ConfigurationItemDTO
 from teams.data.dto.dto_game import GameDTO
 from teams.data.dto.dto_game_rules import GameRulesDTO
 from teams.data.dto.dto_record import RecordDTO
@@ -25,6 +26,7 @@ class Database:
         session.query(RecordDTO).delete()
         session.query(TeamDTO).delete()
         session.query(GameRulesDTO).delete()
+        session.query(ConfigurationItemDTO).delete()
         session.commit()
         session.flush()
 

@@ -10,20 +10,20 @@ class TestConfigurationRepository(TestBaseRepository, TestCase):
 
     def test_add(self):
         session = self.setup_basic_test()
-        game_data = GameData(5, 225)
+        game_data = GameData(5, 225, True, False)
         self.repo.add(game_data, session)
         session.commit()
 
         data = self.repo.get_all(session)
-        self.assertEqual(2, len(data))
+        self.assertEqual(4, len(data))
 
     def test_update(self):
         session = self.setup_basic_test()
-        game_data = GameData(5, 225)
+        game_data = GameData(5, 225, True, False)
         self.repo.add(game_data, session)
         session.commit()
 
-        game_data_u = GameData(66, 3465)
+        game_data_u = GameData(66, 3465, False, True)
         self.repo.update(game_data_u, session)
         session.commit()
 
@@ -31,10 +31,12 @@ class TestConfigurationRepository(TestBaseRepository, TestCase):
 
         self.assertEqual(game_data_r.current_year, 66)
         self.assertEqual(game_data_r.current_day, 3465)
+        self.assertFalse(game_data_r.is_year_setup)
+        self.assertTrue(game_data_r.is_year_finished)
 
     def test_get(self):
         session = self.setup_basic_test()
-        game_data = GameData(35, 1234)
+        game_data = GameData(35, 1234, True, False)
         self.repo.add(game_data, session)
         session.commit()
 
@@ -42,5 +44,7 @@ class TestConfigurationRepository(TestBaseRepository, TestCase):
 
         self.assertEqual(game_data.current_year, new_gd.current_year, "check year")
         self.assertEqual(game_data.current_day, new_gd.current_day, "check day")
+        self.assertEqual(game_data.is_year_setup, new_gd.is_year_setup, "check year setup")
+        self.assertEqual(game_data.is_year_finished, new_gd.is_year_finished, "check year finished")
 
 
