@@ -28,7 +28,10 @@ class Scheduler:
         result = []
         self.setup()
         current_day = starting_day
-        iterations = self.total_teams
+        if self.total_teams % 2 == 0:
+            iterations = self.total_teams - 1
+        else:
+            iterations = self.total_teams
 
         for x in range(iterations):
             self.populate_matrix()
@@ -45,6 +48,20 @@ class Scheduler:
 
             # increment day
             current_day += 1
+
+        if home_and_away:
+            days_to_add = current_day - starting_day
+            new_games = []
+
+            for game in result:
+                new_games.append(ScheduledGame(game.away_id, game.home_id, game.rules_id,
+                                               game.year, game.day + days_to_add))
+
+            result.extend(new_games)
+
+            current_day += days_to_add
+
+        print(current_day)
 
         return result
 
