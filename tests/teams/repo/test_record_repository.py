@@ -1,6 +1,7 @@
 import uuid
 from unittest import TestCase
 
+from teams.data.database import Database
 from teams.data.dto.dto_record import RecordDTO
 from teams.data.dto.dto_team import TeamDTO
 from teams.data.repo.record_repository import RecordRepository
@@ -70,6 +71,15 @@ class TestRecordRepository(TestBaseRepository, TestCase):
         session = self.setup_basic_test()
         repo = RecordRepository()
         team_repo = TeamRepository()
+        self.setup_record_query_data(session, repo, team_repo)
+
+        self.assertEqual(0, len(list(self.repo.get_by_year(325, session))))
+        self.assertEqual(3, len(list(self.repo.get_by_year(30, session))))
+        self.assertEqual(5, len(list(self.repo.get_by_year(31, session))))
+        self.assertEqual(2, len(list(self.repo.get_by_year(32, session))))
+        self.assertEqual(1, len(list(self.repo.get_by_year(33, session))))
+
+    def setup_record_query_data(self, session, repo, team_repo):
         team_list = []
         for i in range(10):
             new_id = str(uuid.uuid4())
@@ -104,8 +114,20 @@ class TestRecordRepository(TestBaseRepository, TestCase):
 
         session.commit()
 
-        self.assertEqual(0, len(list(self.repo.get_by_year(325, session))))
-        self.assertEqual(3, len(list(self.repo.get_by_year(30, session))))
-        self.assertEqual(5, len(list(self.repo.get_by_year(31, session))))
-        self.assertEqual(2, len(list(self.repo.get_by_year(32, session))))
-        self.assertEqual(1, len(list(self.repo.get_by_year(33, session))))
+    def test_get_by_team_and_year(self):
+        session = self.setup_basic_test()
+        Database.clean_up_database(session)
+
+        repo = RecordRepository()
+        team_repo = TeamRepository()
+        self.setup_record_query_data(session, repo, team_repo)
+
+        team = team_repo.get_by_name("GBYN 1", session)
+
+        result = repo.get_by_team_and_year(team.oid, 30, session)
+        self.assertEqual(result.team.oid, team.oid)
+        self.assertEqual(result.year, 30)
+
+        result = repo.get_by_team_and_year(team.oid, 33, session)
+        self.assertEqual(result.team.oid, team.oid)
+        self.assertEqual(result.year, 33)

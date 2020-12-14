@@ -24,16 +24,6 @@ class RecordDTO(Base, Record):
         Record.__init__(self, team_dto, record.year, record.wins, record.loses, record.ties, record.goals_for,
                         record.goals_against, record.oid)
 
-    def __init__local(self, team, year, wins, loses, ties, goals_for, goals_against, oid):
-        self.oid = oid
-        self.year = year
-        self.team = team
-        self.wins = wins
-        self.loses = loses
-        self.ties = ties
-        self.goals_for = goals_for
-        self.goals_against = goals_against
-
     @staticmethod
     def get_dto(record):
         if record.__class__ == RecordDTO:
