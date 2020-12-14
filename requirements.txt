@@ -1,0 +1,3 @@
+coverage==5.3
+greenlet==1.0a1
+SQLAlchemy==1.4.0b1
