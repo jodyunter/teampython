@@ -28,3 +28,24 @@ class AppService(BaseService):
         dto = self.repo.get_current_data(session)
         dto.current_year = new_year
         session.commit()
+
+    def get_games_for_day(self, day, session):
+        raise NotImplementedError
+
+    def get_games_for_days(self, first_day, last_day, session):
+        raise NotImplementedError
+
+    def play_games_for_day(self, day, session):
+        raise NotImplementedError
+
+    def play_games_for_days(self, first_day, last_day, session):
+        raise NotImplementedError
+
+    def process_games_for_day(self, day, session):
+        raise NotImplementedError
+
+    def process_games_for_days(self, first_day, last_day, session):
+        raise NotImplementedError
+
+    def play_and_process_games_for_current_day(self):
+        raise NotImplementedError
