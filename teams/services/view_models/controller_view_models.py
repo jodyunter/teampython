@@ -1,4 +1,4 @@
-class ControllerViewModel:
+class GameDataViewModel:
 
     def __init__(self, current_year, current_day):
         self.current_day = current_day

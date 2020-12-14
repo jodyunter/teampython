@@ -1,1 +1,1 @@
-coverage run --sourcoverage run --source="." -m unittest discover ./ && coverage htmlce="." -m unittest discover ./ && coverage html
+coverage run --source="." -m unittest discover ./ && coverage html

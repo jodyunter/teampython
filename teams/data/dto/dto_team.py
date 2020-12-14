@@ -16,11 +16,6 @@ class TeamDTO(Base, Team):
     def __init__(self, team):
         Team.__init__(self, team.name, team.skill, team.oid)
 
-    def __init__local(self, name, skill, oid=str(uuid.uuid4())):
-        self.oid = oid
-        self.name = name
-        self.skill = skill
-
     @staticmethod
     def get_dto(team):
         if not team.__class__ == TeamDTO:

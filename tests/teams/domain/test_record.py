@@ -29,3 +29,36 @@ class TestRecord(TestCase):
         record = Record(None, -1, 1, 2, 3, 4, 10, "")
 
         self.assertEqual(-6, record.goal_difference)
+
+    def test_process_game_win(self):
+        record = Record("Me", -1, 0, 0, 0, 0, 0, "")
+
+        record.process_game(5, 2)
+
+        self.assertEqual(1, record.wins)
+        self.assertEqual(0, record.loses)
+        self.assertEqual(0, record.ties)
+        self.assertEqual(5, record.goals_for)
+        self.assertEqual(2, record.goals_against)
+
+    def test_process_game_lose(self):
+        record = Record("Me", -1, 0, 0, 0, 0, 0, "")
+
+        record.process_game(5, 12)
+
+        self.assertEqual(0, record.wins)
+        self.assertEqual(1, record.loses)
+        self.assertEqual(0, record.ties)
+        self.assertEqual(5, record.goals_for)
+        self.assertEqual(12, record.goals_against)
+
+    def test_process_game_tie(self):
+        record = Record("Me", -1, 0, 0, 0, 0, 0, "")
+
+        record.process_game(2, 2)
+
+        self.assertEqual(0, record.wins)
+        self.assertEqual(0, record.loses)
+        self.assertEqual(1, record.ties)
+        self.assertEqual(2, record.goals_for)
+        self.assertEqual(2, record.goals_against)
