@@ -43,3 +43,4 @@ class TestConfigurationRepository(TestBaseRepository, TestCase):
         self.assertEqual(game_data.current_year, new_gd.current_year, "check year")
         self.assertEqual(game_data.current_day, new_gd.current_day, "check day")
 
+

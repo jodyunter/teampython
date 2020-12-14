@@ -93,23 +93,17 @@ class GameService(BaseService):
 
         session.commit()
 
-    def get_games_to_process(self, session=None):
-        if session is None:
-            session = self.repo.get_session()
+    def get_games_for_days(self, year, first_day, last_day, session):
+        raise NotImplementedError
 
-        return self.repo.get_by_unprocessed_and_complete(session)
+    def play_games_for_days(self, year, first_day, last_day, session):
+        raise NotImplementedError
 
-    def process_games(self):
-        session = self.repo.get_session()
-        game_list = list(self.get_games_to_process(session))
+    def get_complete_and_unprocessed_games_for_days(self, year, first_day, last_day, session):
+        raise NotImplementedError
 
-        for g in game_list:
-            home_record = self.record_repo.get_by_team_and_year(g.home_team.oid, g.year, session)
-            away_record = self.record_repo.get_by_team_and_year(g.away_team.oid, g.year, session)
+    def process_games_for_days(self, year, first_day, last_day, session):
+        raise NotImplementedError
 
-            home_record.process_game(g.home_score, g.away_score)
-            away_record.process_game(g.away_score, g.home_score)
-
-            self.record_service.update_records([home_record, away_record], session)
-
-        session.commit()
+    def process_games_before(self, year, before_this_day, session):
+        raise NotImplementedError
