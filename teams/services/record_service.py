@@ -13,7 +13,7 @@ class RecordService(BaseService):
         repo = RecordRepository()
         team_repo = TeamRepository()
         team_list = [team_repo.get_by_oid(t.oid, session) for t in team_view_list]
-        record_list = [Record(-1, t, year, 0, 0, 0, 0, 0, self.get_new_id()) for t in team_list]
+        record_list = [Record(-1, t, year, 0, 0, 0, 0, 0, t.skill, self.get_new_id()) for t in team_list]
         [repo.add(r, session) for r in record_list]
         self.commit(session, commit)
 
@@ -69,7 +69,7 @@ class RecordService(BaseService):
     def get_view_from_model(r):
         return RecordViewModel(r.oid, r.rank, r.team.oid, r.team.name, r.year, r.wins,
                                r.loses, r.ties, r.goals_for, r.goals_against, r.points, r.games,
-                               r.goal_difference, r.team.skill)
+                               r.goal_difference, r.skill)
 
     def get_by_team_and_year(self, team_id, year, session=None):
         session = self.get_session(session)

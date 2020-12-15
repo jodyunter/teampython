@@ -1,6 +1,6 @@
 class Record:
 
-    def __init__(self, rank, team, year, wins, loses, ties, goals_for, goals_against, oid):
+    def __init__(self, rank, team, year, wins, loses, ties, goals_for, goals_against, skill, oid):
         self.oid = oid
         self.rank = rank
         self.team = team
@@ -10,6 +10,7 @@ class Record:
         self.ties = ties
         self.goals_for = goals_for
         self.goals_against = goals_against
+        self.skill = skill
 
     @property
     def points(self):

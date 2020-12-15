@@ -19,7 +19,7 @@ class TestRecordRepository(TestBaseRepository, TestCase):
         team_id = str(uuid.uuid4())
         team = Team("Record Add For New Team", 5, team_id)
 
-        record = Record(1, team, 1, 2, 3, 4, 5, 6, str(uuid.uuid4()))
+        record = Record(1, team, 1, 2, 3, 4, 5, 6, 7, str(uuid.uuid4()))
 
         self.repo.add(record, session)
 
@@ -38,7 +38,7 @@ class TestRecordRepository(TestBaseRepository, TestCase):
         session.commit()
 
         team = team_repo.get_by_oid(team.oid, session)
-        record = Record(1, team, 1, 2, 3, 4, 5, 6, str(uuid.uuid4()))
+        record = Record(1, team, 1, 2, 3, 4, 5, 6, 7, str(uuid.uuid4()))
 
         self.repo.add(record, session)
 
@@ -55,7 +55,7 @@ class TestRecordRepository(TestBaseRepository, TestCase):
         [team_repo.add(Team(t, 0, str(uuid.uuid4())), session) for t in team_names]
         session.commit()
 
-        [self.repo.add(Record(1, team, 1, 2, 3, 4, 5, 6, str(uuid.uuid4())), session)
+        [self.repo.add(Record(1, team, 1, 2, 3, 4, 5, 6, 7, str(uuid.uuid4())), session)
          for team in team_repo.get_all(session)]
         session.commit()
 
@@ -90,26 +90,26 @@ class TestRecordRepository(TestBaseRepository, TestCase):
         team_list = team_repo.get_all(session)
 
         record_year_30 = [
-            repo.add(Record(1, team_list[0], 30, 0, 0, 0, 0, 0, self.create_id()), session),
-            repo.add(Record(2, team_list[1], 30, 0, 0, 0, 0, 0, self.create_id()), session),
-            repo.add(Record(3, team_list[2], 30, 0, 0, 0, 0, 0, self.create_id()), session),
+            repo.add(Record(1, team_list[0], 30, 0, 0, 0, 0, 0, 0, self.create_id()), session),
+            repo.add(Record(2, team_list[1], 30, 0, 0, 0, 0, 0, 0, self.create_id()), session),
+            repo.add(Record(3, team_list[2], 30, 0, 0, 0, 0, 0, 0, self.create_id()), session),
         ]
 
         record_year_31 = [
-            repo.add(Record(1, team_list[2], 31, 0, 0, 0, 0, 0, self.create_id()), session),
-            repo.add(Record(1, team_list[4], 31, 0, 0, 0, 0, 0, self.create_id()), session),
-            repo.add(Record(1, team_list[6], 31, 0, 0, 0, 0, 0, self.create_id()), session),
-            repo.add(Record(1, team_list[8], 31, 0, 0, 0, 0, 0, self.create_id()), session),
-            repo.add(Record(1, team_list[9], 31, 0, 0, 0, 0, 0, self.create_id()), session),
+            repo.add(Record(1, team_list[2], 31, 0, 0, 0, 0, 0, 0, self.create_id()), session),
+            repo.add(Record(1, team_list[4], 31, 0, 0, 0, 0, 0, 0, self.create_id()), session),
+            repo.add(Record(1, team_list[6], 31, 0, 0, 0, 0, 0, 0, self.create_id()), session),
+            repo.add(Record(1, team_list[8], 31, 0, 0, 0, 0, 0, 0, self.create_id()), session),
+            repo.add(Record(1, team_list[9], 31, 0, 0, 0, 0, 0, 0, self.create_id()), session),
         ]
 
         record_year_32 = [
-            repo.add(Record(1, team_list[5], 32, 0, 0, 0, 0, 0, self.create_id()), session),
-            repo.add(Record(1, team_list[3], 32, 0, 0, 0, 0, 0, self.create_id()), session),
+            repo.add(Record(1, team_list[5], 32, 0, 0, 0, 0, 0, 0, self.create_id()), session),
+            repo.add(Record(1, team_list[3], 32, 0, 0, 0, 0, 0, 0, self.create_id()), session),
         ]
 
         record_year_33 = [
-            repo.add(Record(1, team_list[1], 33, 0, 0, 0, 0, 0, self.create_id()), session),
+            repo.add(Record(1, team_list[1], 33, 0, 0, 0, 0, 0, 0, self.create_id()), session),
         ]
 
         session.commit()
