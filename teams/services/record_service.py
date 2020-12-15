@@ -1,4 +1,3 @@
-from teams.data.dto.dto_record import RecordDTO
 from teams.data.repo.record_repository import RecordRepository
 from teams.data.repo.team_repository import TeamRepository
 from teams.domain.record import Record
@@ -69,9 +68,3 @@ class RecordService(BaseService):
     def get_by_team_and_year(self, team_id, year, session=None):
         session = self.get_session(session)
         return self.repo.get_by_team_and_year(team_id, year, session)
-
-    def get_by_year_range(self, first_year, last_year):
-        raise NotImplementedError
-
-    def get_by_team(self, team_id):
-        raise NotImplementedError
