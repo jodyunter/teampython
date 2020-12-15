@@ -8,8 +8,10 @@ class TeamViewModel:
 
 class RecordViewModel:
 
-    def __init__(self, oid, team_id, team_name, year, wins, loses, ties, goals_for, goals_against, points, games, goal_difference):
+    def __init__(self, oid, rank, team_id, team_name, year, wins, loses, ties, goals_for, goals_against, points, games,
+                 goal_difference, skill):
         self.oid = oid
+        self.rank = rank
         self.team_id = team_id
         self.team_name = team_name
         self.year = year
@@ -21,3 +23,4 @@ class RecordViewModel:
         self.points = points
         self.games = games
         self.goal_difference = goal_difference
+        self.skill = skill

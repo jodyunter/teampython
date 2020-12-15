@@ -20,8 +20,17 @@ class Game:
 
     def play(self, random):
         if not self.complete:
-            self.home_score = random.randint(0, 6)
-            self.away_score = random.randint(0, 6)
+            diff = self.home_team.skill - self.away_team.skill
+            diff = int(diff)
+
+            if diff > 6:
+                diff = 6
+
+            if diff < -6:
+                diff = -6
+
+            self.home_score = random.randint(0, 6 + diff)
+            self.away_score = random.randint(0, 6 - diff)
             while self.home_score == self.away_score and not self.rules.can_tie:
                 a = random.randint(-6, 6)
                 if a < 0:

@@ -10,6 +10,7 @@ class RecordDTO(Base, Record):
     __tablename__ = "records"
 
     oid = Column(String, primary_key=True)
+    rank = Column(Integer)
     year = Column(Integer)
     wins = Column(Integer, default=0)
     loses = Column(Integer, default=0)
@@ -21,7 +22,7 @@ class RecordDTO(Base, Record):
 
     def __init__(self, record):
         team_dto = TeamDTO.get_dto(record.team)
-        Record.__init__(self, team_dto, record.year, record.wins, record.loses, record.ties, record.goals_for,
+        Record.__init__(self, record.rank, team_dto, record.year, record.wins, record.loses, record.ties, record.goals_for,
                         record.goals_against, record.oid)
 
     @staticmethod

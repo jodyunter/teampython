@@ -14,7 +14,7 @@ class RecordService(BaseService):
         commit = session is None
         session = self.get_session(session)
         team_list = [self.team_repo.get_by_oid(t.oid, session) for t in team_view_list]
-        record_list = [Record(t, year, 0, 0, 0, 0, 0, self.get_new_id()) for t in team_list]
+        record_list = [Record(-1, t, year, 0, 0, 0, 0, 0, self.get_new_id()) for t in team_list]
         [self.repo.add(r, session) for r in record_list]
         self.commit(session, commit)
 
@@ -41,12 +41,29 @@ class RecordService(BaseService):
         record.goals_against = goals_against
         self.commit(session, commit)
 
+    def update_rank(self, year, session=None):
+        commit = session is None
+        session = self.get_session(session)
+
+        result = list(self.repo.get_by_year(year, session))
+        result.sort(key=lambda rec: (-rec.points, -rec.wins, rec.games, -rec.goal_difference))
+
+        rank = 1
+        for r in result:
+            r.rank = rank
+            rank += 1
+
+        self.update_records(result)
+
+        self.commit(session, commit)
+
     def get_by_year(self, year):
         session = self.get_session()
-        view_list = [RecordViewModel(r.oid, r.team.oid, r.team.name, r.year, r.wins,
+        view_list = [RecordViewModel(r.oid, r.rank, r.team.oid, r.team.name, r.year, r.wins,
                                      r.loses, r.ties, r.goals_for, r.goals_against, r.points, r.games,
-                                     r.goal_difference)
+                                     r.goal_difference, r.team.skill)
                      for r in self.repo.get_by_year(year, session)]
+
         return view_list
 
     def get_by_team_and_year(self, team_id, year, session=None):

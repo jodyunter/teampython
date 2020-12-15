@@ -19,3 +19,4 @@ class RecordRepository(BaseRepository):
 
     def get_by_team_and_year(self, team_id, year, session):
         return session.query(self.get_type()).filter_by(year=year, team_id=team_id).first()
+
