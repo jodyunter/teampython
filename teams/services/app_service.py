@@ -9,6 +9,9 @@ from teams.services.view_models.controller_view_models import GameDataViewModel
 
 class AppService(BaseService):
 
+    def __init__(self):
+        pass
+
     def get_current_data(self, session=None):
         session = self.get_session(session)
         repo = ConfigurationRepository()
@@ -77,9 +80,9 @@ class AppService(BaseService):
         repo = ConfigurationRepository()
         game_data = repo.get_current_data(session)
         game_service = GameService()
-        games_unprocessed = game_service.get_complete_and_unprocessed_games_for_days(game_data.current_year,
-                                                                                     game_data.current_day,
-                                                                                     game_data.current_day, session)
+        games_unprocessed = game_service.get_incomplete_games_for_days(game_data.current_year,
+                                                                       game_data.current_day,
+                                                                       game_data.current_day, session)
 
         if len(games_unprocessed) == 0:
             day_is_complete = True

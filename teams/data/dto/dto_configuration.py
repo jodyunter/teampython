@@ -5,7 +5,7 @@ from teams.domain.gamedata import ConfigurationItem
 
 
 class ConfigurationItemDTO(Base, ConfigurationItem):
-    __tablename__ = "controller"
+    __tablename__ = "configuration"
 
     name = Column(String, primary_key=True)
     data = Column(Integer)

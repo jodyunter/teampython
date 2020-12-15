@@ -114,6 +114,11 @@ class GameService(BaseService):
 
         return [self.game_to_vm(g) for g in self.repo.get_games_by_day(year, first_day, last_day, session)]
 
+    def get_incomplete_games_for_days(self, year, first_day, last_day, session=None):
+        session = self.get_session(session)
+        return [self.game_to_vm(g)
+                for g in self.repo.get_incomplete_or_unprocessed_games_by_day(year, first_day, last_day, session)]
+
     def get_complete_and_unprocessed_games_for_days(self, year, first_day, last_day, session=None):
         session = self.get_session(session)
 

@@ -33,6 +33,13 @@ class GameRepository(BaseRepository):
                                              my_type.day <= last_day,
                                              my_type.year == year)
 
+    def get_incomplete_or_unprocessed_games_by_day(self, year, first_day, last_day, session):
+        my_type = self.get_type()
+        return session.query(my_type).filter(my_type.complete == False or my_type.processed == False,
+                                             my_type.day >= first_day,
+                                             my_type.day <= last_day,
+                                             my_type.year == year)
+
     def get_incomplete_or_unprocessed_games_by_year_count(self, year, session):
         my_type = self.get_type()
         return session.query(my_type).filter(my_type.complete == False or my_type.processed == False,

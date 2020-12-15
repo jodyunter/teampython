@@ -23,7 +23,6 @@ class ConfigurationRepository(BaseRepository):
             ConfigurationItemDTO(ConfigurationItem(GameData.current_day_string, configuration.current_day)))
         session.add(
             ConfigurationItemDTO(ConfigurationItem(GameData.is_year_setup_string, configuration.is_year_setup)))
-
         session.add(
             ConfigurationItemDTO(ConfigurationItem(GameData.is_year_finished_string, configuration.is_year_finished)))
 
