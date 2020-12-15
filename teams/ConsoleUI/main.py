@@ -13,8 +13,8 @@ setup = False
 add_teams = True
 
 # Database.create_db("sqlite:///:memory:")
-Database.create_db("sqlite:///D:\\Coding\\teampython\\mydb.db")
-# Database.create_db("sqlite:///C:\\dev\\python_learning\\team_project\\mydb.db")
+# Database.create_db("sqlite:///D:\\Coding\\teampython\\mydb.db")
+Database.create_db("sqlite:///C:\\dev\\python_learning\\team_project\\mydb.db")
 if setup:
     Database.clean_up_database(Database.get_session())
     data_setup.setup()
@@ -37,7 +37,7 @@ if game_data.is_year_finished:
 
 while not app_service.is_year_complete():
     game_data = app_service.get_current_data()
-    print("Playing games on day " + str(game_data.current_day))
+    # print("Playing games on day " + str(game_data.current_day))
     r = random
     app_service.play_and_process_games_for_current_day(r)
 
@@ -46,13 +46,28 @@ while not app_service.is_year_complete():
 
 game_data = app_service.get_current_data()
 record_service.update_rank(game_data.current_year)
+
+table = record_service.get_all_by_rank(1)
+reverse = False
+table.sort(key=lambda rec: rec.year, reverse=reverse)
+print()
+print("Champions")
+t = 1
+# t = game_data.current_year
+print(RecordView.get_table_header())
+for r in table:
+    r.rank = t
+    print(RecordView.get_table_row(r))
+    t += 1
+
+team_service.update_skills(random)
+
 table = record_service.get_by_year(game_data.current_year)
-
 table.sort(key=lambda rec: rec.rank)
-
 print("Year: " + str(game_data.current_year))
 print(RecordView.get_table_header())
 for r in table:
     print(RecordView.get_table_row(r))
 
-team_service.update_skills(random)
+# for i in range(66):
+#     record_service.update_rank(i)

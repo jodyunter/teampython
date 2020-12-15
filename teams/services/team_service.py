@@ -39,11 +39,13 @@ class TeamService(BaseService):
 
             up_score = random.randint(0, 100)
             down_score = random.randint(0, 100)
+            go_down = True
 
             if up_score > to_go_up:
                 t.skill += 1
+                go_down = False
 
-            if down_score > to_go_down:
+            if down_score > to_go_down and go_down:
                 t.skill -= 1
 
             if t.skill > 20:

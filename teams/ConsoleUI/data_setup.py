@@ -45,5 +45,18 @@ def get_next_teams(year_string):
         "65": ["Winnipeg"],
         "70": ["New Jersey"],
         "75": ["Los Angelas"],
-        "80": ["Quebec City"]
+        "80": ["Quebec City"],
+        "85": ["Nashville"],
+        "90": ["Columbus"],
+        "95": ["Washington"],
+        "100": ["Las Vegas"],
+        "105": ["San Jose"],
+        "110": ["Buffalo"],
+        "115": ["Atlanta"],
+        "120": ["Tampa Bay"],
+        "125": ["Florida"],
+        "130": ["Hamilton"],
+        "135": ["London"],
+        "140": ["Anaheim"],
+        "145": ["Dallas"]
     }.get(year_string, [])

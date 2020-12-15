@@ -6,15 +6,15 @@ from teams.services.view_models.team_view_models import RecordViewModel
 
 
 class RecordService(BaseService):
-    repo = RecordRepository()
-    team_repo = TeamRepository()
 
     def add(self, team_view_list, year, session=None):
         commit = session is None
         session = self.get_session(session)
-        team_list = [self.team_repo.get_by_oid(t.oid, session) for t in team_view_list]
+        repo = RecordRepository()
+        team_repo = TeamRepository()
+        team_list = [team_repo.get_by_oid(t.oid, session) for t in team_view_list]
         record_list = [Record(-1, t, year, 0, 0, 0, 0, 0, self.get_new_id()) for t in team_list]
-        [self.repo.add(r, session) for r in record_list]
+        [repo.add(r, session) for r in record_list]
         self.commit(session, commit)
 
     def update_records(self, updated_records, session=None):
@@ -29,9 +29,10 @@ class RecordService(BaseService):
     def update_record(self, oid, team_id, wins, loses, ties, goals_for, goals_against, session=None):
         commit = session is None
         session = self.get_session(session)
-
-        team = self.team_repo.get_by_oid(team_id, session)
-        record = self.repo.get_by_oid(oid, session)
+        repo = RecordRepository()
+        team_repo = TeamRepository()
+        team = team_repo.get_by_oid(team_id, session)
+        record = repo.get_by_oid(oid, session)
         record.team = team
         record.wins = wins
         record.loses = loses
@@ -43,8 +44,8 @@ class RecordService(BaseService):
     def update_rank(self, year, session=None):
         commit = session is None
         session = self.get_session(session)
-
-        result = list(self.repo.get_by_year(year, session))
+        repo = RecordRepository()
+        result = list(repo.get_by_year(year, session))
         result.sort(key=lambda rec: (-rec.points, -rec.wins, rec.games, -rec.goal_difference))
 
         rank = 1
@@ -58,13 +59,24 @@ class RecordService(BaseService):
 
     def get_by_year(self, year):
         session = self.get_session()
-        view_list = [RecordViewModel(r.oid, r.rank, r.team.oid, r.team.name, r.year, r.wins,
-                                     r.loses, r.ties, r.goals_for, r.goals_against, r.points, r.games,
-                                     r.goal_difference, r.team.skill)
-                     for r in self.repo.get_by_year(year, session)]
+        repo = RecordRepository()
+        view_list = [self.get_view_from_model(r)
+                     for r in repo.get_by_year(year, session)]
 
         return view_list
 
+    @staticmethod
+    def get_view_from_model(r):
+        return RecordViewModel(r.oid, r.rank, r.team.oid, r.team.name, r.year, r.wins,
+                               r.loses, r.ties, r.goals_for, r.goals_against, r.points, r.games,
+                               r.goal_difference, r.team.skill)
+
     def get_by_team_and_year(self, team_id, year, session=None):
         session = self.get_session(session)
-        return self.repo.get_by_team_and_year(team_id, year, session)
+        repo = RecordRepository()
+        return repo.get_by_team_and_year(team_id, year, session)
+
+    def get_all_by_rank(self, rank, session=None):
+        session = self.get_session(session)
+        repo = RecordRepository()
+        return [self.get_view_from_model(r) for r in repo.get_by_rank(rank, session)]
