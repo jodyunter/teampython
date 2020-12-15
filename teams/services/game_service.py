@@ -59,14 +59,20 @@ class GameService(BaseService):
 
         return game
 
-    def create_games(self, team_list, year, start_day, rules, home_and_away, session=None):
+    def create_games(self, team_list, year, start_day, rules, rounds, home_and_away, session=None):
         if session is None:
             session = self.repo.get_session()
 
         scheduler = Scheduler()
         team_ids = [i.oid for i in team_list]
 
-        schedule_games = scheduler.schedule_games(team_ids, rules.oid, year, start_day, home_and_away)
+        schedule_games = []
+        # schedule_games = scheduler.schedule_games(team_ids, rules.oid, year, start_day, home_and_away)
+        for i in range(rounds):
+            schedule_games.extend(scheduler.schedule_games(team_ids, rules.oid, year, start_day, home_and_away))
+            start_day = max([sg.day for sg in schedule_games])
+            start_day += 1
+
         new_games = [self.create_game_from_schedule_game(sg, session) for sg in schedule_games]
         [self.repo.add(g, session) for g in new_games]
 

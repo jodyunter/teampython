@@ -28,31 +28,66 @@ class TeamService(BaseService):
         self.commit(session, commit)
 
     def update_skills(self, random, session=None):
+        maximum = 20
+        minimum = 0
+        max_score = 200
         commit = session is None
         session = self.get_session(session)
 
         teams = self.repo.get_all(session)
 
+        skill_change = {
+            "0": [0, 140],
+            "1": [40, 140],
+            "2": [40, 140],
+            "3": [40, 140],
+            "4": [40, 140],
+            "5": [40, 100],
+            "6": [80, 100],
+            "7": [80, 100],
+            "8": [80, 100],
+            "9": [80, 100],
+            "10": [100, 120],
+            "11": [100, 120],
+            "12": [100, 120],
+            "13": [100, 120],
+            "14": [100, 120],
+            "15": [100, 120],
+            "16": [140, 190],
+            "17": [140, 190],
+            "18": [140, 190],
+            "19": [140, 190],
+            "20": [140, 200]
+        }
+
         for t in teams:
-            to_go_up = 100 - int((100 - 5 * t.skill) / 2)
-            to_go_down = 100 - int((5 * t.skill) / 2)
+            old_skill = t.skill
+            score = random.randint(0, max_score)
+            # normalize in case there was a change in process or data
+            if t.skill > maximum:
+                t.skill = maximum
 
-            up_score = random.randint(0, 100)
-            down_score = random.randint(0, 100)
-            go_down = True
+            if t.skill < minimum:
+                t.skill = minimum
 
-            if up_score > to_go_up:
-                t.skill += 1
-                go_down = False
+            down = skill_change[str(t.skill)][0]
+            up = skill_change[str(t.skill)][1]
 
-            if down_score > to_go_down and go_down:
+            if score < down:
                 t.skill -= 1
 
-            if t.skill > 20:
-                t.skill = 20
+            if score > up:
+                t.skill += 1
 
-            if t.skill < 0:
-                t.skill = 0
+            if t.skill > maximum:
+                t.skill = maximum
+
+            if t.skill < minimum:
+                t.skill = minimum
+
+            print(t.name + " Old: " + str(old_skill) + " New:" + str(t.skill) +
+                  " score: " + str(score) +
+                  " up: " + str(up) + " down: " + str(down))
 
         self.commit(session, commit)
 

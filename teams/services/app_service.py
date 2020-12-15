@@ -126,7 +126,7 @@ class AppService(BaseService):
 
         self.commit(session, commit)
 
-    def setup_year(self, rules, session=None):
+    def setup_year(self, rules, rounds, session=None):
         commit = session is None
         session = self.get_session(session)
         team_service = TeamService()
@@ -139,7 +139,7 @@ class AppService(BaseService):
             team_list = team_service.get_all()
             record_service.add(team_list, game_data.current_year)
             game_service.create_games(team_service.get_all(), game_data.current_year, game_data.current_day, rules,
-                                      True)
+                                      rounds, False)
             game_data.is_year_setup = True
             repo.update(game_data, session)
 

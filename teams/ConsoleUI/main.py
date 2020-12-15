@@ -33,17 +33,26 @@ game_data = app_service.get_current_data()
 if game_data.is_year_finished:
     app_service.go_to_next_year()
     rules = game_rules_service.get_by_name("Season")
-    app_service.setup_year(rules)
+    app_service.setup_year(rules, 3)
 
 while not app_service.is_year_complete():
     game_data = app_service.get_current_data()
     # print("Playing games on day " + str(game_data.current_day))
     r = random
     app_service.play_and_process_games_for_current_day(r)
-
+    os.system('cls')
+    record_service.update_rank(game_data.current_year)
+    table = record_service.get_by_year(game_data.current_year)
+    table.sort(key=lambda rec: rec.rank)
+    print("Year: " + str(game_data.current_year))
+    print(RecordView.get_table_header())
+    for r in table:
+        print(RecordView.get_table_row(r))
+    input("Press enter to continue.")
     # for x in game_service.get_games_for_days(game_data.current_year, game_data.current_day, game_data.current_day):
     #  print(GameView.get_view_with_day(x))
 
+os.system('cls')
 game_data = app_service.get_current_data()
 record_service.update_rank(game_data.current_year)
 
