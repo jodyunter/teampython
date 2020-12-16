@@ -23,14 +23,14 @@ class Game:
             diff = self.home_team.skill - self.away_team.skill
             diff = int(diff)
 
-            if diff > 6:
-                diff = 6
+            if diff > 10:
+                diff = 10
 
-            if diff < -6:
-                diff = -6
+            if diff < -10:
+                diff = -10
 
-            self.home_score = random.randint(0, 6 + diff)
-            self.away_score = random.randint(0, 6 - diff)
+            self.home_score = random.randint(0, 20 + diff)
+            self.away_score = random.randint(0, 20 - diff)
             while self.home_score == self.away_score and not self.rules.can_tie:
                 a = random.randint(-6, 6)
                 if a < 0:

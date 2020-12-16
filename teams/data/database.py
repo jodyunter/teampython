@@ -14,7 +14,7 @@ Session = sessionmaker()
 
 class Database:
     @staticmethod
-    def create_db(file):
+    def init_db(file):
         global engine
         engine = create_engine(file)
         Session.configure(bind=engine)

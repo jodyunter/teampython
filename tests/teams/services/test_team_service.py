@@ -7,7 +7,7 @@ from teams.services.team_service import TeamService
 class BaseTestService:
     @staticmethod
     def setup_test():
-        Database.create_db("sqlite:///:memory:")
+        Database.init_db("sqlite:///:memory:")
 
 
 class TestTeamService(TestCase):

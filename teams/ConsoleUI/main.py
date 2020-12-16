@@ -14,7 +14,7 @@ add_teams = True
 
 # Database.create_db("sqlite:///:memory:")
 # Database.create_db("sqlite:///D:\\Coding\\teampython\\mydb.db")
-Database.create_db("sqlite:///C:\\dev\\python_learning\\team_project\\mydb.db")
+Database.init_db("sqlite:///C:\\dev\\python_learning\\team_project\\mydb.db")
 if setup:
     Database.clean_up_database(Database.get_session())
     data_setup.setup()

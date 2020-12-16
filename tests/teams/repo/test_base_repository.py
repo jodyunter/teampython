@@ -9,7 +9,7 @@ from teams.data.repo.base_repository import BaseRepository
 class TestBaseRepository:
     @staticmethod
     def setup_database():
-        Database.create_db("sqlite:///:memory:")
+        Database.init_db("sqlite:///:memory:")
 
     @staticmethod
     def setup_basic_test():
