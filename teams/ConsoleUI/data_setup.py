@@ -29,6 +29,5 @@ def add_new_teams():
 
 def get_next_teams(year_string):
     return {
-        "0": ["Montreal", "Toronto", "Ottawa", "Calgary", "Edmonton", "Vancouver", "Winnipeg"],
-        "33": ["Quebec City", "Halifax", "Victoria", "Saskatoon"]
+        "0": ["Montreal", "Toronto", "Ottawa", "Calgary", "Edmonton", "Vancouver", "Winnipeg", "Quebec City", "Halifax", "Victoria", "Saskatoon"]
     }.get(year_string, [])
