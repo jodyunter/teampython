@@ -38,7 +38,7 @@ class TeamService(BaseService):
         teams = self.repo.get_all(session)
 
         skill_change = {
-            "0": [95, 0],
+            "0": [100, 0],
             "1": [90, -10],
             "2": [80, -20],
             "3": [70, -30],
@@ -48,7 +48,7 @@ class TeamService(BaseService):
             "7": [30, -70],
             "8": [20, -80],
             "9": [10, -90],
-            "10": [0, -95]
+            "10": [0, -100]
         }
 
         for t in teams:
@@ -78,9 +78,9 @@ class TeamService(BaseService):
             if t.skill < minimum:
                 t.skill = minimum
 
-            print(t.name + " Old: " + str(old_skill) + " New:" + str(t.skill) +
-                  " score: " + str(score) +
-                  " up: " + str(up) + " down: " + str(down))
+            # print(t.name + " Old: " + str(old_skill) + " New:" + str(t.skill) +
+            #       " score: " + str(score) +
+            #       " up: " + str(up) + " down: " + str(down))
 
         self.commit(session, commit)
 
