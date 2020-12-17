@@ -28,41 +28,25 @@ class TeamService(BaseService):
         self.commit(session, commit)
 
     def update_skills(self, random, session=None):
-        maximum = 20
+        maximum = 25
         minimum = 0
-        max_score = 200
+        max_score = 400
+        sub_value = 200
         commit = session is None
         session = self.get_session(session)
 
         teams = self.repo.get_all(session)
 
-        skill_change = {
-            "0": [0, 60],
-            "1": [40, 60],
-            "2": [40, 60],
-            "3": [40, 60],
-            "4": [40, 60],
-            "5": [40, 100],
-            "6": [80, 100],
-            "7": [80, 100],
-            "8": [80, 100],
-            "9": [80, 100],
-            "10": [100, 140],
-            "11": [100, 140],
-            "12": [100, 140],
-            "13": [100, 140],
-            "14": [100, 140],
-            "15": [100, 140],
-            "16": [140, 180],
-            "17": [140, 180],
-            "18": [140, 180],
-            "19": [140, 180],
-            "20": [140, 200]
-        }
+        skill_change = {"0": [175, 0], "1": [150, -50], "2": [150, -50], "3": [150, -50], "4": [150, -50],
+                        "5": [150, -50],
+                        "6": [125, -75], "7": [125, -75], "8": [125, -75], "9": [125, -75], "10": [125, -75],
+                        "11": [100, -100], "12": [100, -100], "13": [100, -100], "14": [100, -100], "15": [100, -100],
+                        "16": [75, -125], "17": [75, -125], "18": [75, -125], "19": [75, -125], "20": [75, -125],
+                        "21": [50, -150], "22": [50, -150], "23": [50, -150], "24": [50, -150], "25": [0, -175]}
 
         for t in teams:
             old_skill = t.skill
-            score = random.randint(0, max_score)
+            score = random.randint(0, max_score) - sub_value
             # normalize in case there was a change in process or data
             if t.skill > maximum:
                 t.skill = maximum
@@ -70,14 +54,16 @@ class TeamService(BaseService):
             if t.skill < minimum:
                 t.skill = minimum
 
-            down = skill_change[str(t.skill)][0]
-            up = skill_change[str(t.skill)][1]
+            down = skill_change[str(t.skill)][1]
+            up = skill_change[str(t.skill)][0]
 
-            if score < down:
-                t.skill -= 1
+            if score > 0:
+                if score < up:
+                    t.skill += 1
 
-            if score > up:
-                t.skill += 1
+            if score < 0:
+                if score > down:
+                    t.skill -= 1
 
             if t.skill > maximum:
                 t.skill = maximum
