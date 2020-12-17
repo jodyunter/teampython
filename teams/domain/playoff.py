@@ -26,6 +26,36 @@ class PlayoffSeries:
         pass
 
     def check_complete(self):
+        required_wins = self.rules.required_wins
+
+        if self.team1_wins == required_wins or self.team2_wins == required_wins:
+            return True
+        else:
+            self.team1_wins = self.get_wins_for_team(self.team1)
+            self.team2_wins = self.get_wins_for_team(self.team2)
+
+            return self.team1_wins == required_wins or self.team2_wins == required_wins
+
+    def get_wins_for_team(self, team):
+        return [a.get_winner().oid == team.oid for a in self.game_list].count()
+
+    def process_game(self, game_to_process):
+        add_game_to_list = [game_to_process.oid == a.oid for a in self.game_list].count() == 0
+        if add_game_to_list:
+            self.game_list.append(game_to_process)
+
+        if not game_to_process.processed:
+            if game_to_process.complete:
+                winner = game_to_process.get_winner()
+                if winner.oid == self.team1.oid:
+                    self.team1_wins += 1
+                elif winner.oid == self.team2.oid:
+                    self.team2_wins += 1
+
+        if self.check_complete():
+            self.complete = True
+
+    def setup_game(self):
         pass
 
 

@@ -66,3 +66,21 @@ class Game:
                     self.home_score += 1
 
             self.complete = True
+
+    def get_winner(self):
+        if self.complete:
+            if self.home_score > self.away_score:
+                return self.home_team
+            elif self.away_score > self.home_score:
+                return self.away_team
+
+        return None
+
+    def get_loser(self):
+        if self.complete:
+            if self.home_score < self.away_score:
+                return self.home_team
+            elif self.away_score < self.home_score:
+                return self.away_team
+
+        return None
