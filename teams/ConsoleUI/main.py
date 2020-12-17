@@ -39,8 +39,8 @@ while not app_service.is_year_complete():
     game_data = app_service.get_current_data()
     # print("Playing games on day " + str(game_data.current_day))
     r = random
-    app_service.play_and_process_games_for_current_day(r)
     os.system('cls')
+    app_service.play_and_process_games_for_current_day(r)
     record_service.update_rank(game_data.current_year)
     table = record_service.get_by_year(game_data.current_year)
     table.sort(key=lambda rec: rec.rank)
