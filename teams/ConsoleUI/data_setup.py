@@ -14,6 +14,7 @@ def setup():
     # [team_service.create(n, 0) for n in team_name_list]
     game_rules_service = GameRulesService()
     game_rules_service.create("Season", True)
+    game_rules_service.create("Playoff", False)
     app_service = AppService()
     app_service.setup_data(0, 0, True, True)
 
@@ -34,3 +35,4 @@ def get_next_teams(year_string):
         "10": ["Detroit", "Pittsburgh", "New York", "Chicago", "Philadelphia",
                "Buffalo", "Seattle", "Colorado", "Boston", "Minnesota"]
     }.get(year_string, [])
+

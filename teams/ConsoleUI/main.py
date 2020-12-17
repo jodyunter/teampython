@@ -11,6 +11,9 @@ from teams.services.team_service import TeamService
 
 setup = False
 add_teams = True
+rounds = 2
+do_home_and_away = True
+rules_name = "Season"  # other is Playoff
 
 # Database.create_db("sqlite:///:memory:")
 # Database.create_db("sqlite:///D:\\Coding\\teampython\\mydb.db")
@@ -27,20 +30,19 @@ game_service = GameService()
 record_service = RecordService()
 game_rules_service = GameRulesService()
 app_service = AppService()
-rules = game_rules_service.get_by_name("Season")
+rules = game_rules_service.get_by_name(rules_name)
 
 game_data = app_service.get_current_data()
 if game_data.is_year_finished:
     app_service.go_to_next_year()
-    rules = game_rules_service.get_by_name("Season")
-    app_service.setup_year(rules, 3)
+    app_service.setup_year(rules, rounds, do_home_and_away)
 
 while not app_service.is_year_complete():
     game_data = app_service.get_current_data()
     # print("Playing games on day " + str(game_data.current_day))
     r = random
-    os.system('cls')
     app_service.play_and_process_games_for_current_day(r)
+    os.system('cls')
     record_service.update_rank(game_data.current_year)
     table = record_service.get_by_year(game_data.current_year)
     table.sort(key=lambda rec: rec.rank)
