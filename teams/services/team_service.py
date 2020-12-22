@@ -28,7 +28,7 @@ class TeamService(BaseService):
         self.commit(session, commit)
 
     def update_skills(self, random, session=None):
-        maximum = 25
+        maximum = 10
         minimum = 0
         max_score = 400
         sub_value = 200
@@ -65,11 +65,11 @@ class TeamService(BaseService):
             up = skill_change[str(t.skill)][0]
 
             if score > 0:
-                if score < up:
+                if score > up:
                     t.skill += 1
 
             if score < 0:
-                if score > down:
+                if score < down:
                     t.skill -= 1
 
             if t.skill > maximum:
@@ -79,8 +79,8 @@ class TeamService(BaseService):
                 t.skill = minimum
 
             # print(t.name + " Old: " + str(old_skill) + " New:" + str(t.skill) +
-            #       " score: " + str(score) +
-            #       " up: " + str(up) + " down: " + str(down))
+            #      " score: " + str(score) +
+            #      " up: " + str(up) + " down: " + str(down))
 
         self.commit(session, commit)
 

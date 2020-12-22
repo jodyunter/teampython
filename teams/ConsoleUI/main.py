@@ -10,14 +10,15 @@ from teams.services.record_service import RecordService
 from teams.services.team_service import TeamService
 
 setup = False
+
 add_teams = True
-rounds = 2
-do_home_and_away = True
+rounds = 1
+do_home_and_away = False
 rules_name = "Season"  # other is Playoff
 
 # Database.create_db("sqlite:///:memory:")
-# Database.create_db("sqlite:///D:\\Coding\\teampython\\mydb.db")
-Database.init_db("sqlite:///C:\\dev\\python_learning\\team_project\\mydb.db")
+Database.init_db("sqlite:///C:\\temp\\sqlite\\Data\\mydb.db")
+# Database.init_db("sqlite:///C:\\dev\\python_learning\\team_project\\mydb.db")#
 if setup:
     Database.clean_up_database(Database.get_session())
     data_setup.setup()
