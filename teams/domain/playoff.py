@@ -1,10 +1,22 @@
 class PlayoffSeriesRules:
-    def __init__(self, po_round, required_wins, game_rules, team1_from, team2_from):
+    SERIES = "SERIES"
+    WINNER = "WINNER"
+    LOSER = "LOSER"
+    STANDINGS = "RANKING"
+    # FROM should be series or ranking
+    # VALUE should be WINNER, LOSER or name of the ranking
+    # RANK should be the number of the ranking
+
+    def __init__(self, po_round, required_wins, game_rules, team1_from, team1_value, team1_rank, team2_from, team2_value, team2_rank):
         self.po_round = po_round
         self.required_wins = required_wins
         self.game_rules = game_rules
         self.team1_from = team1_from
+        self.team1_rank = team1_rank
+        self.team1_value = team1_value
         self.team2_from = team2_from
+        self.team2_rank = team2_rank
+        self.team2_value = team2_value
 
 
 class PlayoffSeries:
