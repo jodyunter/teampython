@@ -1,3 +1,8 @@
+import uuid
+
+from teams.domain.game import Game
+
+
 class PlayoffSeriesRules:
     SERIES = "SERIES"
     WINNER = "WINNER"
@@ -42,15 +47,20 @@ class PlayoffSeries:
 
         return self.team1_wins == required_wins or self.team2_wins == required_wins
 
-    def re_process_games(self):
+    def re_count_wins(self):
         self.team1_wins = self.get_wins_for_team(self.team1)
         self.team2_wins = self.get_wins_for_team(self.team2)
 
     def get_wins_for_team(self, team):
-        return len([a.get_winner().oid == team.oid for a in self.games])
+        wins = 0
+        for x in self.games:
+            if x.get_winner().oid == team.oid:
+                wins += 1
+
+        return wins
 
     def process_game(self, game_to_process):
-        add_game_to_list = len([game_to_process.oid == a.oid for a in self.games]) == 0
+        add_game_to_list = not any(x.oid == game_to_process.oid for x in self.games)
         if add_game_to_list:
             self.games.append(game_to_process)
 
@@ -65,8 +75,15 @@ class PlayoffSeries:
         if self.check_complete():
             self.complete = True
 
-    def setup_game(self):
-        pass
+    @staticmethod
+    def default_setup_game(series):
+        return Game(series.year, -1, series.team1, series.team2, 0, 0,
+                    False, False, series.rules.game_rules, uuid.uuid4())
+
+    def setup_game(self, method=default_setup_game):
+        # we want to pass the game back to a scheduler to determine the day
+        # we will probably have a larger method in the playoff or competition that creates the appropriate game
+        return method(self)
 
 
 
