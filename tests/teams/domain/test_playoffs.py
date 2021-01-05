@@ -17,16 +17,31 @@ class TestPlayoffSeries(TestCase):
 
         g1 = Game(1, 1, ht, at, 5, 0, True, False, None, "B")
         ps.process_game(g1)
+        self.assertFalse(ps.check_complete())
         self.assertEqual(1, ps.team1_wins)
         self.assertFalse(0, ps.team2_wins)
 
         g2 = Game(1, 2, ht, at, 5, 0, True, False, None, "A")
         ps.process_game(g2)
+        self.assertFalse(ps.check_complete())
         self.assertEqual(2, ps.team1_wins)
         self.assertFalse(0, ps.team2_wins)
 
-        g3 = Game(1, 3, ht, at, 5, 6, True, False, None, "A")
+        g3 = Game(1, 3, ht, at, 5, 6, True, False, None, "C")
         ps.process_game(g3)
+        self.assertFalse(ps.check_complete())
         self.assertEqual(2, ps.team1_wins)
-        self.assertFalse(1, ps.team2_wins)
+        self.assertEqual(1, ps.team2_wins)
+
+        g4 = Game(1, 3, ht, at, 7, 6, True, False, None, "D")
+        ps.process_game(g4)
+        self.assertFalse(ps.check_complete())
+        self.assertEqual(3, ps.team1_wins)
+        self.assertEqual(1, ps.team2_wins)
+
+        g5 = Game(1, 5, ht, at, 9, 6, True, False, None, "E")
+        ps.process_game(g5)
+        self.assertTrue(ps.check_complete())
+        self.assertEqual(4, ps.team1_wins)
+        self.assertEqual(1, ps.team2_wins)
 

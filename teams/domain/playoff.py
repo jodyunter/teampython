@@ -40,13 +40,11 @@ class PlayoffSeries:
     def check_complete(self):
         required_wins = self.rules.required_wins
 
-        if self.team1_wins == required_wins or self.team2_wins == required_wins:
-            return True
-        else:
-            self.team1_wins = self.get_wins_for_team(self.team1)
-            self.team2_wins = self.get_wins_for_team(self.team2)
+        return self.team1_wins == required_wins or self.team2_wins == required_wins
 
-            return self.team1_wins == required_wins or self.team2_wins == required_wins
+    def re_process_games(self):
+        self.team1_wins = self.get_wins_for_team(self.team1)
+        self.team2_wins = self.get_wins_for_team(self.team2)
 
     def get_wins_for_team(self, team):
         return len([a.get_winner().oid == team.oid for a in self.games])
