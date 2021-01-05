@@ -85,5 +85,23 @@ class PlayoffSeries:
         # we will probably have a larger method in the playoff or competition that creates the appropriate game
         return method(self)
 
+    def get_winner(self):
+        if self.check_complete():
+            if self.team1_wins == self.rules.required_wins:
+                return self.team1
+            elif self.team2_wins == self.rules.required_wins:
+                return self.team2
+        else:
+            return None
+
+    def get_loser(self):
+        if self.check_complete():
+            if self.team1_wins == self.rules.required_wins:
+                return self.team2
+            elif self.team2_wins == self.rules.required_wins:
+                return self.team1
+        else:
+            return None
+
 
 

@@ -109,3 +109,55 @@ class TestPlayoffSeries(TestCase):
 
         self.assertEqual(7, ps.get_wins_for_team(ps.team1))
         self.assertEqual(3, ps.get_wins_for_team(ps.team2))
+
+    def test_get_winner(self):
+        ht = Team("Team 1", 5, "A")
+        at = Team("Team 2", 5, "B")
+        psr = PlayoffSeriesRules(1, 2, None, None, None, None, None, None, None)
+        ps = PlayoffSeries(1, ht, at, 0, 0, psr, [], True, False)
+
+        ps.team1_wins = 0
+        ps.team2_wins = 0
+        self.assertIsNone(ps.get_winner())
+
+        ps.team1_wins = 1
+        ps.team2_wins = 0
+        self.assertIsNone(ps.get_winner())
+
+        ps.team1_wins = 2
+        ps.team2_wins = 0
+        self.assertEquals(ps.get_winner().oid, ht.oid)
+
+        ps.team1_wins = 2
+        ps.team2_wins = 1
+        self.assertEquals(ps.get_winner().oid, ht.oid)
+
+        ps.team1_wins = 1
+        ps.team2_wins = 2
+        self.assertEquals(ps.get_winner().oid, at.oid)
+
+    def test_get_loser(self):
+        ht = Team("Team 1", 5, "A")
+        at = Team("Team 2", 5, "B")
+        psr = PlayoffSeriesRules(1, 2, None, None, None, None, None, None, None)
+        ps = PlayoffSeries(1, ht, at, 0, 0, psr, [], True, False)
+
+        ps.team1_wins = 0
+        ps.team2_wins = 0
+        self.assertIsNone(ps.get_loser())
+
+        ps.team1_wins = 1
+        ps.team2_wins = 0
+        self.assertIsNone(ps.get_loser())
+
+        ps.team1_wins = 2
+        ps.team2_wins = 0
+        self.assertEquals(ps.get_loser().oid, at.oid)
+
+        ps.team1_wins = 2
+        ps.team2_wins = 1
+        self.assertEquals(ps.get_loser().oid, at.oid)
+
+        ps.team1_wins = 1
+        ps.team2_wins = 2
+        self.assertEquals(ps.get_loser().oid, ht.oid)
