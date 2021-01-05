@@ -49,12 +49,12 @@ class PlayoffSeries:
             return self.team1_wins == required_wins or self.team2_wins == required_wins
 
     def get_wins_for_team(self, team):
-        return [a.get_winner().oid == team.oid for a in self.game_list].count()
+        return len([a.get_winner().oid == team.oid for a in self.games])
 
     def process_game(self, game_to_process):
-        add_game_to_list = [game_to_process.oid == a.oid for a in self.game_list].count() == 0
+        add_game_to_list = len([game_to_process.oid == a.oid for a in self.games]) == 0
         if add_game_to_list:
-            self.game_list.append(game_to_process)
+            self.games.append(game_to_process)
 
         if not game_to_process.processed:
             if game_to_process.complete:
