@@ -131,6 +131,7 @@ class GameService(BaseService):
         return [self.game_to_vm(g)
                 for g in self.repo.get_by_unprocessed_and_complete(year, first_day, last_day, session)]
 
+    # processing games needs to go to a higher level so we can know how to process a given game
     def process_games_for_days(self, year, first_day, last_day, session=None):
         commit = session is None
         session = self.get_session(session)

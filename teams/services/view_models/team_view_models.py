@@ -1,5 +1,4 @@
 class TeamViewModel:
-
     def __init__(self, oid, name, skill):
         self.name = name
         self.skill = skill
@@ -7,7 +6,6 @@ class TeamViewModel:
 
 
 class RecordViewModel:
-
     def __init__(self, oid, rank, team_id, team_name, year, wins, loses, ties, goals_for, goals_against, points, games,
                  goal_difference, skill):
         self.oid = oid

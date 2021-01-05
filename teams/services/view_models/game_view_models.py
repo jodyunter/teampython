@@ -6,6 +6,7 @@ class GameRulesViewModel:
 
 
 class GameViewModel:
+
     def __init__(self, oid, year, day, home_name, home_id, away_name, away_id, home_score, away_score, status):
         self.oid = oid
         self.year = year
