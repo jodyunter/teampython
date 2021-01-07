@@ -1,11 +1,12 @@
 from flask import Flask, render_template
+from flask_bootstrap import Bootstrap
 from markupsafe import escape
 
 from teams.data.database import Database
 from teams.services.team_service import TeamService
 
 app = Flask(__name__)
-
+Bootstrap(app)
 Database.init_db("sqlite:///C:\\temp\\sqlite\\Data\\mydb.db")
 
 
