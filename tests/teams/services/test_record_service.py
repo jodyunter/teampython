@@ -25,6 +25,6 @@ class TestTeamService(BaseTestService, TestCase):
         [self.assertEqual(35, r.year) for r in result]
 
         result = service.get_by_team_and_year(teams[6].oid, 35)
-        self.assertEqual(teams[6].oid, result.team.oid, "by year and team")
+        self.assertEqual(teams[6].oid, result.team_id, "by year and team")
         self.assertEqual(35, result.year, "by year and team")
 

@@ -67,6 +67,8 @@ class RecordService(BaseService):
 
     @staticmethod
     def get_view_from_model(r):
+        if r is None:
+            return None
         return RecordViewModel(r.oid, r.rank, r.team.oid, r.team.name, r.year, r.wins,
                                r.loses, r.ties, r.goals_for, r.goals_against, r.points, r.games,
                                r.goal_difference, r.skill)
@@ -74,9 +76,9 @@ class RecordService(BaseService):
     def get_by_team_and_year(self, team_id, year, session=None):
         session = self.get_session(session)
         repo = RecordRepository()
-        return repo.get_by_team_and_year(team_id, year, session)
+        return RecordService.get_view_from_model(repo.get_by_team_and_year(team_id, year, session))
 
     def get_all_by_rank(self, rank, session=None):
         session = self.get_session(session)
         repo = RecordRepository()
-        return [self.get_view_from_model(r) for r in repo.get_by_rank(rank, session)]
+        return [RecordService.get_view_from_model(r) for r in repo.get_by_rank(rank, session)]

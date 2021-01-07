@@ -8,6 +8,10 @@ from teams.services.view_models.team_view_models import TeamViewModel
 class TeamService(BaseService):
     repo = TeamRepository()
 
+    @staticmethod
+    def team_to_vm(team):
+        return TeamViewModel(team.oid, team.name, team.skill)
+
     def create(self, name, skill, session=None):
         commit = session is None
         session = self.get_session(session)
@@ -88,7 +92,7 @@ class TeamService(BaseService):
         session = self.get_session(session)
 
         team_list = self.repo.get_all(session)
-        return [TeamViewModel(t.oid, t.name, t.skill) for t in team_list]
+        return [TeamService.team_to_vm(t) for t in team_list]
 
     def get_team_by_name(self, name, session=None):
         session = self.get_session(session)
@@ -96,7 +100,7 @@ class TeamService(BaseService):
         if team is None:
             return None
         else:
-            return TeamViewModel(team.oid, team.name, team.skill)
+            return TeamService.team_to_vm(team)
 
     def get_by_id(self, oid, session=None):
         session = self.get_session(session)
@@ -104,4 +108,4 @@ class TeamService(BaseService):
         if team is None:
             return None
         else:
-            return TeamViewModel(team.oid, team.name, team.skill)
+            return TeamService.team_to_vm(team)
