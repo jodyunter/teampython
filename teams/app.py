@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from markupsafe import escape
 
 from teams.data.database import Database
@@ -12,17 +12,15 @@ Database.init_db("sqlite:///C:\\temp\\sqlite\\Data\\mydb.db")
 @app.route('/')
 def hello_world():
     team_service = TeamService()
-    result = ""
-    for t in team_service.get_all():
-        result += t.name + "\n"
+    teams = team_service.get_all()
 
-    return 'Hello World\n' + result
+    return render_template('teams/index.html', teams=teams)
 
 
 @app.route('/user/<username>')
 def show_user_profile(username):
     # show the user profile for that user
-    return 'User %s' % escape(username)
+    return render_template('index.html', user=username)
 
 
 @app.route('/post/<int:post_id>')

@@ -1,0 +1,12 @@
+<html>
+  <head>
+    <title>Team List</title>
+  </head>
+  <body>
+  <ul id="team_list">
+    {% for a in teams %}
+        <li>{{ a.name }}</li>
+    {% endfor %}
+  </ul>
+  </body>
+</html>
