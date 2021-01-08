@@ -18,6 +18,11 @@ def hello_world():
     return render_template('teams/index.html', teams=teams)
 
 
+@app.route('/newuser')
+def show_new_user_Profile():
+    return render_template('example.html')
+
+
 @app.route('/user/<username>')
 def show_user_profile(username):
     # show the user profile for that user
