@@ -1,0 +1,35 @@
+{% block content %}
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">Rank</th>
+        <th scope="col">Name</th>
+        <th scope="col">W</th>
+        <th scope="col">L</th>
+        <th scope="col">T</th>
+        <th scope="col">Pts</th>
+        <th scope="col">G</th>
+        <th scope="col">GF</th>
+        <th scope="col">GA</th>
+        <th scope="col">GD</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for team in teams %}
+    <tr>
+        <th scope="row">{{ team.rank }}</th>
+        <td>{{ team.team_name }}</td>
+        <td>{{ team.wins }}</td>
+        <td>{{ team.loses }}</td>
+        <td>{{ team.ties }}</td>
+        <td>{{ team.points }}</td>
+        <td>{{ team.games_played }}</td>
+        <td>{{ team.goals_for }}</td>
+        <td>{{ team.goals_against }}</td>
+        <td>{{ team.goal_difference }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

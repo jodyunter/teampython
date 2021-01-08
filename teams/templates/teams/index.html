@@ -1,12 +1,19 @@
-<html>
-  <head>
-    <title>Team List</title>
-  </head>
-  <body>
-  <ul id="team_list">
-    {% for a in teams %}
-        <li>{{ a.name }}</li>
+{% block content %}
+<table class="table">
+    <thead class="thead-dark">
+    <tr>        
+        <th scope="col">Name</th>
+        <th scope="col">Skill</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for team in teams %}
+    <tr>
+        <th scope="row">{{ team.name }}</th>
+        <td>{{ team.skill }}</td>
+    </tr>
     {% endfor %}
-  </ul>
-  </body>
-</html>
+    </tbody>
+</table>
+
+{% endblock %}
