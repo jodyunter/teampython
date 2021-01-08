@@ -1,3 +1,4 @@
+{% extends "main.html.j2" %}
 {% block content %}
 <table class="table">
     <thead class="thead-dark">
@@ -15,7 +16,7 @@
     </tr>
     </thead>
     <tbody>
-    {% for team in teams %}
+    {% for team in records %}
     <tr>
         <th scope="row">{{ team.rank }}</th>
         <td>{{ team.team_name }}</td>
@@ -23,7 +24,7 @@
         <td>{{ team.loses }}</td>
         <td>{{ team.ties }}</td>
         <td>{{ team.points }}</td>
-        <td>{{ team.games_played }}</td>
+        <td>{{ team.games }}</td>
         <td>{{ team.goals_for }}</td>
         <td>{{ team.goals_against }}</td>
         <td>{{ team.goal_difference }}</td>

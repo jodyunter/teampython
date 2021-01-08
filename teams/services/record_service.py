@@ -82,3 +82,9 @@ class RecordService(BaseService):
         session = self.get_session(session)
         repo = RecordRepository()
         return [RecordService.get_view_from_model(r) for r in repo.get_by_rank(rank, session)]
+
+    def sort_default(self, standings):
+        reverse = False        
+        standings.sort(key=lambda rec: rec.rank, reverse=reverse)
+
+        
