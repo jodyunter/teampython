@@ -1,5 +1,4 @@
 from flask import Flask, render_template
-from flask_bootstrap import Bootstrap
 from markupsafe import escape
 
 from teams.services.record_service import RecordService
@@ -7,7 +6,6 @@ from teams.data.database import Database
 from teams.services.team_service import TeamService
 
 app = Flask(__name__)
-Bootstrap(app)
 Database.init_db("sqlite:///C:\\temp\\sqlite\\Data\\mydb.db")
 
 
@@ -23,6 +21,8 @@ def get_standings_for_year(year):
     record_service = RecordService()
     records = record_service.get_by_year(year)
     record_service.sort_default(records)
+
+    seasons = record_service.get_list_of_Seasons()    
     return render_template('teams/standings.html.j2', records=records)
 
 

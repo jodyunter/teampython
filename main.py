@@ -1,9 +1,9 @@
-from teams.data.database import Creation, Database, ClearData
+from teams.data.database import Database
 
 from teams.services.record_service import RecordService
 from teams.services.team_service import TeamService
 
-Creation.init_db("sqlite:///:memory:")
+Database.init_db("sqlite:///:memory:")
 
 team_name_list = ["Toronto", "Montreal", "Calgary", "Edmonton", "Vancouver", "Winnipeg", "Ottawa"]
 

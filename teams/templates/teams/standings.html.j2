@@ -13,18 +13,6 @@
   </div>
 </div>
 
-<form action="">
-    <select name="seasons" method="POST" type="submit" onchange="location = this.value;">   
-        <option selected=true>--Select a Season--</option>               
-        <option value="{{ url_for('get_standings_for_year', year=5) }}">Season 5</option>
-        <option value="{{ url_for('get_standings_for_year', year=4) }}">Season 4</option>
-        <option value="{{ url_for('get_standings_for_year', year=3) }}">Season 3</option>
-        <option value="{{ url_for('get_standings_for_year', year=2) }}">Season 2</option>
-        <option value="{{ url_for('get_standings_for_year', year=1) }}">Season 1</option>            
-        </select>
-    </li>
-</form>
-
 <table class="table">
     <thead class="thead-dark">
     <tr>

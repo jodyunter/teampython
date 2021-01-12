@@ -23,3 +23,6 @@ class RecordRepository(BaseRepository):
     def get_by_rank(self, rank, session):
         return session.query(self.get_type()).filter_by(rank=rank)
 
+    def get_list_of_seasons(self, session):
+        return session.query(self.get_type().year).group_by(RecordDTO.year)
+

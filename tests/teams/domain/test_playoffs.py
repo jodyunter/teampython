@@ -126,15 +126,15 @@ class TestPlayoffSeries(TestCase):
 
         ps.team1_wins = 2
         ps.team2_wins = 0
-        self.assertEquals(ps.get_winner().oid, ht.oid)
+        self.assertEqual(ps.get_winner().oid, ht.oid)
 
         ps.team1_wins = 2
         ps.team2_wins = 1
-        self.assertEquals(ps.get_winner().oid, ht.oid)
+        self.assertEqual(ps.get_winner().oid, ht.oid)
 
         ps.team1_wins = 1
         ps.team2_wins = 2
-        self.assertEquals(ps.get_winner().oid, at.oid)
+        self.assertEqual(ps.get_winner().oid, at.oid)
 
     def test_get_loser(self):
         ht = Team("Team 1", 5, "A")
@@ -152,12 +152,12 @@ class TestPlayoffSeries(TestCase):
 
         ps.team1_wins = 2
         ps.team2_wins = 0
-        self.assertEquals(ps.get_loser().oid, at.oid)
+        self.assertEqual(ps.get_loser().oid, at.oid)
 
         ps.team1_wins = 2
         ps.team2_wins = 1
-        self.assertEquals(ps.get_loser().oid, at.oid)
+        self.assertEqual(ps.get_loser().oid, at.oid)
 
         ps.team1_wins = 1
         ps.team2_wins = 2
-        self.assertEquals(ps.get_loser().oid, ht.oid)
+        self.assertEqual(ps.get_loser().oid, ht.oid)
