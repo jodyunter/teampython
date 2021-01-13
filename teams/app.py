@@ -1,6 +1,10 @@
+import logging
+
 from flask import Flask, render_template
 from markupsafe import escape
 
+from teams.app_config import log_file
+from teams.log_config import log_format, log_level, log_date_format
 from teams.services.app_service import AppService
 from teams.services.record_service import RecordService
 from teams.data.database import Database
@@ -9,7 +13,7 @@ from teams.services.team_service import TeamService
 
 app = Flask(__name__)
 Database.init_db("sqlite:///C:\\temp\\sqlite\\Data\\mydb.db")
-
+logging.basicConfig(filename=log_file, filemode='w', format=log_format, level=log_level, datefmt=log_date_format)
 
 @app.route('/teams')
 def show_team_list():

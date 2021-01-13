@@ -16,7 +16,7 @@ class StandingsService(BaseService):
         seasons = record_service.get_all_seasons_for_dropdown()
         seasons.sort(reverse=True)
 
-        return StandingsHistoryViewModel(current_data, current_data.current_year, records, seasons)
+        return StandingsHistoryViewModel(current_data, year, records, seasons)
 
     @staticmethod
     def get_current_standings_view():
