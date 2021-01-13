@@ -13,7 +13,8 @@ from teams.services.team_service import TeamService
 
 app = Flask(__name__)
 Database.init_db("sqlite:///C:\\temp\\sqlite\\Data\\mydb.db")
-logging.basicConfig(filename=log_file, filemode='w', format=log_format, level=log_level, datefmt=log_date_format)
+#  logging.basicConfig(filename=log_file, filemode='w', format=log_format, level=log_level, datefmt=log_date_format)
+logging.basicConfig(format=log_format, level=log_level, datefmt=log_date_format)
 
 @app.route('/teams')
 def show_team_list():
@@ -23,12 +24,19 @@ def show_team_list():
     return render_template('teams/index.html', teams=teams)
 
 
-@app.route('/standings/<year>')
+@app.route('/standings/year/<year>')
 def get_standings_for_year(year):
     standings_service = StandingsService()
     standings_view = standings_service.get_standings_history_view(year)
-
     return render_template('teams/standings.html', view=standings_view)
+
+
+@app.route('/standings/team/<team_id>')
+def get_standings_for_team(team_id):
+    standings_service = StandingsService()
+    standings_view = standings_service.get_standings_team_history_view(team_id)
+
+    return render_template('teams/historic_standings.html', view=standings_view)
 
 
 @app.route('/standings')

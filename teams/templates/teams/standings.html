@@ -29,6 +29,7 @@
     <div class="row">
         <div class="col col-sm-6">
             <table class="table table-sm">
+                {% block standings_header %}
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col">Rank</th>
@@ -43,11 +44,13 @@
                     <th scope="col">GD</th>
                 </tr>
                 </thead>
+                {% endblock %}
                 <tbody>
+                {% block standings_rows %}
                 {% for record in view.records %}
                 <tr>
                     <th scope="row">{{ record.rank }}</th>
-                    <td>{{ record.team_name }}</td>
+                    <td><a href="{{ url_for('get_standings_for_team', team_id=record.team_id) }}">{{ record.team_name }}</a></td>
                     <td>{{ record.wins }}</td>
                     <td>{{ record.loses }}</td>
                     <td>{{ record.ties }}</td>
@@ -58,6 +61,7 @@
                     <td>{{ record.goal_difference }}</td>
                 </tr>
                 {% endfor %}
+                {% endblock %}
                 </tbody>
             </table>
         </div>

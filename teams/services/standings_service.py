@@ -1,7 +1,11 @@
+import logging
+
 from teams.services.app_service import AppService
 from teams.services.base_service import BaseService
 from teams.services.record_service import RecordService
-from teams.services.view_models.standings_views import StandingsHistoryViewModel, StandingsCurrentViewModel
+from teams.services.team_service import TeamService
+from teams.services.view_models.standings_views import StandingsHistoryViewModel, StandingsCurrentViewModel, \
+    StandingsTeamHistoryViewModel
 
 
 class StandingsService(BaseService):
@@ -17,6 +21,18 @@ class StandingsService(BaseService):
         seasons.sort(reverse=True)
 
         return StandingsHistoryViewModel(current_data, year, records, seasons)
+
+    @staticmethod
+    def get_standings_team_history_view(team_id):
+        record_service = RecordService()
+        app_service = AppService()
+        team_service = TeamService()
+        team = team_service.get_by_id(team_id)
+        current_data = app_service.get_current_data()
+        records = record_service.get_by_team(team_id)
+        record_service.sort_by_year(records)
+
+        return StandingsTeamHistoryViewModel(current_data, team.name, records)
 
     @staticmethod
     def get_current_standings_view():

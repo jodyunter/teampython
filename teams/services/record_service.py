@@ -78,6 +78,11 @@ class RecordService(BaseService):
         repo = RecordRepository()
         return RecordService.get_view_from_model(repo.get_by_team_and_year(team_id, year, session))
 
+    def get_by_team(self, team_id, session=None):
+        session = self.get_session(session)
+        repo = RecordRepository()
+        return [RecordService.get_view_from_model(r) for r in repo.get_by_team(team_id, session)]
+
     def get_all_by_rank(self, rank, session=None):
         session = self.get_session(session)
         repo = RecordRepository()
@@ -87,6 +92,10 @@ class RecordService(BaseService):
     def sort_default(standings):
         reverse = False        
         standings.sort(key=lambda rec: rec.rank, reverse=reverse)
+
+    @staticmethod
+    def sort_by_year(standings):
+        standings.sort(key=lambda rec: rec.year)
 
     def get_all_seasons_for_dropdown(self):
         repo = RecordRepository()
