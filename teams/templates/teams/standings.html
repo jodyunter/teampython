@@ -1,0 +1,57 @@
+{% extends "main.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="dropdown">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Season List
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    {% for year in seasons %}
+                    <a class="dropdown-item" href="{{ url_for('get_standings_for_year', year=year) }}">Season {{ year
+                        }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col col-sm-6">
+            <table class="table table-sm">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Rank</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">W</th>
+                    <th scope="col">L</th>
+                    <th scope="col">T</th>
+                    <th scope="col">Pts</th>
+                    <th scope="col">G</th>
+                    <th scope="col">GF</th>
+                    <th scope="col">GA</th>
+                    <th scope="col">GD</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for team in records %}
+                <tr>
+                    <th scope="row">{{ team.rank }}</th>
+                    <td>{{ team.team_name }}</td>
+                    <td>{{ team.wins }}</td>
+                    <td>{{ team.loses }}</td>
+                    <td>{{ team.ties }}</td>
+                    <td>{{ team.points }}</td>
+                    <td>{{ team.games }}</td>
+                    <td>{{ team.goals_for }}</td>
+                    <td>{{ team.goals_against }}</td>
+                    <td>{{ team.goal_difference }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

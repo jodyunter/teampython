@@ -14,7 +14,7 @@ def show_team_list():
     team_service = TeamService()
     teams = team_service.get_all()
 
-    return render_template('teams/index.html.j2', teams=teams)
+    return render_template('teams/index.html', teams=teams)
 
 @app.route('/standings/<year>')
 def get_standings_for_year(year):
@@ -22,19 +22,20 @@ def get_standings_for_year(year):
     records = record_service.get_by_year(year)
     record_service.sort_default(records)
 
-    seasons = record_service.get_list_of_Seasons()    
-    return render_template('teams/standings.html.j2', records=records)
+    seasons = record_service.get_all_seasons_for_dropdown()
+    seasons.sort(reverse=True)
+    return render_template('teams/standings.html', records=records, seasons=seasons)
 
 
 @app.route('/newuser')
 def show_new_user_Profile():
-    return render_template('example.html.j2')
+    return render_template('example.html')
 
 
 @app.route('/user/<username>')
 def show_user_profile(username):
     # show the user profile for that user
-    return render_template('index.html.j2', user=username)
+    return render_template('index.html', user=username)
 
 
 @app.route('/post/<int:post_id>')

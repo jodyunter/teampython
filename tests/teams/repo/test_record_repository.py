@@ -132,13 +132,15 @@ class TestRecordRepository(TestBaseRepository, TestCase):
         self.assertEqual(result.team.oid, team.oid)
         self.assertEqual(result.year, 33)
 
-
     def test_get_season_list(self):
         session = self.setup_basic_test()
         repo = RecordRepository()
         team_repo = TeamRepository()
         self.setup_record_query_data(session, repo, team_repo)
 
-        count = repo.get_list_of_seasons(session).all()
+        count = [a.year for a in repo.get_list_of_seasons(session)]
         self.assertEqual(4, len(count))
-        
+        self.assertEqual(count[0], 30)
+        self.assertEqual(count[1], 31)
+        self.assertEqual(count[2], 32)
+        self.assertEqual(count[3], 33)

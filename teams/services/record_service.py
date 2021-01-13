@@ -83,8 +83,13 @@ class RecordService(BaseService):
         repo = RecordRepository()
         return [RecordService.get_view_from_model(r) for r in repo.get_by_rank(rank, session)]
 
-    def sort_default(self, standings):
+    @staticmethod
+    def sort_default(standings):
         reverse = False        
         standings.sort(key=lambda rec: rec.rank, reverse=reverse)
 
-        
+    def get_all_seasons_for_dropdown(self):
+        repo = RecordRepository()
+        session = self.get_session()
+        data = repo.get_list_of_seasons(session)
+        return [a.year for a in data]
