@@ -16,32 +16,21 @@ def show_team_list():
 
     return render_template('teams/index.html', teams=teams)
 
+
+@app.route('/standings')
 @app.route('/standings/<year>')
-def get_standings_for_year(year):
+def get_standings_for_year(year=-1):
     record_service = RecordService()
-    records = record_service.get_by_year(year)
-    record_service.sort_default(records)
 
     seasons = record_service.get_all_seasons_for_dropdown()
     seasons.sort(reverse=True)
-    return render_template('teams/standings.html', records=records, seasons=seasons)
+    if int(year) < 0:
+        year = max(seasons)
 
+    records = record_service.get_by_year(year)
+    record_service.sort_default(records)
 
-@app.route('/newuser')
-def show_new_user_Profile():
-    return render_template('example.html')
-
-
-@app.route('/user/<username>')
-def show_user_profile(username):
-    # show the user profile for that user
-    return render_template('index.html', user=username)
-
-
-@app.route('/post/<int:post_id>')
-def show_post(post_id):
-    # show the post with the given id, the id is an integer
-    return 'Post %d' % post_id
+    return render_template('teams/standings.html', records=records, seasons=seasons, current_year=year)
 
 
 @app.route('/path/<path:subpath>')
