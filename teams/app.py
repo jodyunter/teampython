@@ -1,8 +1,10 @@
 from flask import Flask, render_template
 from markupsafe import escape
 
+from teams.services.app_service import AppService
 from teams.services.record_service import RecordService
 from teams.data.database import Database
+from teams.services.standings_service import StandingsService
 from teams.services.team_service import TeamService
 
 app = Flask(__name__)
@@ -17,20 +19,21 @@ def show_team_list():
     return render_template('teams/index.html', teams=teams)
 
 
-@app.route('/standings')
 @app.route('/standings/<year>')
-def get_standings_for_year(year=-1):
-    record_service = RecordService()
+def get_standings_for_year(year):
+    standings_service = StandingsService()
+    standings_view = standings_service.get_standings_history_view(year)
 
-    seasons = record_service.get_all_seasons_for_dropdown()
-    seasons.sort(reverse=True)
-    if int(year) < 0:
-        year = max(seasons)
+    return render_template('teams/standings.html', view=standings_view)
 
-    records = record_service.get_by_year(year)
-    record_service.sort_default(records)
 
-    return render_template('teams/standings.html', records=records, seasons=seasons, current_year=year)
+@app.route('/standings')
+@app.route('/standings/current')
+def get_current_standings():
+    standings_service = StandingsService()
+    standings_view = standings_service.get_current_standings_view()
+
+    return render_template('teams/current_standings.html', view=standings_view)
 
 
 @app.route('/path/<path:subpath>')

@@ -1,11 +1,14 @@
 {% extends "main.html" %}
 {% block content %}
 <div class="container">
+    {% block standings_info %}
     <div class="row">
         <div class="col">
-            Showing Season {{ current_year }}
+            Season {{ view.year }}
         </div>
     </div>
+    {% endblock %}
+    {% block standings_options %}
     <div class="row">
         <div class="col">
             <div class="dropdown">
@@ -14,7 +17,7 @@
                     Season List
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    {% for year in seasons %}
+                    {% for year in view.seasons %}
                     <a class="dropdown-item" href="{{ url_for('get_standings_for_year', year=year) }}">Season {{ year
                         }}</a>
                     {% endfor %}
@@ -22,6 +25,7 @@
             </div>
         </div>
     </div>
+    {% endblock %}
     <div class="row">
         <div class="col col-sm-6">
             <table class="table table-sm">
@@ -40,18 +44,18 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for team in records %}
+                {% for record in view.records %}
                 <tr>
-                    <th scope="row">{{ team.rank }}</th>
-                    <td>{{ team.team_name }}</td>
-                    <td>{{ team.wins }}</td>
-                    <td>{{ team.loses }}</td>
-                    <td>{{ team.ties }}</td>
-                    <td>{{ team.points }}</td>
-                    <td>{{ team.games }}</td>
-                    <td>{{ team.goals_for }}</td>
-                    <td>{{ team.goals_against }}</td>
-                    <td>{{ team.goal_difference }}</td>
+                    <th scope="row">{{ record.rank }}</th>
+                    <td>{{ record.team_name }}</td>
+                    <td>{{ record.wins }}</td>
+                    <td>{{ record.loses }}</td>
+                    <td>{{ record.ties }}</td>
+                    <td>{{ record.points }}</td>
+                    <td>{{ record.games }}</td>
+                    <td>{{ record.goals_for }}</td>
+                    <td>{{ record.goals_against }}</td>
+                    <td>{{ record.goal_difference }}</td>
                 </tr>
                 {% endfor %}
                 </tbody>
