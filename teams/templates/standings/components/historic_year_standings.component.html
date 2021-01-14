@@ -1,14 +1,5 @@
-{% extends "main.html" %}
-{% block content %}
-<div class="container">
-    {% block standings_info %}
-    <div class="row">
-        <div class="col">
-            Season {{ view.year }}
-        </div>
-    </div>
-    {% endblock %}
-    {% block standings_options %}
+{% extends "standings/components/standings_with_year.component.html" %}
+ {% block standings_options %}
     <div class="row">
         <div class="col">
             <div class="dropdown">
@@ -26,8 +17,10 @@
         </div>
     </div>
     {% endblock %}
-    {% block standings_component %}
-        {% include "teams/standings.component.html" %}
-    {% endblock %}
-</div>
+{% block standings_info %}
+    <div class="row">
+        <div class="col">
+            Season {{ view.year }}
+        </div>
+    </div>
 {% endblock %}
