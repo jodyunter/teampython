@@ -17,7 +17,7 @@ do_home_and_away = False
 rules_name = "Season"  # other is Playoff
 
 # Database.create_db("sqlite:///:memory:")
-Database.init_db("sqlite:///C:\\temp\\sqlite\\Data\\mydb.db")
+Database.init_db("sqlite:///team_data.db")
 # Database.init_db("sqlite:///C:\\dev\\python_learning\\team_project\\mydb.db")#
 if setup:
     Database.clean_up_database(Database.get_session())
