@@ -1,1 +1,12 @@
-{% extends "main.html" %}
+<!-- this is a component to be plugged -->
+<!-- requires current_data and a list of games -->
+
+Season {{ current_data.current_year }}
+Day {{ current_data.current_day }}
+<ul>
+{% for game in games %}
+    <li>
+        Put the score here
+    </li>
+{% endfor %}
+</ul>
