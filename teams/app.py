@@ -5,6 +5,8 @@ from markupsafe import escape
 
 from teams.data.database import Database
 from teams.log_config import log_format, log_level, log_date_format
+from teams.services.app_service import AppService
+from teams.services.game_service import GameService
 from teams.services.standings_service import StandingsService
 
 app = Flask(__name__)
@@ -38,7 +40,12 @@ def get_current_standings():
     return render_template('standings/pages/current_standings.html', view=standings_view)
 
 
-@app.route('/path/<path:subpath>')
-def show_subpath(subpath):
-    # show the subpath after /path/
-    return 'Subpath %s' % escape(subpath)
+@app.route('/games/today')
+def get_games_for_today():
+    app_service = AppService()
+    current_data = app_service.get_current_data()
+
+    game_service = GameService()
+    games = game_service.get_games_for_days(current_data.current_year, current_data.current_day, current_data.current_day)
+
+    return render_template('games/pages/game_day.html', current_data=current_data, games=games)

@@ -143,3 +143,4 @@ cython_debug/
 mydb.db
 venv/Lib/site-packages/pip/__init__.py
 venv/Lib/site-packages/pip/_internal/cli/parser.py
+/team_data.db
