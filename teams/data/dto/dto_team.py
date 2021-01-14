@@ -1,5 +1,3 @@
-import uuid
-
 from sqlalchemy import String, Integer, Column
 
 from teams.data.dto.dto_base import Base

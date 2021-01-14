@@ -3,10 +3,9 @@ import logging
 from flask import Flask, render_template
 from markupsafe import escape
 
-from teams.log_config import log_format, log_level, log_date_format
 from teams.data.database import Database
+from teams.log_config import log_format, log_level, log_date_format
 from teams.services.standings_service import StandingsService
-from teams.services.team_service import TeamService
 
 app = Flask(__name__)
 Database.init_db("sqlite:///C:\\temp\\sqlite\\Data\\mydb.db")

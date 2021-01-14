@@ -6,7 +6,6 @@ from teams.domain.game import Game, GameRules
 from teams.domain.record import Record
 from teams.domain.team import Team
 from teams.services.record_service import RecordService
-from teams.services.view_models.team_view_models import RecordViewModel
 
 
 class TestGame(TestCase):

@@ -1,4 +1,3 @@
-from teams.data.dto.dto_team import TeamDTO
 from teams.data.repo.team_repository import TeamRepository
 from teams.domain.team import Team
 from teams.services.base_service import BaseService

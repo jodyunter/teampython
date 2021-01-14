@@ -1,5 +1,3 @@
-from random import Random
-
 from teams.data.repo.game_repository import GameRepository
 from teams.data.repo.game_rules_repository import GameRulesRepository
 from teams.data.repo.record_repository import RecordRepository

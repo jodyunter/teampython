@@ -1,5 +1,4 @@
 from teams.data.dto.dto_game import GameDTO
-from teams.data.dto.dto_team import TeamDTO
 from teams.data.repo.base_repository import BaseRepository
 
 

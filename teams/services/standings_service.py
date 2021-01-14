@@ -1,5 +1,3 @@
-import logging
-
 from teams.services.app_service import AppService
 from teams.services.base_service import BaseService
 from teams.services.record_service import RecordService

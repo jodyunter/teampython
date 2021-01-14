@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 from teams.data.dto.dto_base import Base
 from teams.data.dto.dto_game_rules import GameRulesDTO
 from teams.data.dto.dto_team import TeamDTO
-from teams.domain.game import Game, GameRules
+from teams.domain.game import Game
 
 
 class GameDTO(Base, Game):
