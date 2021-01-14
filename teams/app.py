@@ -28,7 +28,7 @@ def show_team_list():
 def get_standings_for_year(year):
     standings_service = StandingsService()
     standings_view = standings_service.get_standings_history_view(year)
-    return render_template('teams/standings.html', view=standings_view)
+    return render_template('teams/historic_year_standings.html', view=standings_view)
 
 
 @app.route('/standings/team/<team_id>')
@@ -36,7 +36,7 @@ def get_standings_for_team(team_id):
     standings_service = StandingsService()
     standings_view = standings_service.get_standings_team_history_view(team_id)
 
-    return render_template('teams/historic_standings.html', view=standings_view)
+    return render_template('teams/historic_team_standings.html', view=standings_view)
 
 
 @app.route('/standings')

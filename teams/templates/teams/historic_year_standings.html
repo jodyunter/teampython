@@ -1,0 +1,33 @@
+{% extends "main.html" %}
+{% block content %}
+<div class="container">
+    {% block standings_info %}
+    <div class="row">
+        <div class="col">
+            Season {{ view.year }}
+        </div>
+    </div>
+    {% endblock %}
+    {% block standings_options %}
+    <div class="row">
+        <div class="col">
+            <div class="dropdown">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Season List
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    {% for year in view.seasons %}
+                    <a class="dropdown-item" href="{{ url_for('get_standings_for_year', year=year) }}">Season {{ year
+                        }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    {% block standings_component %}
+        {% include "teams/standings.component.html" %}
+    {% endblock %}
+</div>
+{% endblock %}

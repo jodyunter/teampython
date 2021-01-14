@@ -18,3 +18,12 @@ class GameViewModel:
         self.home_score = home_score
         self.away_score = away_score
         self.status = status
+
+
+class GameDayViewModel:
+
+    def __init__(self, current_data_view, day_viewing, year_viewing, game_view_list):
+        self.current_data = current_data_view
+        self.day = day_viewing
+        self.year = year_viewing
+        self.games = game_view_list

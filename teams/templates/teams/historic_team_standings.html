@@ -1,0 +1,13 @@
+{% extends "teams/historic_year_standings.html" %}
+{% block standings_info %}
+<div class="row">
+    <div class="col">
+        Team {{ view.team }}
+    </div>
+</div>
+{% endblock %}
+{% block standings_options %}
+{% endblock %}
+{% block standings_component %}
+    {% include "teams/standings_with_year.component.html" %}
+{% endblock %}
