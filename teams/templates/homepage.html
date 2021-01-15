@@ -5,7 +5,13 @@
     {% set showYear = False %}
     {% set table_style = "table-sm" %}
     <div class="row">
+        <div class="col-sm">
+            {% set game_list_class = "" %}
+            {% include "games/components/game_day.component.html" %}
+        </div>
         <div class="col">
+            {% set showYear = False %}
+            {% set table_style = "table-sm" %}
             {% include "standings/components/standings.component.html" %}
         </div>
     </div>

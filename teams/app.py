@@ -8,6 +8,7 @@ from teams.log_config import log_format, log_level, log_date_format
 from teams.services.app_service import AppService
 from teams.services.game_service import GameService
 from teams.services.standings_service import StandingsService
+from teams.services.view_models.home_page_view_models import HomePageViewModel
 
 app = Flask(__name__)
 Database.init_db("sqlite:///C:\\temp\\sqlite\\Data\\mydb.db")
@@ -19,7 +20,17 @@ logging.basicConfig(format=log_format, level=log_level, datefmt=log_date_format)
 def get_home_page():
     standings_service = StandingsService()
     standings_view = standings_service.get_current_standings_view()
-    return render_template("homepage.html", view=standings_view)
+    app_service = AppService()
+    current_data = app_service.get_current_data()
+
+    year = current_data.current_year
+    day = current_data.current_day
+
+    game_service = GameService()
+    games = game_service.get_games_for_days(year, day, day)
+    homepage_view = HomePageViewModel(games, current_data, standings_view)
+
+    return render_template("homepage.html", view=homepage_view)
 
 
 @app.route('/standings/<year>')

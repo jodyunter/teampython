@@ -1,0 +1,12 @@
+<!-- setting this up to be able to style it as desired
+     requires a list of game_views
+-->
+
+<li class="list-group-item active">
+    Day {{ view.current_data.current_day }}
+</li>
+{% for game_view in view.games %}
+    <li class="list-group-item {{ game_list_class }}">
+        {% include "games/components/short_game.component.html" %}
+    </li>
+{% endfor %}
