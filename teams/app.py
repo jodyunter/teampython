@@ -15,6 +15,13 @@ Database.init_db("sqlite:///C:\\temp\\sqlite\\Data\\mydb.db")
 logging.basicConfig(format=log_format, level=log_level, datefmt=log_date_format)
 
 
+@app.route('/')
+def get_home_page():
+    standings_service = StandingsService()
+    standings_view = standings_service.get_current_standings_view()
+    return render_template("homepage.html", view=standings_view)
+
+
 @app.route('/standings/<year>')
 @app.route('/standings/year/<year>')
 def get_standings_for_year(year):

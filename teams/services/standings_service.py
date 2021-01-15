@@ -26,11 +26,12 @@ class StandingsService(BaseService):
         app_service = AppService()
         team_service = TeamService()
         team = team_service.get_by_id(team_id)
+        teams = team_service.get_all()
         current_data = app_service.get_current_data()
         records = record_service.get_by_team(team_id)
         record_service.sort_by_year(records)
 
-        return StandingsTeamHistoryViewModel(current_data, team.name, records)
+        return StandingsTeamHistoryViewModel(current_data, team.name, records, teams)
 
     @staticmethod
     def get_current_standings_view():

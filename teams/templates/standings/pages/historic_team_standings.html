@@ -1,6 +1,32 @@
 {% extends "main.html" %}
 {% block content %}
 <div class="container">
-    {% include "standings/components/historic_team_standings.component.html" %}
+    <div class="row">
+        <div class="col">
+            {{ view.team }} season history
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="dropdown">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Team List
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    {% for team in view.team_list %}
+                        <a class="dropdown-item" href="{{ url_for('get_standings_for_team', team_id=team.oid) }}">{{ team.name }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col col-sm-6">
+            {% set showYear = True %}
+            {% set table_style = "table-sm" %}
+            {% include "standings/components/standings.component.html" %}
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -10,10 +10,11 @@ class StandingsHistoryViewModel:
 
 class StandingsTeamHistoryViewModel:
 
-    def __init__(self, current_data_view, team_viewing, records_view_list):
+    def __init__(self, current_data_view, team_viewing, records_view_list, team_view_list):
         self.current_data = current_data_view
         self.team = team_viewing
         self.records = records_view_list
+        self.team_list = team_view_list
 
 
 class StandingsCurrentViewModel:

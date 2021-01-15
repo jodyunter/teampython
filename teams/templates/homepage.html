@@ -1,15 +1,11 @@
 {% extends "main.html" %}
 {% block content %}
+
 <div class="container">
+    {% set showYear = False %}
+    {% set table_style = "table-sm" %}
     <div class="row">
         <div class="col">
-            Season {{ view.current_data.current_year }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col col-sm-6">
-            {% set showYear = False %}
-            {% set table_style = "table-sm" %}
             {% include "standings/components/standings.component.html" %}
         </div>
     </div>
