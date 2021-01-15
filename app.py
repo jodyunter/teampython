@@ -15,9 +15,10 @@ Database.init_db("sqlite:///C:\\temp\\sqlite\\Data\\mydb.db")
 #  logging.basicConfig(filename=log_file, filemode='w', format=log_format, level=log_level, datefmt=log_date_format)
 logging.basicConfig(format=log_format, level=log_level, datefmt=log_date_format)
 
-rounds = 1
+rounds = 4
 do_home_and_away = False
 rules_name = "Season"  # other is Playoff
+
 
 @app.route('/')
 def get_home_page():

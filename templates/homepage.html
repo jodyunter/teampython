@@ -3,12 +3,9 @@
 
 <div class="container">
     <div class="row py-5">
-        {% block action_values %}
-            {% set started = False %}
-            {% set setup = False %}
-            {% set finished = False %}
-        {% endblock %}
-        {% include "actions/year_actions.component.html" %}
+        {% with view=view.buttons_view %}
+            {% include "actions/year_actions.component.html" %}
+        {% endwith %}
     </div>
     {% set showYear = False %}
     {% set table_style = "table-sm" %}
@@ -36,7 +33,7 @@
         </div>
         <div class="col-5">
             {% set showYear = False %}
-            {% set table_style = "table-sm" %}
+            {% set table_style = "table-sm table-striped" %}
             {% with records=view.standings_view.records %}
                 {% include "standings/components/standings.component.html" %}
             {% endwith %}
