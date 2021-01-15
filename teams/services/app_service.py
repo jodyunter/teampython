@@ -114,6 +114,9 @@ class AppService(BaseService):
             game_service.process_games_for_days(game_data.current_year, game_data.current_day, game_data.current_day,
                                                 session)
 
+        record_service = RecordService()
+        record_service.update_rank(game_data.current_year, session)
+
         # check if day complete and processed
         if self.is_day_complete(session):
             self.go_to_next_day(session)

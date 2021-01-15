@@ -2,11 +2,30 @@
 {% block content %}
 
 <div class="container">
+    <div class="row py-5">
+        {% block action_values %}
+            {% set started = False %}
+            {% set setup = False %}
+            {% set finished = False %}
+        {% endblock %}
+        {% include "actions/year_actions.component.html" %}
+    </div>
     {% set showYear = False %}
     {% set table_style = "table-sm" %}
     <div class="row">
+        <div class="col">
+            Season {{ view.current_data.current_year }}
+        </div>
+    </div>
+    <div class="row">
         <div class="col-sm">
             {% set game_list_class = "" %}
+            {% set today = False %}
+            {% include "games/components/game_day.component.html" %}
+        </div>
+        <div class="col-sm">
+            {% set game_list_class = "" %}
+            {% set today = True %}
             {% include "games/components/game_day.component.html" %}
         </div>
         <div class="col">

@@ -53,7 +53,7 @@ class RecordService(BaseService):
             r.rank = rank
             rank += 1
 
-        self.update_records(result)
+        self.update_records(result, session)
 
         self.commit(session, commit)
 
