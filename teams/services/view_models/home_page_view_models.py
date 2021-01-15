@@ -1,11 +1,13 @@
 class HomePageViewModel:
 
-    def __init__(self, yesterday_games, games_view_list, current_data, standings_view, button_view):
+    def __init__(self, map_of_games_by_day, current_data, standings_view, button_view):
         self.current_data = current_data
-        self.yesterday_games = yesterday_games
+        self.days = map_of_games_by_day
         self.standings_view = standings_view
-        self.games = games_view_list
         self.buttons_view = button_view
+
+    def getDaysInReverseOrder(self):
+        return sorted(self.days, reverse=True)
 
 
 class ButtonViewModel:

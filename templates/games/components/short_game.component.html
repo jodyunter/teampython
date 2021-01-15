@@ -1,3 +1,7 @@
 <!-- assumes a game view called game_view
     still need to do styles-->
-{{ game_view.home_name }} {{ game_view.home_score }} :  {{ game_view.away_score }} {{ game_view.away_name }}
+    <div class="row">
+        <div class="col">{{ game_view.home_name }}</div>
+        <div class="col">{{ game_view.home_score }} : {{ game_view.away_score }}</div>
+        <div class="col">{{ game_view.away_name }}</div>
+    </div>

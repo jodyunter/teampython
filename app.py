@@ -31,16 +31,21 @@ def get_home_page():
     day = current_data.current_day
 
     game_service = GameService()
-    games = game_service.get_games_for_days(year, day, day)
-    yesterday_games = game_service.get_games_for_days(year, day-1, day-1)
+    day_map = {}
+    games = game_service.get_games_for_days(year, day - 3, day)
+
+    for game in games:
+        if not game.day in day_map:
+            day_map[game.day] = []
+        day_map[game.day].append(game)
 
     button_view = ButtonViewModel(current_data)
-    homepage_view = HomePageViewModel(yesterday_games, games, current_data, standings_view, button_view)
+    homepage_view = HomePageViewModel(day_map, current_data, standings_view, button_view)
 
     return render_template("homepage.html", view=homepage_view)
 
 
-@app.route('/playgames',  methods=['POST'])
+@app.route('/playgames', methods=['POST'])
 def button_play_clicked():
     app_service = AppService()
 
@@ -50,7 +55,7 @@ def button_play_clicked():
     return get_home_page()
 
 
-@app.route('/setupseason',  methods=['POST'])
+@app.route('/setupseason', methods=['POST'])
 def button_setup_clicked():
     app_service = AppService()
     game_rules_service = GameRulesService()
@@ -95,6 +100,7 @@ def get_games_for_today():
     current_data = app_service.get_current_data()
 
     game_service = GameService()
-    games = game_service.get_games_for_days(current_data.current_year, current_data.current_day, current_data.current_day)
+    games = game_service.get_games_for_days(current_data.current_year, current_data.current_day,
+                                            current_data.current_day)
 
     return render_template('games/pages/game_day.html', current_data=current_data, games=games)

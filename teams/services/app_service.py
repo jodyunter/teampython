@@ -4,7 +4,7 @@ from teams.services.base_service import BaseService
 from teams.services.game_service import GameService
 from teams.services.record_service import RecordService
 from teams.services.team_service import TeamService
-from teams.services.view_models.controller_view_models import GameDataViewModel
+from teams.services.view_models.app_view_models import GameDataViewModel
 
 
 class AppService(BaseService):

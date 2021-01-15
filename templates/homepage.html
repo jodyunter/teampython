@@ -4,38 +4,37 @@
 <div class="container">
     <div class="row py-5">
         {% with view=view.buttons_view %}
-            {% include "actions/year_actions.component.html" %}
+        {% include "actions/year_actions.component.html" %}
         {% endwith %}
     </div>
     {% set showYear = False %}
     {% set table_style = "table-sm" %}
     <div class="row">
         <div class="col">
-            Season {{ view.current_data.current_year }}
+            <h1>Season {{ view.current_data.current_year }}</h1>
         </div>
     </div>
     <div class="row">
-        {% if view.current_data.current_day > 1 %}
-        <div class="col">
-            {% with day=view.current_data.current_day -1, games=view.yesterday_games %}
-                {% set game_list_class = "" %}
-                {% set today = False %}
-                {% include "games/components/game_day.component.html" %}
-            {% endwith %}
+        <div class="col-4">
+            {% for key in view.getDaysInReverseOrder() %}
+            <div class="row">
+                <div class="col">
+                    {% if view.current_data.current_day > 1 %}
+                    {% with day=key, games=view.days[key] %}
+                    {% set game_list_class = "" %}
+                    {% set today = False %}
+                    {% include "games/components/game_day.component.html" %}
+                    {% endwith %}
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
         </div>
-        {% endif %}
         <div class="col">
-            {% with day=view.current_data.current_day, games=view.games %}
-            {% set game_list_class = "" %}
-            {% set today = True %}
-            {% include "games/components/game_day.component.html" %}
-            {% endwith %}
-        </div>
-        <div class="col-5">
             {% set showYear = False %}
             {% set table_style = "table-sm table-striped" %}
             {% with records=view.standings_view.records %}
-                {% include "standings/components/standings.component.html" %}
+            {% include "standings/components/standings.component.html" %}
             {% endwith %}
         </div>
     </div>

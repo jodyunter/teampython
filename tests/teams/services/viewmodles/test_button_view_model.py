@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from teams.services.view_models.controller_view_models import GameDataViewModel
+from teams.services.view_models.app_view_models import GameDataViewModel
 from teams.services.view_models.home_page_view_models import ButtonViewModel
 
 

@@ -1,7 +1,7 @@
 from teams.data.dto.dto_configuration import ConfigurationItemDTO
 from teams.data.repo.base_repository import BaseRepository
 from teams.domain.gamedata import GameData, ConfigurationItem
-from teams.services.view_models.controller_view_models import GameDataViewModel
+from teams.services.view_models.app_view_models import GameDataViewModel
 
 
 class ConfigurationRepository(BaseRepository):
