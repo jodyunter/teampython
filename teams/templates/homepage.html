@@ -18,20 +18,28 @@
         </div>
     </div>
     <div class="row">
+        {% if not view.current_data.current_day == 1 %}
         <div class="col-sm">
-            {% set game_list_class = "" %}
-            {% set today = False %}
-            {% include "games/components/game_day.component.html" %}
+            {% with day=view.current_data.current_day -1, games=view.yesterday_games %}
+                {% set game_list_class = "" %}
+                {% set today = False %}
+                {% include "games/components/game_day.component.html" %}
+            {% endwith %}
         </div>
+        {% endif %}
         <div class="col-sm">
+            {% with day=view.current_data.current_day, games=view.games %}
             {% set game_list_class = "" %}
             {% set today = True %}
             {% include "games/components/game_day.component.html" %}
+            {% endwith %}
         </div>
-        <div class="col">
+        <div class="col-5">
             {% set showYear = False %}
             {% set table_style = "table-sm" %}
-            {% include "standings/components/standings.component.html" %}
+            {% with records=view.standings_view.records %}
+                {% include "standings/components/standings.component.html" %}
+            {% endwith %}
         </div>
     </div>
 </div>

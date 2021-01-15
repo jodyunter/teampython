@@ -2,11 +2,17 @@
      requires a list of game_views
 -->
 
-<li class="list-group-item active">
-    Day {{ view.current_data.current_day }}
-</li>
-{% for game_view in view.games %}
-    <li class="list-group-item {{ game_list_class }}">
-        {% include "games/components/short_game.component.html" %}
-    </li>
+<table class="table table-sm" >
+<thead class="thead-dark">
+<tr>
+    <th scope="col">Day {{ day }}</th>
+</tr>
+</thead>
+    <tbody
+{% for game_view in games %}
+    <tr>
+        <td>{% include "games/components/short_game.component.html" %}</td>
+    </tr>
 {% endfor %}
+</tbody>
+</table>

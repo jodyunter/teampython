@@ -3,11 +3,9 @@ class HomePageViewModel:
     def __init__(self, yesterday_games, games_view_list, current_data, standings_view, button_view):
         self.current_data = current_data
         self.yesterday_games = yesterday_games
+        self.standings_view = standings_view
         self.games = games_view_list
-        self.records = standings_view.records
-        self.buttons = button_view
-        self.play_games_disabled = button_view.play_games_disabled
-        self.setup_season_disabled = button_view.setup_season_disabled
+        self.buttons_view = button_view
 
 
 class ButtonViewModel:

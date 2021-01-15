@@ -10,7 +10,9 @@
         <div class="col col-sm-6">
             {% set showYear = False %}
             {% set table_style = "table-sm" %}
-            {% include "standings/components/standings.component.html" %}
+            {% with records = view.records %}
+                {% include "standings/components/standings.component.html" %}
+            {% endwith %}
         </div>
     </div>
 </div>
