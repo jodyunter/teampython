@@ -32,7 +32,7 @@ def get_home_page():
 
     game_service = GameService()
     day_map = {}
-    games = game_service.get_games_for_days(year, day - 3, day)
+    games = game_service.get_games_for_days(year, day - 10, day)
 
     for game in games:
         if not game.day in day_map:
