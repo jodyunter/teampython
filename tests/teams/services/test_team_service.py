@@ -35,13 +35,14 @@ class TestTeamService(TestCase):
 
         view = service.get_team_by_name("New Team")
 
-        service.update(view.oid, "Updated Name", 33)
+        service.update(view.oid, "Updated Name", 33, False)
 
         view2 = service.get_by_id(view.oid)
 
         self.assertEqual(view.oid, view2.oid)
         self.assertEqual("Updated Name", view2.name)
         self.assertEqual(33, view2.skill)
+        self.assertFalse(view2.active)
 
     def test_get_all(self):
         BaseTestService.setup_test()

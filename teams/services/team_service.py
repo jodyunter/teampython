@@ -9,7 +9,7 @@ class TeamService(BaseService):
 
     @staticmethod
     def team_to_vm(team):
-        return TeamViewModel(team.oid, team.name, team.skill)
+        return TeamViewModel(team.oid, team.name, team.skill, team.active)
 
     def create(self, name, skill, active, session=None):
         commit = session is None
@@ -20,13 +20,14 @@ class TeamService(BaseService):
 
         self.commit(session, commit)
 
-    def update(self, oid, name, skill, session=None):
+    def update(self, oid, name, skill, active, session=None):
         commit = session is None
         session = self.get_session(session)
 
         team = self.repo.get_by_oid(oid, session)
         team.name = name
         team.skill = skill
+        team.active = active
 
         self.commit(session, commit)
 

@@ -1,8 +1,9 @@
 class TeamViewModel:
-    def __init__(self, oid, name, skill):
+    def __init__(self, oid, name, skill, active):
         self.name = name
         self.skill = skill
         self.oid = oid
+        self.active = active
 
 
 class RecordViewModel:
@@ -22,3 +23,9 @@ class RecordViewModel:
         self.games = games
         self.goal_difference = goal_difference
         self.skill = skill
+
+
+class TeamPageViewModel:
+
+    def __init__(self, team_view, records_view_list, games_view_list):
+        pass
