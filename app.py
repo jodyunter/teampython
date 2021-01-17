@@ -40,7 +40,7 @@ def get_home_page():
         day_map[game.day].append(game)
 
     button_view = ButtonViewModel(current_data)
-    homepage_view = HomePageViewModel(day_map, current_data, standings_view, button_view)
+    homepage_view = HomePageViewModel(day_map, current_data, standings_view, button_view, current_data.current_day)
 
     return render_template("homepage.html", view=homepage_view)
 

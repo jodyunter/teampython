@@ -16,27 +16,40 @@
     </div>
     <div class="row">
         <div class="col-4">
-            {% for key in view.getDaysInReverseOrder() %}
-            <div class="row">
-                <div class="col">
-                    {% if view.current_data.current_day > 1 %}
-                    {% with day=key, games=view.days[key] %}
-                    {% set game_list_class = "" %}
-                    {% set today = False %}
-                    {% include "games/components/game_day.component.html" %}
-                    {% endwith %}
-                    {% endif %}
+            <div id="days" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    {% for key in view.getDaysInReverseOrder() %}
+                    {% if view.active_day == key %}
+                    <div class="carousel-item active">
+                    {% else %}
+                        <div class="carousel-item">
+                            {% endif %}
+                            {% with day=key, games=view.days[key] %}
+                            {% set game_list_class = "" %}
+                            {% set today = False %}
+                            {% include "games/components/game_day.component.html" %}
+                            {% endwith %}
+                        </div>
+                    {% endfor %}
+
+                    </div>
+                    <a class="carousel-control-prev" href="#days" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#days" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
                 </div>
             </div>
-            {% endfor %}
-        </div>
-        <div class="col">
-            {% set showYear = False %}
-            {% set table_style = "table-sm table-striped" %}
-            {% with records=view.standings_view.records %}
-            {% include "standings/components/standings.component.html" %}
-            {% endwith %}
+            <div class="col">
+                {% set showYear = False %}
+                {% set table_style = "table-sm table-striped" %}
+                {% with records=view.standings_view.records %}
+                {% include "standings/components/standings.component.html" %}
+                {% endwith %}
+            </div>
         </div>
     </div>
-</div>
-{% endblock %}
+    {% endblock %}
