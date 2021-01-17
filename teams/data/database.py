@@ -14,6 +14,16 @@ Session = sessionmaker()
 
 class Database:
     @staticmethod
+    def get_engine():
+        global engine
+        return engine
+
+    @staticmethod
+    def create_db(file):
+        global engine
+        engine = create_engine(file)
+
+    @staticmethod
     def init_db(file):
         global engine
         engine = create_engine(file)

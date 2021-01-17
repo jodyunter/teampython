@@ -11,7 +11,7 @@ from teams.services.record_service import RecordService
 class TestGame(TestCase):
 
     def test_play(self):
-        game = Game(5, 25, Team("T1", 5, "1"), Team("T1", 4, "2"), 0, 0, False, False, GameRules("Rules", True, ""), "")
+        game = Game(5, 25, Team("T1", 5, True, "1"), Team("T1", 4, True, "2"), 0, 0, False, False, GameRules("Rules", True, ""), "")
 
         r = random
         r.seed(1235)
@@ -23,8 +23,8 @@ class TestGame(TestCase):
     def test_stats(self):
         t1_skill = 10
         t2_skill = 0
-        team1 = Team("T1", t1_skill, "1")
-        team2 = Team("T2", t2_skill, "2")
+        team1 = Team("T1", t1_skill, True, "1")
+        team2 = Team("T2", t2_skill, True, "2")
 
         record1 = Record(1, team1, 1, 0, 0, 0, 0, 0, 0, "3")
         record2 = Record(1, team2, 1, 0, 0, 0, 0, 0, 0, "3")

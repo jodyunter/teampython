@@ -1,6 +1,7 @@
 import os
 import random
 
+from app_config import db_connection_string
 from teams.ConsoleUI import data_setup
 from teams.ConsoleUI.views.record_view import RecordView
 from teams.data.database import Database
@@ -16,9 +17,8 @@ rounds = 1
 do_home_and_away = False
 rules_name = "Season"  # other is Playoff
 
-#Database.init_db("sqlite:///:memory:")
-Database.init_db("sqlite:///team_data.db")
-# Database.init_db("sqlite:///C:\\dev\\python_learning\\team_project\\mydb.db")#
+Database.init_db(db_connection_string)
+
 if setup:
     Database.clean_up_database(Database.get_session())
     data_setup.setup()

@@ -1,0 +1,3 @@
+remember to add all models to the env.py
+
+alembic revision --autogenerate -m "active"

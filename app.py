@@ -3,15 +3,16 @@ import random
 
 from flask import Flask, render_template
 
+from app_config import db_connection_string
 from teams.data.database import Database
-from teams.log_config import log_format, log_level, log_date_format
+from log_config import log_format, log_level, log_date_format
 from teams.services.app_service import AppService
 from teams.services.game_service import GameService, GameRulesService
 from teams.services.standings_service import StandingsService
 from teams.services.view_models.home_page_view_models import HomePageViewModel, ButtonViewModel
 
 app = Flask(__name__)
-Database.init_db("sqlite:///C:\\temp\\sqlite\\Data\\mydb.db")
+Database.init_db(db_connection_string)
 #  logging.basicConfig(filename=log_file, filemode='w', format=log_format, level=log_level, datefmt=log_date_format)
 logging.basicConfig(format=log_format, level=log_level, datefmt=log_date_format)
 

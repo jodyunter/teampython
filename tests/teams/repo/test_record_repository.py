@@ -15,7 +15,7 @@ class TestRecordRepository(TestBaseRepository, TestCase):
     def test_add_new_team(self):
         session = self.setup_basic_test()
         team_id = str(uuid.uuid4())
-        team = Team("Record Add For New Team", 5, team_id)
+        team = Team("Record Add For New Team", 5, True, team_id)
 
         record = Record(1, team, 1, 2, 3, 4, 5, 6, 7, str(uuid.uuid4()))
 
@@ -30,7 +30,7 @@ class TestRecordRepository(TestBaseRepository, TestCase):
     def test_add_existing_team(self):
         session = self.setup_basic_test()
         team_id = str(uuid.uuid4())
-        team = Team("Record Add Existing Team", 5, team_id)
+        team = Team("Record Add Existing Team", 5, True, team_id)
         team_repo = TeamRepository()
         team_repo.add(team, session)
         session.commit()
@@ -50,7 +50,7 @@ class TestRecordRepository(TestBaseRepository, TestCase):
         session = self.setup_basic_test()
         team_names = ["Team A1", "Team A2", "Team A5"]
         team_repo = TeamRepository()
-        [team_repo.add(Team(t, 0, str(uuid.uuid4())), session) for t in team_names]
+        [team_repo.add(Team(t, 0, True, str(uuid.uuid4())), session) for t in team_names]
         session.commit()
 
         [self.repo.add(Record(1, team, 1, 2, 3, 4, 5, 6, 7, str(uuid.uuid4())), session)
@@ -81,7 +81,7 @@ class TestRecordRepository(TestBaseRepository, TestCase):
         team_list = []
         for i in range(10):
             new_id = str(uuid.uuid4())
-            team_list.append(Team("GBYN " + str(i), i, new_id))
+            team_list.append(Team("GBYN " + str(i), i, True, new_id))
 
         [team_repo.add(t, session) for t in team_list]
         # need them to be DTOs!

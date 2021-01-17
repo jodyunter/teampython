@@ -9,6 +9,9 @@ class TeamRepository(BaseRepository):
     def get_by_name(self, name, session):
         return session.query(self.get_type()).filter_by(name=name).first()
 
+    def get_by_active_status(self, active, session):
+        return session.query(self.get_type()).filter_by(active=active)
+
     @staticmethod
     def add(team, session):
         team_dto = TeamDTO(team)

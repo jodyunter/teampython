@@ -1,4 +1,4 @@
-from sqlalchemy import String, Integer, Column
+from sqlalchemy import String, Integer, Column, Boolean
 
 from teams.data.dto.dto_base import Base
 from teams.domain.team import Team
@@ -10,9 +10,10 @@ class TeamDTO(Base, Team):
     oid = Column(String, primary_key=True)
     name = Column(String, unique=True)
     skill = Column(Integer, default=5)
+    active = Column(Boolean, default=True)
 
     def __init__(self, team):
-        Team.__init__(self, team.name, team.skill, team.oid)
+        Team.__init__(self, team.name, team.skill, team.active, team.oid)
 
     @staticmethod
     def get_dto(team):

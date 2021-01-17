@@ -15,7 +15,7 @@ class TestTeamService(TestCase):
     def test_create_and_get_by_name_and_get_by_oid(self):
         BaseTestService.setup_test()
         service = TeamService()
-        service.create("Team 1 create", 12)
+        service.create("Team 1 create", 12, True)
         team_view = service.get_team_by_name("Team 1 create")
 
         self.assertEqual("Team 1 create", team_view.name)
@@ -31,7 +31,7 @@ class TestTeamService(TestCase):
     def test_create_and_update(self):
         BaseTestService.setup_test()
         service = TeamService()
-        service.create("New Team", 55)
+        service.create("New Team", 55, True)
 
         view = service.get_team_by_name("New Team")
 
@@ -48,7 +48,7 @@ class TestTeamService(TestCase):
         service = TeamService()
         current = len(service.get_all())
         for k in range(10):
-            service.create("Team Get All " + str(k), k)
+            service.create("Team Get All " + str(k), k, True)
 
         all_data = service.get_all()
 

@@ -13,7 +13,7 @@ class TestRecordService(BaseTestService, TestCase):
         service = RecordService()
 
         for i in range(10):
-            team_service.create("Team " + str(i), 5)
+            team_service.create("Team " + str(i), 5, True)
 
         teams = team_service.get_all()
 
@@ -34,7 +34,7 @@ class TestRecordService(BaseTestService, TestCase):
         service = RecordService()
 
         for i in range(10):
-            team_service.create("Team " + str(i), 5)
+            team_service.create("Team " + str(i), 5, True)
 
         teams = team_service.get_all()
 

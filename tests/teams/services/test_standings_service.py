@@ -19,7 +19,7 @@ class TestStandingsService(BaseTestService, TestCase):
         standings_service = StandingsService()
 
         for i in range(10):
-            team_service.create("Team " + str(i), 5)
+            team_service.create("Team " + str(i), 5, True)
 
         [record_service.add(team_service.get_all(), 25)]
         [record_service.add(team_service.get_all(), 35)]

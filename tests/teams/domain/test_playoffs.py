@@ -8,8 +8,8 @@ from teams.domain.team import Team
 class TestPlayoffSeries(TestCase):
 
     def test_process_game_team1_win(self):
-        ht = Team("Team 1", 5, "A")
-        at = Team("Team 2", 5, "B")
+        ht = Team("Team 1", 5, True, "A")
+        at = Team("Team 2", 5, True, "B")
         psr = PlayoffSeriesRules(1, 4, None, None, None, None, None, None, None)
         ps = PlayoffSeries(1, ht, at, 0, 0, psr, [], True, False)
 
@@ -28,8 +28,8 @@ class TestPlayoffSeries(TestCase):
         self.assertEqual(2, len(ps.games), "Games in list")
 
     def test_process_game_team2_win(self):
-        ht = Team("Team 1", 5, "A")
-        at = Team("Team 2", 5, "B")
+        ht = Team("Team 1", 5, True, "A")
+        at = Team("Team 2", 5, True, "B")
         psr = PlayoffSeriesRules(1, 4, None, None, None, None, None, None, None)
         ps = PlayoffSeries(1, ht, at, 0, 0, psr, [], True, False)
 
@@ -46,8 +46,8 @@ class TestPlayoffSeries(TestCase):
         self.assertEqual(1, ps.team2_wins)
 
     def test_check_complete(self):
-        ht = Team("Team 1", 5, "A")
-        at = Team("Team 2", 5, "B")
+        ht = Team("Team 1", 5, True, "A")
+        at = Team("Team 2", 5, True, "B")
         psr = PlayoffSeriesRules(1, 2, None, None, None, None, None, None, None)
         ps = PlayoffSeries(1, ht, at, 0, 0, psr, [], True, False)
 
@@ -72,8 +72,8 @@ class TestPlayoffSeries(TestCase):
         self.assertTrue(ps.check_complete())
 
     def test_get_wins_for_team_zero_games(self):
-        ht = Team("Team 1", 5, "A")
-        at = Team("Team 2", 5, "B")
+        ht = Team("Team 1", 5, True, "A")
+        at = Team("Team 2", 5, True, "B")
         psr = PlayoffSeriesRules(1, 2, None, None, None, None, None, None, None)
         ps = PlayoffSeries(1, ht, at, 0, 0, psr, [], True, False)
 
@@ -81,8 +81,8 @@ class TestPlayoffSeries(TestCase):
         self.assertEqual(0, ps.get_wins_for_team(ps.team2))
 
     def test_get_wins_for_team_zero_wins_with_games(self):
-        ht = Team("Team 1", 5, "A")
-        at = Team("Team 2", 5, "B")
+        ht = Team("Team 1", 5, True, "A")
+        at = Team("Team 2", 5, True, "B")
         psr = PlayoffSeriesRules(1, 2, None, None, None, None, None, None, None)
         ps = PlayoffSeries(1, ht, at, 0, 0, psr, [], True, False)
 
@@ -91,8 +91,8 @@ class TestPlayoffSeries(TestCase):
         self.assertEqual(1, ps.get_wins_for_team(ps.team2))
 
     def test_get_wins_for_each_team_lots_of_games(self):
-        ht = Team("Team 1", 5, "A")
-        at = Team("Team 2", 5, "B")
+        ht = Team("Team 1", 5, True, "A")
+        at = Team("Team 2", 5, True, "B")
         psr = PlayoffSeriesRules(1, 2, None, None, None, None, None, None, None)
         ps = PlayoffSeries(1, ht, at, 0, 0, psr, [], True, False)
 
@@ -111,8 +111,8 @@ class TestPlayoffSeries(TestCase):
         self.assertEqual(3, ps.get_wins_for_team(ps.team2))
 
     def test_get_winner(self):
-        ht = Team("Team 1", 5, "A")
-        at = Team("Team 2", 5, "B")
+        ht = Team("Team 1", 5, True, "A")
+        at = Team("Team 2", 5, True, "B")
         psr = PlayoffSeriesRules(1, 2, None, None, None, None, None, None, None)
         ps = PlayoffSeries(1, ht, at, 0, 0, psr, [], True, False)
 
@@ -137,8 +137,8 @@ class TestPlayoffSeries(TestCase):
         self.assertEqual(ps.get_winner().oid, at.oid)
 
     def test_get_loser(self):
-        ht = Team("Team 1", 5, "A")
-        at = Team("Team 2", 5, "B")
+        ht = Team("Team 1", 5, True, "A")
+        at = Team("Team 2", 5, True, "B")
         psr = PlayoffSeriesRules(1, 2, None, None, None, None, None, None, None)
         ps = PlayoffSeries(1, ht, at, 0, 0, psr, [], True, False)
 

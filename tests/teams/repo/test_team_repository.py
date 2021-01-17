@@ -11,7 +11,7 @@ class TestTeamRepository(TestBaseRepository, TestCase):
     def test_get_by_name(self):
         name = "team 1 by name"
         session = self.setup_basic_test()
-        session.add(TeamDTO(Team(name, 12, str(uuid.uuid4()))))
+        session.add(TeamDTO(Team(name, 12, True, str(uuid.uuid4()))))
         session.commit()
 
         repo = TeamRepository()
@@ -26,7 +26,7 @@ class TestTeamRepository(TestBaseRepository, TestCase):
 
         repo = TeamRepository()
         for i in range(5):
-            repo.add(TeamDTO(Team("team " + str(i) + " add_all", i, str(uuid.uuid4()))), session)
+            repo.add(TeamDTO(Team("team " + str(i) + " add_all", i, True, str(uuid.uuid4()))), session)
 
         session.commit()
 
@@ -41,7 +41,7 @@ class TestTeamRepository(TestBaseRepository, TestCase):
 
         for i in range(5):
             oid = str(uuid.uuid4())
-            repo.add(TeamDTO(Team("team " + str(i) + " add_all", i, oid)), session)
+            repo.add(TeamDTO(Team("team " + str(i) + " add_all", i, True, oid)), session)
 
         session.commit()
 
@@ -49,5 +49,24 @@ class TestTeamRepository(TestBaseRepository, TestCase):
 
         self.assertIsNotNone(dto, oid)
         self.assertEqual(dto.oid, oid)
+
+    def should_get_by_status(self):
+        session = self.setup_basic_test()
+
+        repo = TeamRepository()
+
+        for i in range(5):
+            oid = str(uuid.uuid4())
+            active = True
+            if i % 2 == 0:
+                active = False
+            repo.add(TeamDTO(Team("team " + str(i) + " add_all", i, True, oid)), session)
+
+        session.commit()
+
+        result = repo.get_by_active_status(True)
+        self.assertEqual(2, len(result))
+        result = repo.get_by_active_status(True)
+        self.assertEqual(3, len(result))
 
 

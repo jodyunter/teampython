@@ -25,18 +25,12 @@ def add_new_teams():
     game_data = app_service.get_current_data()
     teams_to_add = get_next_teams(str(game_data.current_year))
     for t in teams_to_add:
-        team_service.create(t, 0)
+        team_service.create(t, 0, True)
 
 
 def get_next_teams(year_string):
     return {
-        "0": ["Montreal", "Toronto", "Ottawa", "Calgary"],
-        "1": ["Edmonton"],
-        "2": ["Vancouver"],
-        "3": ["Winnipeg"],
-        "4": ["Quebec City"],
-        "5": ["Halifax"],
-        "6": ["Victoria"],
+        "0": ["Montreal", "Toronto", "Ottawa", "Calgary", "Edmonton", "Vancouver", "Winnipeg", "Quebec City", "Halifax", "Victoria", "Saskatoon"],
         "7": ["Saskatoon"],
         "8": ["Detroit"],
         "9": ["Pittsburgh"],

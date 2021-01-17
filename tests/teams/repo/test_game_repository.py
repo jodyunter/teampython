@@ -18,8 +18,8 @@ class TestGameRepository(TestBaseRepository, TestCase):
         name_1 = "Team GA1"
         name_2 = "Team GA2"
 
-        team_repo.add(Team(name_1, 12, self.get_id()), session)
-        team_repo.add(Team(name_2, 12, self.get_id()), session)
+        team_repo.add(Team(name_1, 12, True, self.get_id()), session)
+        team_repo.add(Team(name_2, 12, True, self.get_id()), session)
         session.commit()
 
         team_1 = team_repo.get_by_name(name_1, session)
@@ -39,8 +39,8 @@ class TestGameRepository(TestBaseRepository, TestCase):
         name_1 = "Team GA1"
         name_2 = "Team GA2"
 
-        team_1 = Team(name_1, 12, self.get_id())
-        team_2 = Team(name_2, 12, self.get_id())
+        team_1 = Team(name_1, 12, True, self.get_id())
+        team_2 = Team(name_2, 12, True, self.get_id())
 
         repo.add(Game(1, 15, team_1, team_2, 5, 4, True, False, GameRules("Rules", True, self.get_id()),
                       self.get_id()), session)
@@ -57,12 +57,12 @@ class TestGameRepository(TestBaseRepository, TestCase):
         name_1 = "Team GA1"
         name_2 = "Team GA2"
 
-        team_repo.add(Team(name_1, 12, self.get_id()), session)
+        team_repo.add(Team(name_1, 12, True, self.get_id()), session)
 
         session.commit()
 
         team_1 = team_repo.get_by_name(name_1, session)
-        team_2 = Team(name_2, 12, self.get_id())
+        team_2 = Team(name_2, 12, True, self.get_id())
 
         repo.add(Game(1, 15, team_1, team_2, 5, 4, True, False, GameRules("Rules", True, self.get_id()),
                       self.get_id()), session)
@@ -78,8 +78,8 @@ class TestGameRepository(TestBaseRepository, TestCase):
         team_repo = TeamRepository()
         gr_repo = GameRulesRepository()
 
-        team1 = Team("t1", 5, "A")
-        team2 = Team("t2", 5, "B")
+        team1 = Team("t1", 5, True, "A")
+        team2 = Team("t2", 5, True, "B")
         team_repo.add(team1, session)
         team_repo.add(team2, session)
         gr = GameRules("Rules 12", True, "T")

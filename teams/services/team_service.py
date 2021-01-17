@@ -11,11 +11,11 @@ class TeamService(BaseService):
     def team_to_vm(team):
         return TeamViewModel(team.oid, team.name, team.skill)
 
-    def create(self, name, skill, session=None):
+    def create(self, name, skill, active, session=None):
         commit = session is None
         session = self.get_session(session)
 
-        dto = Team(name, skill, self.get_new_id())
+        dto = Team(name, skill, active, self.get_new_id())
         self.repo.add(dto, session)
 
         self.commit(session, commit)
@@ -91,6 +91,13 @@ class TeamService(BaseService):
         session = self.get_session(session)
 
         team_list = self.repo.get_all(session)
+        return [TeamService.team_to_vm(t) for t in team_list]
+
+    def get_active_teams(self, session=None):
+        session = self.get_session(session)
+
+        team_list = self.repo.get_by_active_status(True, session)
+
         return [TeamService.team_to_vm(t) for t in team_list]
 
     def get_team_by_name(self, name, session=None):
