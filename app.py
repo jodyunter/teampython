@@ -105,3 +105,9 @@ def get_games_for_today():
                                             current_data.current_day)
 
     return render_template('games/pages/game_day.html', current_data=current_data, games=games)
+
+
+@app.route('/teams/test')
+def test_team_view():
+    return render_template('teams/pages/team_edit.html')
+
