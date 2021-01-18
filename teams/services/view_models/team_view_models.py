@@ -27,5 +27,7 @@ class RecordViewModel:
 
 class TeamPageViewModel:
 
-    def __init__(self, team_view, records_view_list, games_view_list):
-        pass
+    def __init__(self, team_view, standings_view, games_view_list):
+        self.team = team_view
+        self.standings = standings_view
+        self.games = games_view_list

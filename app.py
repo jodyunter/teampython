@@ -9,7 +9,9 @@ from log_config import log_format, log_level, log_date_format
 from teams.services.app_service import AppService
 from teams.services.game_service import GameService, GameRulesService
 from teams.services.standings_service import StandingsService
+from teams.services.team_service import TeamService
 from teams.services.view_models.home_page_view_models import HomePageViewModel, ButtonViewModel
+from teams.services.view_models.team_view_models import TeamPageViewModel
 
 app = Flask(__name__)
 Database.init_db(db_connection_string)
@@ -107,7 +109,14 @@ def get_games_for_today():
     return render_template('games/pages/game_day.html', current_data=current_data, games=games)
 
 
-@app.route('/teams/test')
-def test_team_view():
-    return render_template('teams/pages/team_edit.html')
+@app.route('/teams/view/<team_id>')
+def get_team_view(team_id):
+    standings_service = StandingsService()
+    standings_view = standings_service.get_standings_team_history_view(team_id)
+
+    team_service = TeamService()
+    team = team_service.get_by_id(team_id)
+    team_view = TeamPageViewModel(team, standings_view, [])
+
+    return render_template('teams/pages/team_edit.html', view=team_view)
 

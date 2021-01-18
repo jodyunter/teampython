@@ -27,7 +27,11 @@
             <td>{{ record.year }}</td>
         {% endif %}
         <td>{{ record.rank }}</td>
-        <td><a href="{{ url_for('get_standings_for_team', team_id=record.team_id) }}">{{ record.team_name }}</a></td>
+        {% if showLink %}
+        <td><a href="{{ url_for('get_team_view', team_id=record.team_id) }}">{{ record.team_name }}</a></td>
+        {% else %}
+        <td>{{ record.team_name }}</td>
+        {% endif %}
         <td>{{ record.wins }}</td>
         <td>{{ record.loses }}</td>
         <td>{{ record.ties }}</td>

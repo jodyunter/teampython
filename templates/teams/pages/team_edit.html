@@ -1,2 +1,24 @@
 {% extends "main.html" %}
-{% include "teams/components/new_team.component.html" %}
+{% block custom_styles %}
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            {% with team=view.team %}
+            {% include "teams/components/new_team.component.html" %}
+            {% endwith %}
+        </div>
+        <div class="col-8">
+            {% if view.team.oid != "" %}
+                {% set showYear = True %}
+                {% set showLink = False %}
+                {% set table_style = "table-sm table-striped" %}
+                {% with records=view.standings.records %}
+                {% include "standings/components/standings.component.html" %}
+                {% endwith %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
