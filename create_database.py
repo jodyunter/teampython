@@ -3,7 +3,7 @@ from teams.data.database import Database
 from alembic.config import Config
 from alembic import command
 
-Database.init_db(db_connection_string)
+#Database.init_db(db_connection_string)
 
 alembic_cfg = Config("alembic.ini")
 command.stamp(alembic_cfg, "head")
