@@ -137,10 +137,10 @@ class AppService(BaseService):
 
         game_data = repo.get_current_data(session)
         if not game_data.is_year_setup:
-            team_list = team_service.get_active_teams()
-            record_service.add(team_list, game_data.current_year)
+            team_list = team_service.get_active_teams(session)
+            record_service.add(team_list, game_data.current_year, session)
             game_service.create_games(team_list, game_data.current_year, game_data.current_day, rules,
-                                      rounds, home_and_away)
+                                      rounds, home_and_away, session)
             game_data.is_year_setup = True
 
         self.commit(session, commit)
