@@ -1,3 +1,5 @@
 remember to add all models to the env.py
+use the create_database script to create a new database and update it using one of the databases/<config>
+alembic --name sqlite_local revision --autogenerate -m "test"
 
 alembic revision --autogenerate -m "active"
