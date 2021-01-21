@@ -1,4 +1,5 @@
 import sys
+
 sys.path = ['', '..'] + sys.path[1:]
 
 from logging.config import fileConfig
@@ -8,12 +9,11 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from teams.data.dto.dto_configuration import ConfigurationItemDTO
+from teams.data.dto.dto_game_data import GameDataDTO
 from teams.data.dto.dto_game import GameDTO
 from teams.data.dto.dto_game_rules import GameRulesDTO
 from teams.data.dto.dto_record import RecordDTO
 from teams.domain import team
-
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -30,6 +30,7 @@ fileConfig(config.config_file_name)
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 target_metadata = Base.metadata
+
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

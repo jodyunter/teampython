@@ -1,4 +1,4 @@
-from teams.data.repo.configuration_repository import ConfigurationRepository
+from teams.data.repo.game_data_repository import GameDataRepository
 from teams.domain.gamedata import GameData
 from teams.services.base_service import BaseService
 from teams.services.game_service import GameService
@@ -14,7 +14,7 @@ class AppService(BaseService):
 
     def get_current_data(self, session=None):
         session = self.get_session(session)
-        repo = ConfigurationRepository()
+        repo = GameDataRepository()
         game_data = repo.get_current_data(session)
         return GameDataViewModel(game_data.current_year, game_data.current_day,
                                  game_data.is_year_setup, game_data.is_year_finished)
@@ -22,37 +22,36 @@ class AppService(BaseService):
     def setup_data(self, year, day, setup, finished, session=None):
         commit = session is None
         session = self.get_session(session)
-        repo = ConfigurationRepository()
-        game_data = GameData(year, day, setup, finished)
+        repo = GameDataRepository()
+        game_data = GameData("game_data", year, day, setup, finished)
         repo.add(game_data, session)
         self.commit(session, commit)
 
     def change_day(self, new_day, session=None):
         commit = session is None
         session = self.get_session(session)
-        repo = ConfigurationRepository()
+        repo = GameDataRepository()
         game_data = repo.get_current_data(session)
         game_data.current_day = new_day
-        repo.update(game_data, session)
         self.commit(session, commit)
 
     def change_year(self, new_year, session=None):
         commit = self.get_session(session)
-        repo = ConfigurationRepository()
+        repo = GameDataRepository()
         game_data = repo.get_current_data(session)
         game_data.current_year = new_year
         game_data.current_day = 1
         game_data.is_year_finished = False
         game_data.is_year_setup = False
 
-        repo.update(game_data, session)
+        # repo.update(game_data, session)
 
         self.commit(session, commit)
 
     def go_to_next_day(self, session=None):
         commit = session is None
         session = self.get_session(session)
-        repo = ConfigurationRepository()
+        repo = GameDataRepository()
         game_data = repo.get_current_data(session)
         yes = self.is_day_complete(session)
 
@@ -64,7 +63,7 @@ class AppService(BaseService):
     def go_to_next_year(self, session=None):
         commit = session is None
         session = self.get_session(session)
-        repo = ConfigurationRepository()
+        repo = GameDataRepository()
         game_data = repo.get_current_data(session)
 
         yes = self.is_year_complete()
@@ -77,7 +76,7 @@ class AppService(BaseService):
     def is_day_complete(self, session=None):
         session = self.get_session(session)
         day_is_complete = False
-        repo = ConfigurationRepository()
+        repo = GameDataRepository()
         game_data = repo.get_current_data(session)
         game_service = GameService()
         games_unprocessed = game_service.get_incomplete_games_for_days(game_data.current_year,
@@ -92,7 +91,7 @@ class AppService(BaseService):
     def is_year_complete(self, session=None):
         session = self.get_session(session)
         game_service = GameService()
-        repo = ConfigurationRepository()
+        repo = GameDataRepository()
         game_data = repo.get_current_data(session)
         if game_data.is_year_finished:
             return True
@@ -106,7 +105,8 @@ class AppService(BaseService):
 
         # get games for current day and play and process if needed
         game_service = GameService()
-        game_data = self.get_current_data(session)
+        repo = GameDataRepository()
+        game_data = repo.get_current_data(session)
 
         if not self.is_day_complete(session):
             game_service.play_games_for_days(game_data.current_year, game_data.current_day, game_data.current_day, r,
@@ -123,9 +123,7 @@ class AppService(BaseService):
 
         # increment day
         if self.is_year_complete(session):
-            repo = ConfigurationRepository()
             game_data.is_year_finished = True
-            repo.update(game_data, session)
 
         self.commit(session, commit)
 
@@ -135,15 +133,14 @@ class AppService(BaseService):
         team_service = TeamService()
         record_service = RecordService()
         game_service = GameService()
-        repo = ConfigurationRepository()
+        repo = GameDataRepository()
 
-        game_data = self.get_current_data(session)
+        game_data = repo.get_current_data(session)
         if not game_data.is_year_setup:
             team_list = team_service.get_active_teams()
             record_service.add(team_list, game_data.current_year)
             game_service.create_games(team_list, game_data.current_year, game_data.current_day, rules,
                                       rounds, home_and_away)
             game_data.is_year_setup = True
-            repo.update(game_data, session)
 
         self.commit(session, commit)

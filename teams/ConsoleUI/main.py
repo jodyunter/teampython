@@ -10,7 +10,7 @@ from teams.services.game_service import GameService, GameRulesService
 from teams.services.record_service import RecordService
 from teams.services.team_service import TeamService
 
-setup = True
+setup = False
 
 add_teams = True
 rounds = 1

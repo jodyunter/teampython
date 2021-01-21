@@ -8,7 +8,7 @@ class GameRulesRepository(BaseRepository):
 
     def add(self, game_rules, session):
         dto = GameRulesDTO.get_dto(game_rules)
-        session.add(dto);
+        session.add(dto)
         session.commit()
 
     def get_by_name(self, name, session):

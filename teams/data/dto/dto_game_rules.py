@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String, Integer, Boolean
 
 from teams.data.dto.dto_base import Base
 from teams.domain.game import GameRules
@@ -9,7 +9,7 @@ class GameRulesDTO(Base, GameRules):
 
     oid = Column(String, primary_key=True)
     name = Column(String, unique=True)
-    can_tie = Column(Integer)
+    can_tie = Column(Boolean)
 
     def __init__(self, game_rules):
         GameRules.__init__(self, game_rules.name, game_rules.can_tie, game_rules.oid)

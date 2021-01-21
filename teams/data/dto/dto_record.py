@@ -18,7 +18,7 @@ class RecordDTO(Base, Record):
     goals_for = Column(Integer, default=0)
     goals_against = Column(Integer, default=0)
     skill = Column(Integer, default=0)
-    team_id = Column(Integer, ForeignKey('teams.oid'))
+    team_id = Column(String, ForeignKey('teams.oid'))
     team = relationship("TeamDTO")
 
     def __init__(self, record):

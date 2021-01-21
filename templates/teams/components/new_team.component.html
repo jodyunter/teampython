@@ -26,7 +26,11 @@
             {% if team.oid == "" %}
             <button type="submit" class="btn btn-primary">Create</button>
             {% else %}
-            <button type="submit" class="btn btn-primary">Update</button>
+             <button type="submit"
+               id="update_button"
+              value="update"
+               class="btn btn-primary px-2">
+                 Update</button>
             {% endif %}
         </div>
     </div>

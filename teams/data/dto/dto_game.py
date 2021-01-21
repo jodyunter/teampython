@@ -1,4 +1,4 @@
-from sqlalchemy import String, Column, Integer, ForeignKey
+from sqlalchemy import String, Column, Integer, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
 from teams.data.dto.dto_base import Base
@@ -15,13 +15,13 @@ class GameDTO(Base, Game):
     day = Column(Integer)
     home_score = Column(Integer)
     away_score = Column(Integer)
-    complete = Column(Integer)
-    processed = Column(Integer)
-    home_team_id = Column(Integer, ForeignKey('teams.oid'))
+    complete = Column(Boolean)
+    processed = Column(Boolean)
+    home_team_id = Column(String, ForeignKey('teams.oid'))
     home_team = relationship("TeamDTO", foreign_keys=[home_team_id])
-    away_team_id = Column(Integer, ForeignKey('teams.oid'))
+    away_team_id = Column(String, ForeignKey('teams.oid'))
     away_team = relationship("TeamDTO", foreign_keys=[away_team_id])
-    rules_id = Column(Integer, ForeignKey('gamerules.oid'))
+    rules_id = Column(String, ForeignKey('gamerules.oid'))
     rules = relationship("GameRulesDTO", foreign_keys=[rules_id])
 
     def __init__(self, game):
