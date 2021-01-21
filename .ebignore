@@ -1,7 +1,11 @@
 # misc
-migrations/
+databases/
 *.log
 docs/
+tests/
+alembic.ini
+create_database.py
+configuration/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
