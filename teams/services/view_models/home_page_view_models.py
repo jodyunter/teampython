@@ -7,6 +7,7 @@ class HomePageViewModel:
         self.buttons_view = button_view
         self.active_day = active_day
 
+
     def getDaysInReverseOrder(self):
         return sorted(self.days, reverse=True)
 

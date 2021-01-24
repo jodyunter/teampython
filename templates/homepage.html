@@ -2,6 +2,11 @@
 {% block content %}
 
 <div class="container">
+    <div class="row">
+        {{ view.message }}
+        This is where messages might go.
+    </div>
+
     <div class="row py-5">
         {% with view=view.buttons_view %}
         {% include "actions/year_actions.component.html" %}

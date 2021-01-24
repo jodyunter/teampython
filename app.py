@@ -10,6 +10,7 @@ from teams.services.app_service import AppService
 from teams.services.game_service import GameService, GameRulesService
 from teams.services.standings_service import StandingsService
 from teams.services.team_service import TeamService
+from teams.services.view_models.dev_view_model import DevViewModel
 from teams.services.view_models.home_page_view_models import HomePageViewModel, ButtonViewModel
 from teams.services.view_models.team_view_models import TeamPageViewModel
 
@@ -120,3 +121,8 @@ def get_team_view(team_id):
 
     return render_template('teams/pages/team_edit.html', view=team_view)
 
+
+@app.route('/dev')
+def get_dev_view():
+    dev_view = DevViewModel(db_connection_string)
+    return render_template('dev/dev.html', view=dev_view)
