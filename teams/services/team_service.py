@@ -116,3 +116,10 @@ class TeamService(BaseService):
             return None
         else:
             return TeamService.team_to_vm(team)
+
+    #  delete methods need to be more robust
+    def delete_team(self, oid, session=None):
+        session = self.get_session(session)
+        team = self.repo.get_by_oid(oid, session)
+        session.delete(team)
+        session.commit()

@@ -50,6 +50,60 @@ def get_home_page():
     return render_template("homepage.html", view=homepage_view)
 
 
+@app.route('/createteam', methods=['POST'])
+def button_create_team_clicked():
+    team_name = request.form["name"]
+    team_active = RequestUtilities.get_boolean_from_form_input(request.form, "active")
+    team_skill = request.form["skill"]
+
+    if team_name is None or team_name == "":
+        pass
+    else:
+        team_service = TeamService()
+
+        team_service.create(team_name, team_skill, team_active)
+
+    return get_team_edit_view()
+
+
+@app.route('/updateteams', methods=['POST'])
+def button_update_team_list_clicked():
+    action_string = request.form["update"]
+    action_string_parsed = action_string.split("_")
+
+    action = action_string_parsed[0]
+
+    team_service = TeamService()
+
+    if action == "All":
+        for key in request.form:
+            if key.startswith("id_"):
+                oid = key.split("_")[1]
+
+                team_id = request.form["id_" + oid]
+                team_name = request.form["name_" + oid]
+                team_active = RequestUtilities.get_boolean_from_form_input(request.form, "active_" + oid)
+                team_skill = request.form["skill_" + oid]
+                team_service.update(team_id, team_name, team_skill, team_active)
+        pass
+    else:
+        oid = action_string_parsed[1]
+
+        team_id = request.form["id_" + oid]
+        team_name = request.form["name_" + oid]
+        team_active = RequestUtilities.get_boolean_from_form_input(request.form, "active_" + oid)
+        team_skill = request.form["skill_" + oid]
+        if action == "Delete":
+            team_service.delete_team(team_id)
+        elif action == "Update":
+            team_service.update(team_id, team_name, team_skill, team_active)
+
+    return get_team_edit_view()
+
+
+
+
+
 @app.route('/updateteam', methods=['POST'])
 def button_update_team_clicked():
     team_id = request.form["id"]
