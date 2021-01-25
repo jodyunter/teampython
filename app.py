@@ -12,7 +12,7 @@ from teams.services.standings_service import StandingsService
 from teams.services.team_service import TeamService
 from teams.services.view_models.dev_view_model import DevViewModel
 from teams.services.view_models.home_page_view_models import HomePageViewModel, ButtonViewModel
-from teams.services.view_models.team_view_models import TeamPageViewModel, TeamViewModel
+from teams.services.view_models.team_view_models import TeamPageViewModel
 from teams.utillity.request_util import RequestUtilities
 
 app = Flask(__name__)
@@ -54,17 +54,12 @@ def get_home_page():
 def button_update_team_clicked():
     team_id = request.form["id"]
     team_name = request.form["name"]
-    team_active = True
-    if "active" not in request.form:
-        team_active = False
+    team_active = RequestUtilities.get_boolean_from_form_input(request.form, "active")
     team_skill = request.form["skill"]
 
     team_service = TeamService()
 
-    if team_skill is None or team_skill == "":
-        team_service.create(team_name, team_skill, team_active)
-    else:
-        team_service.update(team_id, team_name, team_skill, team_active)
+    team_service.update(team_id, team_name, team_skill, team_active)
 
     return get_team_view(team_id)
 

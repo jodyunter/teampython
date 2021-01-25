@@ -9,7 +9,4 @@ class RequestUtilities:
         if parameter not in input_map:
             return False
         else:
-            if input == "on":
-                return True
-            else:
-                return False
+            return True
