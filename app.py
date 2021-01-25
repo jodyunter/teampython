@@ -191,12 +191,6 @@ def get_team_view(team_id):
     return render_template('teams/pages/team_edit.html', view=team_view)
 
 
-@app.route('/api/listteams')
-def get_team_list():
-    team_service = TeamService()
-    teams = team_service.get_all()
-    return jsonify(teams)
-
 @app.route('/teams/edit/all')
 def get_team_edit_view():
     team_service = TeamService()
@@ -209,3 +203,14 @@ def get_team_edit_view():
 def get_dev_view():
     dev_view = DevViewModel(db_connection_string)
     return render_template('dev/dev.html', view=dev_view)
+
+
+@app.route('/api/listteams')
+def get_team_list():
+    team_service = TeamService()
+    teams = team_service.get_all()
+    result = []
+    for t in teams:
+        result.append(t.dictionary())
+
+    return jsonify(result)

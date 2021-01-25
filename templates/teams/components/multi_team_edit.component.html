@@ -1,7 +1,5 @@
 <!-- requires "teams" as a list of team view models -->
-<table class="table table-sm table-striped table-responsive"
-    data-sortable="True"
->
+<table class="table table-sm table-striped table-responsive">
     <thead class="thead-dark">
         <tr>
             <th scope="col">Name</th>
@@ -47,4 +45,20 @@
             </tr>
         </form>
     </body>
+</table>
+
+<table
+  id="table"
+  data-toggle="table"
+  data-toolbar=".toolbar"
+  data-sortable="True"
+  data-height="460"
+  data-url="{{url_for('get_team_list')}}">
+  <thead>
+    <tr>
+      <th data-field="id" data-sortable="true">ID</th>
+      <th data-field="name" data-sortable="true">Name</th>
+      <th data-field="skill" data-sortable="true">Skill</th>
+    </tr>
+  </thead>
 </table>

@@ -5,6 +5,14 @@ class TeamViewModel:
         self.oid = oid
         self.active = active
 
+    def dictionary(self):
+        return {
+            "id": self.oid,
+            "name": self.name,
+            "skill": self.skill,
+            "active": self.active
+        }
+
 
 class RecordViewModel:
     def __init__(self, oid, rank, team_id, team_name, year, wins, loses, ties, goals_for, goals_against, points, games,
@@ -37,3 +45,13 @@ class TeamEditListViewModel:
 
     def __init__(self, team_views):
         self.teams = team_views
+
+    def dictionary(self):
+        result = {}
+        result = { "teams":[]}
+        for a in self.teams:
+            result["teams"].append(a.dictionary())
+
+        return result
+
+
