@@ -1,7 +1,7 @@
 import logging
 import random
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 
 from app_config import db_connection_string
 from teams.data.database import Database
@@ -190,6 +190,12 @@ def get_team_view(team_id):
 
     return render_template('teams/pages/team_edit.html', view=team_view)
 
+
+@app.route('/api/listteams')
+def get_team_list():
+    team_service = TeamService()
+    teams = team_service.get_all()
+    return jsonify(teams)
 
 @app.route('/teams/edit/all')
 def get_team_edit_view():

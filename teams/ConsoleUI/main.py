@@ -10,9 +10,9 @@ from teams.services.game_service import GameService, GameRulesService
 from teams.services.record_service import RecordService
 from teams.services.team_service import TeamService
 
-setup = True
+setup = False
 
-add_teams = True
+add_teams = False
 rounds = 1
 do_home_and_away = False
 rules_name = "Season"  # other is Playoff
@@ -27,6 +27,10 @@ if add_teams:
     data_setup.add_new_teams()
 
 team_service = TeamService()
+
+for t in team_service.get_all():
+    print(t.name + " " + str(t.skill))
+
 game_service = GameService()
 record_service = RecordService()
 game_rules_service = GameRulesService()
