@@ -1,0 +1,40 @@
+<!-- requires "teams" as a list of team view models -->
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th colspan="5" scope="col">Name</th>
+            <th colspan="1" scope="col">Skill</th>
+            <th colspan="1" scope="col">Active</th>
+        </tr>
+    </thead>
+
+    <body>
+    <form method="POST" action="{{url_for('button_create_team_clicked')}}">
+        <tr>
+            <!-- create team form -->
+            <td colspan="5"><input type="text" class="form-control" name="name" id="team_name" placeholder="Name"></td>
+            <td colspan="1"><input type="number" class="form-control" name="skill" id="team_skill" placeholder="0" ></td>
+            <td colspan="1"><input type="checkbox" class="form-check-input" name="active" id="team_active" checked></td>
+            <td colspan="3"><button type="submit" name="Create" class="btn btn-primary">Create</button></td>
+        </tr>
+    </form>
+        <!-- update multiple teams form -->
+    {% for team in teams %}
+        <tr>
+            <td colspan="5"><input type="text" class="form-control" name="name" id="team_name_{{ team.oid }}" placeholder="Name" value="{{ team.name }}"></td>
+            <td colspan="1"><input type="number" class="form-control" name="skill" id="team_skill_{{ team.oid }}" placeholder="0" value="{{ team.skill }}"></td>
+            {% if team.active %}
+            {% set checked = "checked" %}
+            {% else %}
+            {% set checked = "" %}
+            {% endif %}
+            <td colspan="1"><input type="checkbox" class="form-check-input" name="active" id="team_active_{{ team.oid }}" {{  checked }}></td>
+            <td colspan="3">
+                <button type="submit" name="Update" class="btn btn-primary">Update</button>|
+                <button type="submit" name="Delete" class="btn btn-primary">Delete</button>
+                <input type="hidden" readonly class="form-control" name="id" id="{{ team.oid }}" placeholder="ID HERE" value="{{ team.oid }}">
+            </td>
+        </tr>
+    {% endfor %}
+    </body>
+</table>

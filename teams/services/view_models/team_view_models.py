@@ -31,3 +31,9 @@ class TeamPageViewModel:
         self.team = team_view
         self.standings = standings_view
         self.games = games_view_list
+
+
+class TeamEditListViewModel:
+
+    def __init__(self, team_views):
+        self.teams = team_views

@@ -1,0 +1,14 @@
+{% extends "main.html" %}
+{% block custom_styles %}
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            {% with teams=view.teams %}
+            {% include "teams/components/multi_team_edit.component.html" %}
+            {% endwith %}
+        </div>
+    </div>
+</div>
+{% endblock %}

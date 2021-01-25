@@ -12,7 +12,7 @@ from teams.services.standings_service import StandingsService
 from teams.services.team_service import TeamService
 from teams.services.view_models.dev_view_model import DevViewModel
 from teams.services.view_models.home_page_view_models import HomePageViewModel, ButtonViewModel
-from teams.services.view_models.team_view_models import TeamPageViewModel
+from teams.services.view_models.team_view_models import TeamPageViewModel, TeamEditListViewModel
 from teams.utillity.request_util import RequestUtilities
 
 app = Flask(__name__)
@@ -135,6 +135,14 @@ def get_team_view(team_id):
     team_view = TeamPageViewModel(team, standings_view, [])
 
     return render_template('teams/pages/team_edit.html', view=team_view)
+
+
+@app.route('/teams/edit/all')
+def get_team_edit_view():
+    team_service = TeamService()
+    teams = team_service.get_all()
+    view = TeamEditListViewModel(teams)
+    return render_template('teams/pages/multi_team_edit.html', view=view)
 
 
 @app.route('/dev')
