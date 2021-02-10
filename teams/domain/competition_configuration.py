@@ -11,13 +11,15 @@ class CompetitionConfiguration(YearRestricted):
         YearRestricted.__init__(first_year, last_year)
 
 
-class SubCompetition(YearRestricted):
+class SubCompetitionConfiguration(YearRestricted):
+    PLAYOFF_TYPE = "Playoff"
+    TABLE_TYPE = "Table"
 
-    def __init__(self, name, competition_configuration, order, type, first_year, last_year, oid):
+    def __init__(self, name, competition_configuration, order, sub_competition_type, first_year, last_year, oid):
         self.name = name
         self.competition_configuration = competition_configuration
         self.order = order
-        self.type = type
+        self.sub_competition_type = sub_competition_type
         self.oid = oid
 
         YearRestricted.__init__(first_year, last_year)
