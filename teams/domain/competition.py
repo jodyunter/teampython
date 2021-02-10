@@ -1,5 +1,6 @@
 from teams.domain.game import Game
 from teams.domain.record import Record
+from teams.domain.series_rules import SeriesRules
 from teams.domain.team import Team
 
 
@@ -34,13 +35,13 @@ class CompetitionTeam(Team):
         self.competition = competition
         self.parent_team = parent_team
 
-        Team.__init__(name, skill, True, oid)
+        Team.__init__(self, name, skill, True, oid)
 
 
 class CompetitionGame(Game):
 
     def __init__(self, competition, day, home_team, away_team, home_score, away_score, complete, processed, rules, oid):
-        Game.__init__(competition.year, day, home_team, away_team, home_score, away_score, complete, processed, rules,
+        Game.__init__(self, competition.year, day, home_team, away_team, home_score, away_score, complete, processed, rules,
                       oid)
 
 
@@ -50,7 +51,7 @@ class SeriesGame(CompetitionGame):
                  rules, oid):
         self.series = series
 
-        CompetitionGame.__init__(competition, day, home_team, away_team, home_score, away_score, complete, processed,
+        CompetitionGame.__init__(self, competition, day, home_team, away_team, home_score, away_score, complete, processed,
                                  rules, oid)
 
 
@@ -89,7 +90,6 @@ class Series:
                  winner_to_group, winner_rank_from,
                  loser_to_group, loser_rank_from,
                  oid):
-
         self.sub_competition = sub_competition
         self.name = name
         self.series_round = series_round
@@ -118,12 +118,11 @@ class SeriesByWins(Series):
                  winner_to_group, winner_rank_from,
                  loser_to_group, loser_rank_from,
                  oid):
-
         self.home_wins = home_wins
         self.away_wins = away_wins
 
         Series.__init__(self, sub_competition, name, series_round, home_team, away_team,
-                        series_rules, game_rules,
+                        SeriesRules.WINS_TYPE, series_rules, game_rules,
                         home_team_from_group, home_team_value,
                         away_team_from_group, away_team_value,
                         winner_to_group, winner_rank_from,
@@ -140,12 +139,11 @@ class SeriesByGoals(Series):
                  winner_to_group, winner_rank_from,
                  loser_to_group, loser_rank_from,
                  oid):
-
         self.home_goals = home_goals
         self.away_goals = away_goals
 
         Series.__init__(self, sub_competition, name, series_round, home_team, away_team,
-                        series_rules, game_rules,
+                        SeriesRules.GOALS_TYPE, series_rules, game_rules,
                         home_team_from_group, home_team_value,
                         away_team_from_group, away_team_value,
                         winner_to_group, winner_rank_from,
