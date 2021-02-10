@@ -56,10 +56,11 @@ class SeriesGame(CompetitionGame):
 
 class CompetitionGroup:
 
-    def __init__(self, name, parent_group, sub_competition, oid):
+    def __init__(self, name, parent_group, sub_competition, group_type, oid):
         self.name = name
         self.parent_group = parent_group
         self.sub_competition = sub_competition
+        self.group_type = group_type
         self.oid = oid
 
 

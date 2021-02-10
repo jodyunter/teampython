@@ -26,27 +26,27 @@ class SubCompetitionConfiguration(YearRestricted):
 
 
 class CompetitionGroupConfiguration(YearRestricted):
+    REGIONAL_TYPE = "Regional"
+    RANKING_TYPE = "Ranking"
 
-    def __init__(self, name, sub_competition_configuration, parent_group_configuration, group_level, first_year,
+    def __init__(self, name, sub_competition_configuration, parent_group_configuration, group_level, group_type, first_year,
                  last_year, oid):
         self.name = name
         self.sub_competition_configuration = sub_competition_configuration
         self.parent_group_configuration = parent_group_configuration
         self.group_level = group_level
+        self.group_type = group_type
         self.oid = oid
 
         YearRestricted.__init__(first_year, last_year)
 
 
 class CompetitionTeamConfiguration(YearRestricted):
-    REGIONAL_TYPE = "Regional"
-    RANKING_TYPE = "Ranking"
 
-    def __init__(self, team, competition_configuration, group_configuration, group_type, first_year, last_year, oid):
+    def __init__(self, team, competition_configuration, group_configuration, first_year, last_year, oid):
         self.team = team
         self.competition_configuration = competition_configuration
         self.group_configuration = group_configuration
-        self.group_type = group_type
         self.oid = oid
 
         YearRestricted.__init__(first_year, last_year)
