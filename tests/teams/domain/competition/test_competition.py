@@ -67,8 +67,8 @@ class TestSeriesByGoals(TestCase):
         game = CompetitionGame(competition, None, 1, home_competition_team, away_competition_team, 5, 1, True, False,
                                None, uuid.uuid4())
         series.process_game(game)
-        self.assertEquals(5, series.home_goals)
-        self.assertEquals(1, series.away_goals)
+        self.assertEqual(5, series.home_goals)
+        self.assertEqual(1, series.away_goals)
 
         game = CompetitionGame(competition, None, 1, home_competition_team, away_competition_team, 5,15, True, False,
                                None, uuid.uuid4())
@@ -76,6 +76,38 @@ class TestSeriesByGoals(TestCase):
         series.process_game(game)
         self.assertEqual(10, series.home_goals)
         self.assertEqual(16, series.away_goals)
+
+    def test_should_get_winner_and_loser(self):
+        home_team = Team("Team 1", 5, True, uuid.uuid4())
+        away_team = Team("Team 2", 5, True, uuid.uuid4())
+
+        competition = Competition("My Comp", 1, None, True, True, False, False, uuid.uuid4())
+
+        home_competition_team = CompetitionTeam(competition, home_team, uuid.uuid4())
+        away_competition_team = CompetitionTeam(competition, away_team, uuid.uuid4())
+
+        series_rules = SeriesByGoalsRules("My Rules", 3, None)
+
+        series = SeriesByGoals(None, "My Series", 1, home_competition_team, away_competition_team,
+                               0, 0, 0, series_rules, None, None, None, None, None, None, None, None, None, uuid.uuid4())
+
+        series.home_goals = 6
+        series.away_goals = 5
+        series.games_played = 1
+        self.assertIsNone(series.get_winner())
+        self.assertIsNone(series.get_loser())
+
+        series.games_played = 2
+        self.assertIsNone(series.get_winner())
+        self.assertIsNone(series.get_loser())
+
+        series.games_played = 3
+        self.assertEqual(home_competition_team.oid, series.get_winner().oid)
+        self.assertEqual(away_competition_team.oid, series.get_loser().oid)
+
+        series.away_goals = 12
+        self.assertEqual(home_competition_team.oid, series.get_loser().oid)
+        self.assertEqual(away_competition_team.oid, series.get_winner().oid)
 
 
 class TestSeriesByWins(TestCase):
@@ -175,3 +207,36 @@ class TestSeriesByWins(TestCase):
         self.assertEqual(1, series.home_wins)
         self.assertEqual(2, series.away_wins)
         self.assertTrue(series.is_complete())
+
+    def test_should_get_winner_and_loser(self):
+        home_team = Team("Team 1", 5, True, uuid.uuid4())
+        away_team = Team("Team 2", 5, True, uuid.uuid4())
+
+        competition = Competition("My Comp", 1, None, True, True, False, False, uuid.uuid4())
+
+        home_competition_team = CompetitionTeam(competition, home_team, uuid.uuid4())
+        away_competition_team = CompetitionTeam(competition, away_team, uuid.uuid4())
+
+        series_rules = SeriesByWinsRules("My Rules", 2, None)
+
+        series = SeriesByWins(None, "My Series", 1, home_competition_team, away_competition_team,
+                              0, 0, series_rules, None, None, None, None, None, None, None, None, None, uuid.uuid4())
+
+        series.home_wins = 1
+        series.away_wins = 0
+        self.assertIsNone(series.get_winner())
+        self.assertIsNone(series.get_loser())
+
+        series.away_wins = 1
+        self.assertIsNone(series.get_winner())
+        self.assertIsNone(series.get_loser())
+
+        series.home_wins = 2
+        series.away_wins = 1
+        self.assertEqual(home_competition_team.oid, series.get_winner().oid)
+        self.assertEqual(away_competition_team.oid, series.get_loser().oid)
+
+        series.home_wins = 0
+        series.away_wins = 2
+        self.assertEqual(home_competition_team.oid, series.get_loser().oid)
+        self.assertEqual(away_competition_team.oid, series.get_winner().oid)

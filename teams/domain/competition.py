@@ -40,6 +40,14 @@ class SubCompetition(ABC):
     def process_game(self, game):
         pass
 
+    @abstractmethod
+    def create_new_games(self, game_creation_method):
+        pass
+
+    @abstractmethod
+    def is_complete(self, **kwargs):
+        pass
+
 
 class TableSubCompetition(SubCompetition):
 
@@ -57,6 +65,24 @@ class TableSubCompetition(SubCompetition):
             home_record.process_game(game.home_score, game.away_score)
             away_record.prorces_game(game.away_score, game.home_score)
 
+    def create_new_games(self, game_creation_method):
+        pass
+
+    def is_complete(self, incomplete_games):
+        if incomplete_games is None or len(incomplete_games) == 0:
+            return True
+        else:
+            return False
+
+    # one day we need to be able to apply ranking rules, like top in each division or something like that
+    def sort_records(self, ranking_groups, records):
+        count = 0
+        for r in records.sort(key=lambda rec: (-rec.points, -rec.wins, rec.games, -rec.goal_difference)):
+            r.rank = count
+            count += 1
+
+
+
 
 class PlayoffSubCompetition(SubCompetition):
 
@@ -69,6 +95,15 @@ class PlayoffSubCompetition(SubCompetition):
         if game.complete and not game.processed:
             series = game.series
             series.process_game(game)
+
+    def create_new_games(self, game_creation_method):
+        pass
+
+    def is_complete(self, incomplete_series):
+        if incomplete_series is None or len(incomplete_series) == 0:
+            return True
+        else:
+            return False
 
 
 class CompetitionTeam(Team):
@@ -133,6 +168,7 @@ class Series(ABC):
                  away_team_from_group, away_team_value,
                  winner_to_group, winner_rank_from,
                  loser_to_group, loser_rank_from,
+                 setup, post_processed,
                  oid):
         self.sub_competition = sub_competition
         self.name = name
@@ -150,6 +186,8 @@ class Series(ABC):
         self.winner_rank_from = winner_rank_from
         self.loser_to_group = loser_to_group
         self.loser_rank_from = loser_rank_from
+        self.setup = setup
+        self.post_processed = post_processed
         self.oid = oid
 
     @abstractmethod
@@ -205,6 +243,28 @@ class SeriesByWins(Series):
     def is_complete(self):
         return self.series_rules.required_wins == self.home_wins or self.series_rules.required_wins == self.away_wins
 
+    def get_winner(self):
+        if self.is_complete():
+            required_wins = self.series_rules.required_wins
+
+            if self.home_wins == required_wins:
+                return self.home_team
+            elif self.away_wins == required_wins:
+                return self.away_team
+
+        return None
+
+    def get_loser(self):
+        if self.is_complete():
+            required_wins = self.series_rules.required_wins
+
+            if self.home_wins == required_wins:
+                return self.away_team
+            elif self.away_wins == required_wins:
+                return self.home_team
+
+        return None
+
 
 class SeriesByGoals(Series):
 
@@ -237,3 +297,20 @@ class SeriesByGoals(Series):
     def is_complete(self):
         return self.series_rules.games_to_play == self.games_played
 
+    def get_winner(self):
+        if self.is_complete():
+            if self.home_goals > self.away_goals:
+                return self.home_team
+            elif self.away_goals > self.home_goals:
+                return self.away_team
+
+        return None
+
+    def get_loser(self):
+        if self.is_complete():
+            if self.home_goals > self.away_goals:
+                return self.away_team
+            elif self.away_goals > self.home_goals:
+                return self.home_team
+
+        return None
