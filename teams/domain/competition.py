@@ -75,13 +75,26 @@ class TableSubCompetition(SubCompetition):
             return False
 
     # one day we need to be able to apply ranking rules, like top in each division or something like that
-    def sort_records(self, ranking_groups, records):
+    def sort_records(self, team_rankings, records):
         count = 0
+        ranking_group_dict = {}
+        for tr in team_rankings:
+            if tr.competition_group.name not in ranking_group_dict:
+                ranking_group_dict[tr.competition_group.name] = []
+
+            ranking_group_dict[tr.tr.competition_group.name].append(tr)
+
         for r in records.sort(key=lambda rec: (-rec.points, -rec.wins, rec.games, -rec.goal_difference)):
             r.rank = count
             count += 1
 
+        team_record_dict = {}
 
+        for r in records:
+            team_record_dict[r.team.oid] = r
+
+        for group in ranking_group_dict.keys():
+            pass
 
 
 class PlayoffSubCompetition(SubCompetition):
@@ -117,10 +130,10 @@ class CompetitionTeam(Team):
 
 class CompetitionGame(Game):
 
-    def __init__(self, competition, sub_competition, day, home_team, away_team, home_score, away_score, complete, processed, rules, oid):
+    def __init__(self, competition, sub_competition, day, home_team, away_team, home_score, away_score, complete, game_processed, rules, oid):
         self.sub_competition = sub_competition
 
-        Game.__init__(self, competition.year, day, home_team, away_team, home_score, away_score, complete, processed, rules,
+        Game.__init__(self, competition.year, day, home_team, away_team, home_score, away_score, complete, game_processed, rules,
                       oid)
 
 
@@ -219,6 +232,7 @@ class SeriesByWins(Series):
                  away_team_from_group, away_team_value,
                  winner_to_group, winner_rank_from,
                  loser_to_group, loser_rank_from,
+                 setup, post_processed,
                  oid):
         self.home_wins = home_wins
         self.away_wins = away_wins
@@ -229,6 +243,7 @@ class SeriesByWins(Series):
                         away_team_from_group, away_team_value,
                         winner_to_group, winner_rank_from,
                         loser_to_group, loser_rank_from,
+                        setup, post_processed,
                         oid)
 
     def process_game(self, game):
@@ -274,6 +289,7 @@ class SeriesByGoals(Series):
                  away_team_from_group, away_team_value,
                  winner_to_group, winner_rank_from,
                  loser_to_group, loser_rank_from,
+                 setup, post_processed,
                  oid):
         self.home_goals = home_goals
         self.away_goals = away_goals
@@ -285,6 +301,7 @@ class SeriesByGoals(Series):
                         away_team_from_group, away_team_value,
                         winner_to_group, winner_rank_from,
                         loser_to_group, loser_rank_from,
+                        setup, post_processed,
                         oid)
 
     def process_game(self, game):
@@ -295,7 +312,7 @@ class SeriesByGoals(Series):
             self.games_played += 1
 
     def is_complete(self):
-        return self.series_rules.games_to_play == self.games_played
+        return self.series_rules.games_to_play == self.games_played and self.home_goals != self.away_goals
 
     def get_winner(self):
         if self.is_complete():

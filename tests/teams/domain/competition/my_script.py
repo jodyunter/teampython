@@ -38,3 +38,6 @@ while not series.is_complete():
     print(series.name)
     print(series.home_team.name + " : " + str(series.home_goals))
     print(series.away_team.name + " : " + str(series.away_goals))
+
+
+print("Winner is: " + series.get_winner().name)
