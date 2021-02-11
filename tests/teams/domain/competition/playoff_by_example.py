@@ -8,7 +8,6 @@ from teams.domain.series_rules import SeriesByGoalsRules, SeriesByWinsRules
 from teams.domain.team import Team
 from teams.domain.utility.utility_classes import IDHelper
 from teams.services.game_service import GameService
-from teams.services.view_models.game_view_models import GameViewModel
 
 competition = Competition("My Comp", 25, None, True, True, False, False, IDHelper.get_new_id())
 
@@ -55,25 +54,25 @@ playoff.series = [series1, series2, series3]
 
 COMPLETE = "Complete Games"
 INCOMPLETE = "Incomplete Games"
-game_status_map = {
-    COMPLETE: {
-        series1.oid: 0,
-        series2.oid: 0,
-        series3.oid: 0
-    },
-    INCOMPLETE: {
-        series1.oid: 0,
-        series2.oid: 0,
-        series3.oid: 0
-    }
-}
+game_status_map = playoff.create_series_map([])
 
 r = random
 
-games = playoff.create_new_games(game_status_map[COMPLETE], game_status_map[INCOMPLETE])
+games = []
+current_round = 1
+loop = 0
 
-for g in games:
-    g.play(r)
-    model = GameService.game_to_vm(g)
-    playoff.process_game(g)
-    print(GameView.get_basic_view(model))
+while not playoff.is_complete():
+    print(loop)
+    new_games = playoff.create_new_games(game_status_map[COMPLETE], game_status_map[INCOMPLETE])
+    games.extend(new_games)
+    for g in new_games:
+        g.play(r)
+        model = GameService.game_to_vm(g)
+        playoff.process_game(g)
+        print(GameView.get_basic_view(model))
+
+    game_status_map = playoff.create_series_map(games)
+
+    loop += 1
+

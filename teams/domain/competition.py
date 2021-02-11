@@ -127,12 +127,35 @@ class PlayoffSubCompetition(SubCompetition):
 
         return new_games
 
-    def is_complete(self, incomplete_series):
+    def is_complete(self):
+        incomplete_series = [s for s in self.series if not s.is_complete()]
         if incomplete_series is None or len(incomplete_series) == 0:
             return True
         else:
             return False
 
+    def create_series_map(self, games):
+        complete_string = "Complete Games"
+        incomplete_string = "Incomplete Games"
+
+        game_status_map = {
+            complete_string: {},
+            incomplete_string: {}
+        }
+        for s in self.series:
+            series_games = [g for g in games if g.series.oid == s.oid]
+            game_status_map[complete_string][s.oid] = len([g for g in series_games if g.complete and g.processed])
+            game_status_map[incomplete_string][s.oid] = len([g for g in series_games if not (g.complete and g.processed)])
+
+        return game_status_map
+
+    def is_round_complete(self, round_number):
+        series = [s for s in self.series if s.series_round == round_number]
+
+        if series is None or len(series) == 0:
+            return False
+
+        return len([s for s in series if  not s.is_complete()]) == 0
 
 class CompetitionTeam(Team):
 

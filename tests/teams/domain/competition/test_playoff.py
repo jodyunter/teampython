@@ -14,3 +14,6 @@ class TestPlayoffSubCompetition(TestCase):
 
     def test_is_complete(self):
         raise NotImplementedError
+
+    def test_create_status_map(self):
+        raise NotImplementedError
