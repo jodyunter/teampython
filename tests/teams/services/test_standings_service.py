@@ -21,9 +21,9 @@ class TestStandingsService(BaseTestService, TestCase):
         for i in range(10):
             team_service.create("Team " + str(i), 5, True)
 
-        [record_service.add(team_service.get_all(), 25)]
-        [record_service.add(team_service.get_all(), 35)]
-        [record_service.add(team_service.get_all(), 2)]
+        record_service.add(team_service.get_all(), 25)
+        record_service.add(team_service.get_all(), 35)
+        record_service.add(team_service.get_all(), 2)
 
         result = standings_service.get_standings_history_view(2)
         self.assertEqual(10, len(result.records))

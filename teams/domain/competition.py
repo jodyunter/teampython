@@ -75,27 +75,52 @@ class TableSubCompetition(SubCompetition):
         else:
             return False
 
-    # one day we need to be able to apply ranking rules, like top in each division or something like that
-    def sort_records(self, team_rankings, records):
-        count = 0
+    @staticmethod
+    def get_dictionary_of_groups_from_rankings(team_rankings):
         ranking_group_dict = {}
+
         for tr in team_rankings:
             if tr.competition_group.name not in ranking_group_dict:
                 ranking_group_dict[tr.competition_group.name] = []
 
             ranking_group_dict[tr.tr.competition_group.name].append(tr)
 
+        return ranking_group_dict
+
+    @staticmethod
+    def sort_records_default(records):
+        rank = 1
         for r in records.sort(key=lambda rec: (-rec.points, -rec.wins, rec.games, -rec.goal_difference)):
-            r.rank = count
-            count += 1
+            r.rank = rank
+            rank += 1
 
+    @staticmethod
+    def get_dictionary_of_team_records(records):
         team_record_dict = {}
-
         for r in records:
             team_record_dict[r.team.oid] = r
 
+        return team_record_dict
+
+    @staticmethod
+    # one day we need to be able to apply ranking rules, like top in each division or something like that
+    def sort_rankings(team_rankings, records):
+        #  sort the teams into their groups
+        ranking_group_dict = TableSubCompetition.get_dictionary_of_groups_from_rankings(team_rankings)
+        TableSubCompetition.sort_records_default(records)
+        #  sort the records with the team id as the key
+        team_record_dict = TableSubCompetition.get_dictionary_of_team_records(records)
+
         for group in ranking_group_dict.keys():
-            pass
+            #  set the team ranking to the same as their record ranking
+            for team_ranking in group:
+                team_ranking.rank = team_record_dict[team_ranking.team.oid]
+            #  starting at 1 for the group
+            group.sort(key=lambda team_rank: team_rank.rank)
+            rank = 1
+            for ranking in group:
+                ranking.rank = rank
+                rank += 1
 
 
 class PlayoffSubCompetition(SubCompetition):
