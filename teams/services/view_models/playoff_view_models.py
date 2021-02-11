@@ -1,6 +1,8 @@
-class PlayoffSeriesViewModel:
+class SeriesViewModel:
 
-    def __init__(self, year, game_vms, team1_vm, team1_wins, team2_vm, team2_wins, status):
+    def __init__(self, name, year, round, game_vms, team1_vm, team1_wins, team2_vm, team2_wins, status):
+        self.name = name
+        self.round = round
         self.year = year
         self.games = game_vms
         self.team1 = team1_vm

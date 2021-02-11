@@ -27,10 +27,11 @@ class Competition:
 
 class SubCompetition(ABC):
 
-    def __init__(self, name, sub_competition_type, competition, setup, started, finished, post_processed, oid):
+    def __init__(self, name, sub_competition_type, competition, order, setup, started, finished, post_processed, oid):
         self.name = name
         self.sub_competition_type = sub_competition_type
         self.competition = competition
+        self.order = order
         self.setup = setup
         self.started = started
         self.finished = finished
@@ -52,10 +53,10 @@ class SubCompetition(ABC):
 
 class TableSubCompetition(SubCompetition):
 
-    def __init__(self, name, records, competition, setup, started, finished, post_processed, oid):
+    def __init__(self, name, records, competition, order, setup, started, finished, post_processed, oid):
         self.records = records
 
-        SubCompetition.__init__(self, name, SubCompetitionConfiguration.TABLE_TYPE, competition, setup, started,
+        SubCompetition.__init__(self, name, SubCompetitionConfiguration.TABLE_TYPE, competition, order, setup, started,
                                 finished, post_processed,
                                 oid)
 
@@ -107,10 +108,10 @@ class TableSubCompetition(SubCompetition):
 
 class PlayoffSubCompetition(SubCompetition):
 
-    def __init__(self, name, series, competition, setup, started, finished, post_processed, oid):
+    def __init__(self, name, series, competition, order, setup, started, finished, post_processed, oid):
         self.series = series
 
-        SubCompetition.__init__(self, name, SubCompetitionConfiguration.PLAYOFF_TYPE, competition, setup, started,
+        SubCompetition.__init__(self, name, SubCompetitionConfiguration.PLAYOFF_TYPE, competition, order, setup, started,
                                 finished, post_processed, oid)
 
     def process_game(self, game):
