@@ -107,3 +107,11 @@ class TestScheduler(TestCase):
                [1, 4],
                [2, 3]] == scheduler.matrix
 
+    def test_does_team_play_in_games_list(self):
+        raise NotImplementedError
+
+    def test_does_any_team_play_in_other_list(self):
+        raise NotImplementedError
+
+    def test_set_day_for_new_series_game(self):
+        raise NotImplementedError

@@ -97,10 +97,29 @@ class Scheduler:
 
         self.num_list = list(range(self.anchor + 1, self.total_teams))
 
+    @staticmethod
+    def does_team_play_in_games_list(games, team_id):
+        for g in games:
+            if g.home_team.oid == team_id or g.away_team.oid == team_id:
+                return True
 
+        return False
 
+    @staticmethod
+    def does_any_team_play_in_other_list(new_games, games):
+        for n in new_games:
+            for g in games:
+                if n.home_team.oid in [g.home_team.oid, g.away_team.oid] or n.away_team.oid in [g.home_team.oid, g.away_team.oid]:
+                    return True
 
+        return False
 
+    @staticmethod
+    def set_day_for_new_series_game(new_game, current_games, days_between=0):
+        last_day = max(g.day for g in current_games)
 
+        new_game_day = last_day + 1 + days_between
+
+        new_game.day = new_game_day
 
 
