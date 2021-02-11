@@ -64,6 +64,7 @@ class Series(ABC):
         return game.complete and not game.processed and not self.is_complete()
 
 
+# TODO: Implement the home pattern.
 class SeriesByWins(Series):
 
     def __init__(self, sub_competition, name, series_round, home_team, away_team, home_wins, away_wins,
@@ -150,12 +151,10 @@ class SeriesByGoals(Series):
                  winner_to_group, winner_rank_from,
                  loser_to_group, loser_rank_from,
                  setup, post_processed,
-                 last_game_winner,
                  oid):
         self.home_goals = home_goals
         self.away_goals = away_goals
         self.games_played = games_played
-        self.last_game_winner = last_game_winner
 
         Series.__init__(self, sub_competition, name, series_round, home_team, away_team,
                         SeriesRules.GOALS_TYPE, series_rules,
@@ -174,11 +173,9 @@ class SeriesByGoals(Series):
             self.away_goals += game.away_score
             game.processed = True
             self.games_played += 1
-            if game.game_number == self.series_rules.games_to_play:
-                self.last_game_winner = game.get_winner()
 
     def is_complete(self):
-        return self.series_rules.games_to_play <= self.games_played
+        return self.series_rules.games_to_play <= self.games_played and self.home_goals != self.away_goals
 
     def get_winner(self):
         if self.is_complete():
@@ -186,8 +183,6 @@ class SeriesByGoals(Series):
                 return self.home_team
             elif self.away_goals > self.home_goals:
                 return self.away_team
-            else:
-                return self.last_game_winner
         return None
 
     def get_loser(self):
@@ -196,11 +191,6 @@ class SeriesByGoals(Series):
                 return self.away_team
             elif self.away_goals > self.home_goals:
                 return self.home_team
-            else:
-                if self.last_game_winner.oid == self.home_team.oid:
-                    return self.away_team
-                else:
-                    return self.home_team
 
         return None
 
@@ -214,11 +204,15 @@ class SeriesByGoals(Series):
             total_games += 1
             new_games.append(self.create_game(total_games))
 
+        # if all games are complete, and the goals are tied, create a new game with the special last rules
+        if complete_games == minimum_games and self.home_goals == self.away_goals:
+            new_games.append(self.create_game(total_games + 1))
+
         return new_games
 
     def create_game(self, game_number):
         game_rules = self.series_rules.game_rules
-        if game_number >= self.series_rules.games_to_play:
+        if game_number > self.series_rules.games_to_play:
             game_rules = self.series_rules.last_game_rules
 
         return SeriesGame(self, game_number, self.sub_competition.competition,

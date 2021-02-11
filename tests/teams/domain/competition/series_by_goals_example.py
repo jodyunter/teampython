@@ -25,7 +25,7 @@ series_rules = SeriesByGoalsRules("My Rules", 2, game_rules, last_game_rules, ID
 
 series = SeriesByGoals(sub_competition, "My Series", 1, home_competition_team, away_competition_team,
                        0, 0, 0, series_rules, None, None, None, None, None, None, None, None,
-                       True, False, None,
+                       True, False,
                        IDHelper.get_new_id())
 
 games = []

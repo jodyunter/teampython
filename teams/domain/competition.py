@@ -142,6 +142,7 @@ class CompetitionGame(Game):
     def __init__(self, competition, sub_competition, day, home_team, away_team, home_score, away_score, complete,
                  game_processed, rules, oid):
         self.sub_competition = sub_competition
+        self.competition = competition
 
         Game.__init__(self, competition.year, day, home_team, away_team, home_score, away_score, complete,
                       game_processed, rules,
