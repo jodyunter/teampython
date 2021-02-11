@@ -62,3 +62,6 @@ class TestRecord(TestCase):
         self.assertEqual(1, record.ties)
         self.assertEqual(2, record.goals_for)
         self.assertEqual(2, record.goals_against)
+
+    def test_sort_records_default(self):
+        raise NotImplementedError

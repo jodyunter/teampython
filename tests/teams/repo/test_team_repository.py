@@ -4,6 +4,7 @@ from unittest import TestCase
 from teams.data.dto.dto_team import TeamDTO
 from teams.data.repo.team_repository import TeamRepository
 from teams.domain.team import Team
+from teams.domain.utility.utility_classes import IDHelper
 from tests.teams.repo.test_base_repository import TestBaseRepository
 
 
@@ -11,7 +12,7 @@ class TestTeamRepository(TestBaseRepository, TestCase):
     def test_get_by_name(self):
         name = "team 1 by name"
         session = self.setup_basic_test()
-        session.add(TeamDTO(Team(name, 12, True, str(uuid.uuid4()))))
+        session.add(TeamDTO(Team(name, 12, True, IDHelper.get_new_id())))
         session.commit()
 
         repo = TeamRepository()
@@ -26,7 +27,7 @@ class TestTeamRepository(TestBaseRepository, TestCase):
 
         repo = TeamRepository()
         for i in range(5):
-            repo.add(TeamDTO(Team("team " + str(i) + " add_all", i, True, str(uuid.uuid4()))), session)
+            repo.add(TeamDTO(Team("team " + str(i) + " add_all", i, True, IDHelper.get_new_id())), session)
 
         session.commit()
 
@@ -40,7 +41,7 @@ class TestTeamRepository(TestBaseRepository, TestCase):
         repo = TeamRepository()
 
         for i in range(5):
-            oid = str(uuid.uuid4())
+            oid = IDHelper.get_new_id()
             repo.add(TeamDTO(Team("team " + str(i) + " add_all", i, True, oid)), session)
 
         session.commit()
@@ -56,7 +57,7 @@ class TestTeamRepository(TestBaseRepository, TestCase):
         repo = TeamRepository()
 
         for i in range(5):
-            oid = str(uuid.uuid4())
+            oid = IDHelper.get_new_id()
             active = True
             if i % 2 == 0:
                 active = False

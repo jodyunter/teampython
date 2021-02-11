@@ -6,6 +6,7 @@ from teams.data.repo.record_repository import RecordRepository
 from teams.data.repo.team_repository import TeamRepository
 from teams.domain.record import Record
 from teams.domain.team import Team
+from teams.domain.utility.utility_classes import IDHelper
 from tests.teams.repo.test_base_repository import TestBaseRepository
 
 
@@ -14,10 +15,10 @@ class TestRecordRepository(TestBaseRepository, TestCase):
 
     def test_add_new_team(self):
         session = self.setup_basic_test()
-        team_id = str(uuid.uuid4())
+        team_id = IDHelper.get_new_id()
         team = Team("Record Add For New Team", 5, True, team_id)
 
-        record = Record(1, team, 1, 2, 3, 4, 5, 6, 7, str(uuid.uuid4()))
+        record = Record(1, team, 1, 2, 3, 4, 5, 6, 7, IDHelper.get_new_id())
 
         self.repo.add(record, session)
 
@@ -29,14 +30,14 @@ class TestRecordRepository(TestBaseRepository, TestCase):
 
     def test_add_existing_team(self):
         session = self.setup_basic_test()
-        team_id = str(uuid.uuid4())
+        team_id = IDHelper.get_new_id()
         team = Team("Record Add Existing Team", 5, True, team_id)
         team_repo = TeamRepository()
         team_repo.add(team, session)
         session.commit()
 
         team = team_repo.get_by_oid(team.oid, session)
-        record = Record(1, team, 1, 2, 3, 4, 5, 6, 7, str(uuid.uuid4()))
+        record = Record(1, team, 1, 2, 3, 4, 5, 6, 7, IDHelper.get_new_id())
 
         self.repo.add(record, session)
 
@@ -50,10 +51,10 @@ class TestRecordRepository(TestBaseRepository, TestCase):
         session = self.setup_basic_test()
         team_names = ["Team A1", "Team A2", "Team A5"]
         team_repo = TeamRepository()
-        [team_repo.add(Team(t, 0, True, str(uuid.uuid4())), session) for t in team_names]
+        [team_repo.add(Team(t, 0, True, IDHelper.get_new_id()), session) for t in team_names]
         session.commit()
 
-        [self.repo.add(Record(1, team, 1, 2, 3, 4, 5, 6, 7, str(uuid.uuid4())), session)
+        [self.repo.add(Record(1, team, 1, 2, 3, 4, 5, 6, 7, IDHelper.get_new_id()), session)
          for team in team_repo.get_all(session)]
         session.commit()
 
@@ -63,7 +64,7 @@ class TestRecordRepository(TestBaseRepository, TestCase):
 
     @staticmethod
     def create_id():
-        return str(uuid.uuid4())
+        return IDHelper.get_new_id()
 
     def test_get_by_year(self):
         session = self.setup_basic_test()
@@ -80,7 +81,7 @@ class TestRecordRepository(TestBaseRepository, TestCase):
     def setup_record_query_data(self, session, repo, team_repo):
         team_list = []
         for i in range(10):
-            new_id = str(uuid.uuid4())
+            new_id = IDHelper.get_new_id()
             team_list.append(Team("GBYN " + str(i), i, True, new_id))
 
         [team_repo.add(t, session) for t in team_list]

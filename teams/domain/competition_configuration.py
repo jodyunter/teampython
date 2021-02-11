@@ -8,7 +8,7 @@ class CompetitionConfiguration(YearRestricted):
         self.order = order
         self.oid = oid
 
-        YearRestricted.__init__(first_year, last_year)
+        YearRestricted.__init__(self, first_year, last_year)
 
 
 class SubCompetitionConfiguration(YearRestricted):

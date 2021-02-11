@@ -1,6 +1,7 @@
 import uuid
 
 from teams.domain.game import Game
+from teams.domain.utility.utility_classes import IDHelper
 
 
 class PlayoffSeriesRules:
@@ -78,7 +79,7 @@ class PlayoffSeries:
     @staticmethod
     def default_setup_game(series):
         return Game(series.year, -1, series.team1, series.team2, 0, 0,
-                    False, False, series.rules.game_rules, uuid.uuid4())
+                    False, False, series.rules.game_rules, IDHelper.get_new_id())
 
     def setup_game(self, method=default_setup_game):
         # we want to pass the game back to a scheduler to determine the day

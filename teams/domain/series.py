@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 
 from teams.domain.competition import SeriesGame
 from teams.domain.series_rules import SeriesRules
+from teams.domain.utility.utility_classes import IDHelper
 
 
 class Series(ABC):
@@ -56,7 +57,7 @@ class Series(ABC):
     def create_game(self, game_number):
         return SeriesGame(self, game_number, self.sub_competition.competition,
                           self.sub_competition, -1, self.home_team, self.away_team,
-                          0, 0, False, False, self.series_rules.game_rules, uuid.uuid4())
+                          0, 0, False, False, self.series_rules.game_rules, IDHelper.get_new_id())
 
     # we could add a check on the game if it is one of the two teams
     def can_process_game(self, game, ):
@@ -222,4 +223,4 @@ class SeriesByGoals(Series):
 
         return SeriesGame(self, game_number, self.sub_competition.competition,
                           self.sub_competition, -1, self.home_team, self.away_team,
-                          0, 0, False, False, game_rules, uuid.uuid4())
+                          0, 0, False, False, game_rules, IDHelper.get_new_id())

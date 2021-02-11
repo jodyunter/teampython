@@ -34,3 +34,11 @@ class Record:
 
         self.goals_for += us
         self.goals_against += them
+
+
+    @staticmethod
+    def sort_records_default(records):
+        rank = 1
+        for r in records.sort(key=lambda rec: (-rec.points, -rec.wins, rec.games, -rec.goal_difference)):
+            r.rank = rank
+            rank += 1

@@ -55,7 +55,8 @@ class TableSubCompetition(SubCompetition):
     def __init__(self, name, records, competition, setup, started, finished, post_processed, oid):
         self.records = records
 
-        SubCompetition.__init__(self, name, SubCompetitionConfiguration.TABLE_TYPE, competition, setup, started, finished, post_processed,
+        SubCompetition.__init__(self, name, SubCompetitionConfiguration.TABLE_TYPE, competition, setup, started,
+                                finished, post_processed,
                                 oid)
 
     def process_game(self, game):
@@ -74,25 +75,6 @@ class TableSubCompetition(SubCompetition):
             return True
         else:
             return False
-
-    @staticmethod
-    def get_dictionary_of_groups_from_rankings(team_rankings):
-        ranking_group_dict = {}
-
-        for tr in team_rankings:
-            if tr.competition_group.name not in ranking_group_dict:
-                ranking_group_dict[tr.competition_group.name] = []
-
-            ranking_group_dict[tr.tr.competition_group.name].append(tr)
-
-        return ranking_group_dict
-
-    @staticmethod
-    def sort_records_default(records):
-        rank = 1
-        for r in records.sort(key=lambda rec: (-rec.points, -rec.wins, rec.games, -rec.goal_difference)):
-            r.rank = rank
-            rank += 1
 
     @staticmethod
     def get_dictionary_of_team_records(records):
@@ -128,7 +110,8 @@ class PlayoffSubCompetition(SubCompetition):
     def __init__(self, name, series, competition, setup, started, finished, post_processed, oid):
         self.series = series
 
-        SubCompetition.__init__(self, name, SubCompetitionConfiguration.PLAYOFF_TYPE, competition, setup, started, finished, post_processed, oid)
+        SubCompetition.__init__(self, name, SubCompetitionConfiguration.PLAYOFF_TYPE, competition, setup, started,
+                                finished, post_processed, oid)
 
     def process_game(self, game):
         if game.complete and not game.processed:
@@ -156,21 +139,25 @@ class CompetitionTeam(Team):
 
 class CompetitionGame(Game):
 
-    def __init__(self, competition, sub_competition, day, home_team, away_team, home_score, away_score, complete, game_processed, rules, oid):
+    def __init__(self, competition, sub_competition, day, home_team, away_team, home_score, away_score, complete,
+                 game_processed, rules, oid):
         self.sub_competition = sub_competition
 
-        Game.__init__(self, competition.year, day, home_team, away_team, home_score, away_score, complete, game_processed, rules,
+        Game.__init__(self, competition.year, day, home_team, away_team, home_score, away_score, complete,
+                      game_processed, rules,
                       oid)
 
 
 class SeriesGame(CompetitionGame):
 
-    def __init__(self, series, game_number, competition, sub_competition, day, home_team, away_team, home_score, away_score, complete, processed,
+    def __init__(self, series, game_number, competition, sub_competition, day, home_team, away_team, home_score,
+                 away_score, complete, processed,
                  rules, oid):
         self.series = series
         self.game_number = game_number
 
-        CompetitionGame.__init__(self, competition, sub_competition, day, home_team, away_team, home_score, away_score, complete, processed,
+        CompetitionGame.__init__(self, competition, sub_competition, day, home_team, away_team, home_score, away_score,
+                                 complete, processed,
                                  rules, oid)
 
 
@@ -192,6 +179,18 @@ class CompetitionRanking:
         self.rank = rank
         self.oid = oid
 
+    @staticmethod
+    def get_dictionary_of_groups_from_rankings(competition_rankings):
+        ranking_group_dict = {}
+
+        for tr in competition_rankings:
+            if tr.competition_group.name not in ranking_group_dict:
+                ranking_group_dict[tr.competition_group.name] = []
+
+            ranking_group_dict[tr.tr.competition_group.name].append(tr)
+
+        return ranking_group_dict
+
 
 class TableRecords(Record):
 
@@ -199,5 +198,3 @@ class TableRecords(Record):
         self.sub_competition = sub_competition
 
         Record.__init__(self, rank, team, year, wins, loses, ties, goals_for, goals_against, skill, oid)
-
-
