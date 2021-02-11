@@ -20,6 +20,7 @@ class SeriesByWinsRules(SeriesRules):
 
 class SeriesByGoalsRules(SeriesRules):
 
+    # TODO: add home team pattern here too
     def __init__(self, name, games_to_play, game_rules, last_game_rules, oid):
         self.last_game_rules = last_game_rules
         self.games_to_play = games_to_play

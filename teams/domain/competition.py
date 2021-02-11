@@ -42,7 +42,7 @@ class SubCompetition(ABC):
         pass
 
     @abstractmethod
-    def create_new_games(self, game_creation_method):
+    def create_new_games(self, **kwargs):
         pass
 
     @abstractmethod
@@ -67,7 +67,7 @@ class TableSubCompetition(SubCompetition):
             home_record.process_game(game.home_score, game.away_score)
             away_record.prorces_game(game.away_score, game.home_score)
 
-    def create_new_games(self, game_creation_method):
+    def create_new_games(self):
         pass
 
     def is_complete(self, incomplete_games):
@@ -118,8 +118,14 @@ class PlayoffSubCompetition(SubCompetition):
             series = game.series
             series.process_game(game)
 
-    def create_new_games(self, game_creation_method):
-        pass
+    # dictionaries of the series id and how many complete and incomplete games there are
+    def create_new_games(self, complete_games_by_series, incomplete_games_by_series):
+        new_games = []
+        for series in self.series:
+            new_games.extend(series.get_new_games(complete_games_by_series[series.oid],
+                                                  incomplete_games_by_series[series.oid]))
+
+        return new_games
 
     def is_complete(self, incomplete_series):
         if incomplete_series is None or len(incomplete_series) == 0:
