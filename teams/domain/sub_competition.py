@@ -91,8 +91,8 @@ class PlayoffSubCompetition(SubCompetition):
         self.series = series
         self.current_round = current_round
 
-        SubCompetition.__init__(self, name, SubCompetitionConfiguration.PLAYOFF_TYPE, competition, order, setup, started,
-                                finished, post_processed, oid=None)
+        SubCompetition.__init__(self, name, SubCompetitionConfiguration.PLAYOFF_TYPE, competition, order,
+                                setup, started, finished, post_processed, oid)
 
     def process_game(self, game):
         if game.complete and not game.processed:
@@ -100,11 +100,12 @@ class PlayoffSubCompetition(SubCompetition):
             series.process_game(game)
 
     # dictionaries of the series id and how many complete and incomplete games there are
-    def create_new_games(self, complete_games_by_series, incomplete_games_by_series):
+    def create_new_games(self, current_games):
+        game_status_map = self.create_series_map(current_games)
         new_games = []
         for series in [s for s in self.series if s.series_round == self.current_round]:
-            new_games.extend(series.get_new_games(complete_games_by_series[series.oid],
-                                                  incomplete_games_by_series[series.oid]))
+            new_games.extend(series.get_new_games(game_status_map["Complete Games"][series.oid],
+                                                  game_status_map["Incomplete Games"][series.oid]))
 
         return new_games
 
@@ -131,12 +132,12 @@ class PlayoffSubCompetition(SubCompetition):
         return game_status_map
 
     def is_round_complete(self, round_number):
-        series = [s for s in self.series if s.series_round == round_number]
+        series_for_round = [s for s in self.series if s.series_round == round_number]
 
-        if series is None or len(series) == 0:
+        if series_for_round is None or len(series_for_round) == 0:
             return False
 
-        return len([s for s in series if not s.is_complete()]) == 0
+        return len([s for s in series_for_round if not s.is_complete()]) == 0
 
     def is_round_post_processed(self, round_number):
         for s in self.series:

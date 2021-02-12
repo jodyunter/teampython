@@ -1,5 +1,4 @@
-from teams.domain.competition import CompetitionTeam, CompetitionRanking
-from teams.domain.table_competition import TableRecord
+from teams.domain.competition import CompetitionTeam, TableRecord
 from teams.domain.team import Team
 
 

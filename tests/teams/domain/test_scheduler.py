@@ -132,7 +132,41 @@ class TestScheduler(TestCase):
         self.assertTrue(Scheduler.does_team_play_in_games_list(game_list_2, team4))
 
     def test_does_any_team_play_in_other_list(self):
-        raise NotImplementedError
+        team1 = Team("Team 1", 5, False)
+        team2 = Team("Team 2", 5, False)
+        team3 = Team("Team 3", 5, False)
+        team4 = Team("Team 4", 5, False)
+        team5 = Team("Team 5", 5, False)
+        team6 = Team("Team 6", 5, False)
+        team7 = Team("Team 6", 5, False)
+        team8 = Team("Team 6", 5, False)
+
+        game1 = Game(1, 1, team1, team2, 0, 0, False, False, None)
+        game2 = Game(1, 1, team3, team4, 0, 0, False, False, None)
+        game3 = Game(1, 1, team5, team6, 0, 0, False, False, None)
+
+        game4 = Game(1, 1, team1, team3, 0, 0, False, False, None)
+        game5 = Game(1, 1, team2, team5, 0, 0, False, False, None)
+        game6 = Game(1, 1, team4, team6, 0, 0, False, False, None)
+
+        game7 = Game(1, 1, team7, team8, 0, 0, False, False, None)
+
+        game_list_1 = [game1, game2, game3]
+        game_list_2 = [game2, game3, game4]
+        game_list_3 = [game1, game2]
+        game_list_4 = [game6]
+
+        game_list_5 = [game1, game2]
+        game_list_6 = [game3, game7]
+
+        # all teams play in all other games
+        self.assertTrue(Scheduler.does_any_team_play_in_other_list(game_list_1, game_list_2))
+
+        # only one home team plays in other day
+        self.assertTrue(Scheduler.does_any_team_play_in_other_list(game_list_4, game_list_3))
+
+        # no teams play
+        self.assertFalse(Scheduler.does_any_team_play_in_other_list(game_list_5, game_list_6))
 
     def test_set_day_for_new_series_game(self):
         raise NotImplementedError

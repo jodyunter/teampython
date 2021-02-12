@@ -70,10 +70,6 @@ series6 = SeriesByGoals(playoff, "Series 6", 3, competition_team_list[2], compet
 
 playoff.series = [series1, series2, series3, series4]
 
-COMPLETE = "Complete Games"
-INCOMPLETE = "Incomplete Games"
-game_status_map = playoff.create_series_map([])
-
 r = random
 
 games = []
@@ -86,7 +82,7 @@ while not playoff.is_complete():
         if not playoff.is_round_setup(playoff.current_round):
             playoff.setup_round(playoff.current_round)
         # print(loop)
-        new_games = playoff.create_new_games(game_status_map[COMPLETE], game_status_map[INCOMPLETE])
+        new_games = playoff.create_new_games(games)
         games.extend(new_games)
         for g in new_games:
             g.play(r)
@@ -94,7 +90,6 @@ while not playoff.is_complete():
             playoff.process_game(g)
             # print(GameView.get_basic_view(model))
         loop += 1
-        game_status_map = playoff.create_series_map(games)
 
     for s in [ps for ps in playoff.series if ps.series_round == playoff.current_round]:
         home_value = -1

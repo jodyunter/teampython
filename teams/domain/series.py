@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from teams.domain.competition import SeriesGame
+from teams.domain.competition import CompetitionGame
 from teams.domain.series_rules import SeriesRules
 from teams.domain.utility.utility_classes import IDHelper
 
@@ -245,3 +245,16 @@ class SeriesByGoals(Series):
                           self.sub_competition, -1, self.get_home_team_for_game(game_number),
                           self.get_away_team_for_game(game_number),
                           0, 0, False, False, game_rules)
+
+
+class SeriesGame(CompetitionGame):
+
+    def __init__(self, series, game_number, competition, sub_competition, day, home_team, away_team, home_score,
+                 away_score, complete, processed,
+                 rules, oid=None):
+        self.series = series
+        self.game_number = game_number
+
+        CompetitionGame.__init__(self, competition, sub_competition, day, home_team, away_team, home_score, away_score,
+                                 complete, processed,
+                                 rules, oid)

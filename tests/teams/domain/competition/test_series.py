@@ -1,8 +1,8 @@
 from unittest import TestCase
 
-from teams.domain.competition import CompetitionTeam, CompetitionGame, Competition, SeriesGame
+from teams.domain.competition import CompetitionTeam, CompetitionGame, Competition
 from teams.domain.game import GameRules
-from teams.domain.series import SeriesByGoals, SeriesByWins, Series
+from teams.domain.series import SeriesByGoals, SeriesByWins, Series, SeriesGame
 from teams.domain.series_rules import SeriesByWinsRules, SeriesByGoalsRules, SeriesRules
 from teams.domain.sub_competition import PlayoffSubCompetition
 from teams.domain.team import Team
@@ -231,9 +231,10 @@ class TestSeriesByGoals(TestCase):
 
         game = series.create_game(2)
 
+        # game two of the default home/away
         self.assertEqual(2, game.game_number)
-        self.assertEqual(series.home_team.oid, game.home_team.oid)
-        self.assertEqual(series.away_team.oid, game.away_team.oid)
+        self.assertEqual(series.away_team.oid, game.home_team.oid)
+        self.assertEqual(series.home_team.oid, game.away_team.oid)
         self.assertEqual(game.competition.oid, series.sub_competition.competition.oid)
         self.assertEqual(game.sub_competition.oid, series.sub_competition.oid)
         self.assertFalse(game.complete)
@@ -428,6 +429,3 @@ class TestSeriesByWins(TestCase):
         self.assertEqual(-1, game.day)
         self.assertEqual(series.sub_competition.competition.year, game.year)
         self.assertEqual(series.series_rules.game_rules.oid, game.rules.oid)
-
-    def test_home_team_pattern(self):
-        raise NotImplementedError

@@ -18,7 +18,7 @@ away_competition_team = CompetitionTeam(competition, away_team)
 
 game_rules = GameRules("Playoff", False)
 
-series_rules = SeriesByWinsRules("My Rules", 4, game_rules, None)
+series_rules = SeriesByWinsRules("My Rules", 4, game_rules, [0, 0, 1, 1, 0, 1, 0])
 
 series = SeriesByWins(sub_competition, "My Series", 1, home_competition_team, away_competition_team,
                       0, 0, series_rules, None, None, None, None, None, None, None, None,
@@ -38,8 +38,7 @@ while not series.is_complete():
         if not game.complete:
             game.play(r)
             series.process_game(game)
-            print(f'{series.home_team.name} : {series.home_wins} - {series.away_wins} : {series.away_team.name}')
             print(f'{game.game_number}. {game.home_team.name} : {game.home_score} - {game.away_score} : {game.away_team.name}')
 
-
+print(f'{series.home_team.name} : {series.home_wins} - {series.away_wins} : {series.away_team.name}')
 print("Winner is: " + series.get_winner().name)

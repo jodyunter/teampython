@@ -1,6 +1,3 @@
-from abc import ABC, abstractmethod
-
-from teams.domain.competition_configuration import SubCompetitionConfiguration
 from teams.domain.game import Game
 from teams.domain.record import Record
 
@@ -47,19 +44,6 @@ class CompetitionGame(Game):
                       oid)
 
 
-class SeriesGame(CompetitionGame):
-
-    def __init__(self, series, game_number, competition, sub_competition, day, home_team, away_team, home_score,
-                 away_score, complete, processed,
-                 rules, oid=None):
-        self.series = series
-        self.game_number = game_number
-
-        CompetitionGame.__init__(self, competition, sub_competition, day, home_team, away_team, home_score, away_score,
-                                 complete, processed,
-                                 rules, oid)
-
-
 class CompetitionGroup:
 
     def __init__(self, name, parent_group, sub_competition, rankings, group_type, oid=None):
@@ -104,7 +88,7 @@ class CompetitionRanking:
         return ranking_group_dict
 
 
-class TableRecords(Record):
+class TableRecord(Record):
 
     def __init__(self, sub_competition, rank, team, year, wins, loses, ties, goals_for, goals_against, skill, oid=None):
         self.sub_competition = sub_competition
