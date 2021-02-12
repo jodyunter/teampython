@@ -1,4 +1,3 @@
-import uuid
 import random
 
 from teams.domain.competition import Competition, CompetitionTeam, PlayoffSubCompetition
@@ -6,27 +5,25 @@ from teams.domain.series import SeriesByGoals
 from teams.domain.game import GameRules
 from teams.domain.series_rules import SeriesByGoalsRules
 from teams.domain.team import Team
-from teams.domain.utility.utility_classes import IDHelper
 
-home_team = Team("Team 1", 5, True, IDHelper.get_new_id())
-away_team = Team("Team 2", 5, True, IDHelper.get_new_id())
+home_team = Team("Team 1", 5, True)
+away_team = Team("Team 2", 5, True)
 
-competition = Competition("My Comp", 1, None, True, True, False, False, IDHelper.get_new_id())
-sub_competition = PlayoffSubCompetition("Playoff A", None, competition, True, True, False, False, IDHelper.get_new_id())
+competition = Competition("My Comp", 1, None, True, True, False, False)
+sub_competition = PlayoffSubCompetition("Playoff A", None, competition, True, True, False, False)
 
-home_competition_team = CompetitionTeam(competition, home_team, IDHelper.get_new_id())
-away_competition_team = CompetitionTeam(competition, away_team, IDHelper.get_new_id())
+home_competition_team = CompetitionTeam(competition, home_team)
+away_competition_team = CompetitionTeam(competition, away_team)
 
-game_rules = GameRules("Playoff", True, IDHelper.get_new_id())
-last_game_rules = GameRules("Last Game", False, IDHelper.get_new_id())
+game_rules = GameRules("Playoff", True)
+last_game_rules = GameRules("Last Game", False)
 
-series_rules = SeriesByGoalsRules("My Rules", 2, game_rules, last_game_rules, IDHelper.get_new_id())
+series_rules = SeriesByGoalsRules("My Rules", 2, game_rules, last_game_rules)
 
 
 series = SeriesByGoals(sub_competition, "My Series", 1, home_competition_team, away_competition_team,
                        0, 0, 0, series_rules, None, None, None, None, None, None, None, None,
-                       True, False,
-                       IDHelper.get_new_id())
+                       True, False)
 
 games = []
 

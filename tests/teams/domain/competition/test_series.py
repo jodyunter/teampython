@@ -1,4 +1,3 @@
-import uuid
 from unittest import TestCase
 
 from teams.domain.competition import CompetitionTeam, CompetitionGame, Competition, PlayoffSubCompetition, SeriesGame
@@ -6,38 +5,36 @@ from teams.domain.game import GameRules
 from teams.domain.series import SeriesByGoals, SeriesByWins
 from teams.domain.series_rules import SeriesByWinsRules, SeriesByGoalsRules
 from teams.domain.team import Team
-from teams.domain.utility.utility_classes import IDHelper
 
 
 class TestSeriesByGoals(TestCase):
 
     @staticmethod
     def setup_default_series(games):
-        home_team = Team("Team 1", 5, True, IDHelper.get_new_id())
-        away_team = Team("Team 2", 5, True, IDHelper.get_new_id())
+        home_team = Team("Team 1", 5, True)
+        away_team = Team("Team 2", 5, True)
 
-        competition = Competition("My Comp", 1, None, True, True, False, False, IDHelper.get_new_id())
-        sub_competition = PlayoffSubCompetition("Playoff A", None, competition, True, True, False, False,
-                                                IDHelper.get_new_id())
+        competition = Competition("My Comp", 1, None, True, True, False, False)
+        sub_competition = PlayoffSubCompetition("Playoff A", None, competition, True, True, False, False)
 
-        home_competition_team = CompetitionTeam(competition, home_team, IDHelper.get_new_id())
-        away_competition_team = CompetitionTeam(competition, away_team, IDHelper.get_new_id())
+        home_competition_team = CompetitionTeam(competition, home_team)
+        away_competition_team = CompetitionTeam(competition, away_team)
 
-        game_rules = GameRules("A", True, IDHelper.get_new_id())
-        last_game_rules = GameRules("B", False, IDHelper.get_new_id())
+        game_rules = GameRules("A", True)
+        last_game_rules = GameRules("B", False)
 
-        series_rules = SeriesByGoalsRules("My Rules", games, game_rules, last_game_rules, IDHelper.get_new_id())
+        series_rules = SeriesByGoalsRules("My Rules", games, game_rules, last_game_rules)
 
         series = SeriesByGoals(sub_competition, "My Series", 1, home_competition_team, away_competition_team,
                                0, 0, 0, series_rules, None, None, None, None, None, None, None, None,
-                               True, False, IDHelper.get_new_id())
+                               True, False)
 
         return series
 
     def test_should_process_game(self):
         series = TestSeriesByGoals.setup_default_series(3)
 
-        game = CompetitionGame(series.sub_competition.competition, None, 1, None, None, 5, 0, False, False, None, IDHelper.get_new_id())
+        game = CompetitionGame(series.sub_competition.competition, None, 1, None, None, 5, 0, False, False, None)
         self.assertFalse(series.can_process_game(game))
 
         game.complete = True
@@ -102,13 +99,13 @@ class TestSeriesByGoals(TestCase):
         series = TestSeriesByGoals.setup_default_series(3)
 
         game = SeriesGame(series, 1, series.sub_competition.competition, None, 1, series.home_team, series.away_team, 5, 1, True,
-                          False, None, IDHelper.get_new_id())
+                          False, None)
         series.process_game(game)
         self.assertEqual(5, series.home_goals)
         self.assertEqual(1, series.away_goals)
 
         game = SeriesGame(series, 2, series.sub_competition.competition, None, 1, series.home_team, series.away_team, 5, 15, True, False,
-                          None, IDHelper.get_new_id())
+                          None)
 
         series.process_game(game)
         self.assertEqual(10, series.home_goals)
@@ -205,34 +202,33 @@ class TestSeriesByWins(TestCase):
     @staticmethod
     def create_game(competition, home_team, away_team, home_goals, away_goals, complete=True, processed=False):
         return CompetitionGame(competition, None, 1, home_team, away_team, home_goals, away_goals, complete, processed,
-                               None, IDHelper.get_new_id())
+                               None)
 
     @staticmethod
     def setup_default_series(games):
-        home_team = Team("Team 1", 5, True, IDHelper.get_new_id())
-        away_team = Team("Team 2", 5, True, IDHelper.get_new_id())
+        home_team = Team("Team 1", 5, True)
+        away_team = Team("Team 2", 5, True)
 
-        competition = Competition("My Comp", 1, None, True, True, False, False, IDHelper.get_new_id())
-        sub_competition = PlayoffSubCompetition("My Playoff", None, competition, True, False, False, False, IDHelper.get_new_id())
+        competition = Competition("My Comp", 1, None, True, True, False, False)
+        sub_competition = PlayoffSubCompetition("My Playoff", None, competition, True, False, False, False)
 
-        home_competition_team = CompetitionTeam(competition, home_team, IDHelper.get_new_id())
-        away_competition_team = CompetitionTeam(competition, away_team, IDHelper.get_new_id())
+        home_competition_team = CompetitionTeam(competition, home_team)
+        away_competition_team = CompetitionTeam(competition, away_team)
 
-        game_rules = GameRules("My Rules", False, IDHelper.get_new_id())
+        game_rules = GameRules("My Rules", False)
 
-        series_rules = SeriesByWinsRules("My Rules", games, game_rules, None, IDHelper.get_new_id())
+        series_rules = SeriesByWinsRules("My Rules", games, game_rules, None)
 
         series = SeriesByWins(sub_competition, "My Series", 1, home_competition_team, away_competition_team,
                               0, 0, series_rules, None, None, None, None, None, None, None, None,
-                              True, False,
-                              IDHelper.get_new_id())
+                              True, False)
 
         return series
 
     def test_should_process_game(self):
         series = TestSeriesByWins.setup_default_series(2)
 
-        game = CompetitionGame(series.sub_competition.competition, None, 1, None, None, 5, 0, False, False, None, IDHelper.get_new_id())
+        game = CompetitionGame(series.sub_competition.competition, None, 1, None, None, 5, 0, False, False, None)
         self.assertFalse(series.can_process_game(game))
 
         game.complete = True

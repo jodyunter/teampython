@@ -5,11 +5,12 @@ from teams.domain.game import Game
 from teams.domain.record import Record
 
 from teams.domain.team import Team
+from teams.domain.utility.utility_classes import IDHelper
 
 
 class Competition:
 
-    def __init__(self, name, year, sub_competitions, setup, started, finished, post_processed, oid):
+    def __init__(self, name, year, sub_competitions, setup, started, finished, post_processed, oid=None):
         self.name = name
         self.year = year
         self.setup = setup
@@ -17,7 +18,7 @@ class Competition:
         self.sub_competitions = sub_competitions
         self.finished = finished
         self.post_processed = post_processed
-        self.oid = oid
+        self.oid = IDHelper.get_id(oid)
 
     @staticmethod
     def process_game(game):
@@ -27,7 +28,7 @@ class Competition:
 
 class SubCompetition(ABC):
 
-    def __init__(self, name, sub_competition_type, competition, order, setup, started, finished, post_processed, oid):
+    def __init__(self, name, sub_competition_type, competition, order, setup, started, finished, post_processed, oid=None):
         self.name = name
         self.sub_competition_type = sub_competition_type
         self.competition = competition
@@ -36,7 +37,7 @@ class SubCompetition(ABC):
         self.started = started
         self.finished = finished
         self.post_processed = post_processed
-        self.oid = oid
+        self.oid = IDHelper.get_id(oid)
 
     @abstractmethod
     def process_game(self, game):
@@ -53,7 +54,7 @@ class SubCompetition(ABC):
 
 class TableSubCompetition(SubCompetition):
 
-    def __init__(self, name, records, competition, order, setup, started, finished, post_processed, oid):
+    def __init__(self, name, records, competition, order, setup, started, finished, post_processed, oid=None):
         self.records = records
 
         SubCompetition.__init__(self, name, SubCompetitionConfiguration.TABLE_TYPE, competition, order, setup, started,
@@ -108,12 +109,12 @@ class TableSubCompetition(SubCompetition):
 
 class PlayoffSubCompetition(SubCompetition):
 
-    def __init__(self, name, series, competition, order, current_round, setup, started, finished, post_processed, oid):
+    def __init__(self, name, series, competition, order, current_round, setup, started, finished, post_processed, oid=None):
         self.series = series
         self.current_round = current_round
 
         SubCompetition.__init__(self, name, SubCompetitionConfiguration.PLAYOFF_TYPE, competition, order, setup, started,
-                                finished, post_processed, oid)
+                                finished, post_processed, oid=None)
 
     def process_game(self, game):
         if game.complete and not game.processed:
@@ -159,10 +160,38 @@ class PlayoffSubCompetition(SubCompetition):
 
         return len([s for s in series if not s.is_complete()]) == 0
 
+    def is_round_post_processed(self, round_number):
+        for s in self.series:
+            if s.series_round == round_number and not s.post_processed:
+                return False
+
+        return True
+
+    def is_round_setup(self, round_number):
+        for s in self.series:
+            if not s.setup and s.setup == round_number:
+                return False
+
+        return True
+
+    def setup_round(self, round_number):
+        i = 1
+        if not self.is_round_setup(round_number):
+            can_setup = True
+            while i < round_number:
+                #  if a previous round is not complete and processed, we can't set this one up
+                if not self.is_round_complete(i) and self.is_round_post_processed(i):
+                    can_setup = False
+
+            if can_setup:
+                series = [s for s in self.series if s.series_round == round_number]
+                for s in series:
+                    s.home_team = group_map[s.home_team_from]
+
 
 class CompetitionTeam(Team):
 
-    def __init__(self, competition, parent_team, oid):
+    def __init__(self, competition, parent_team, oid=None):
         self.competition = competition
         self.parent_team = parent_team
 
@@ -172,7 +201,7 @@ class CompetitionTeam(Team):
 class CompetitionGame(Game):
 
     def __init__(self, competition, sub_competition, day, home_team, away_team, home_score, away_score, complete,
-                 game_processed, rules, oid):
+                 game_processed, rules, oid=None):
         self.sub_competition = sub_competition
         self.competition = competition
 
@@ -185,7 +214,7 @@ class SeriesGame(CompetitionGame):
 
     def __init__(self, series, game_number, competition, sub_competition, day, home_team, away_team, home_score,
                  away_score, complete, processed,
-                 rules, oid):
+                 rules, oid=None):
         self.series = series
         self.game_number = game_number
 
@@ -196,21 +225,28 @@ class SeriesGame(CompetitionGame):
 
 class CompetitionGroup:
 
-    def __init__(self, name, parent_group, sub_competition, group_type, oid):
+    def __init__(self, name, parent_group, sub_competition, rankings, group_type, oid=None):
         self.name = name
         self.parent_group = parent_group
         self.sub_competition = sub_competition
         self.group_type = group_type
-        self.oid = oid
+        self.rankings = rankings
+        self.oid = IDHelper.get_id(oid)
+
+    def add_team_to_group(self, competition_team, rank):
+        self.rankings.append(CompetitionRanking(self, competition_team, rank))
+
+    def get_team_by_rank(self, rank):
+        return [t for t in self.rankings if t.rank == rank][0]
 
 
 class CompetitionRanking:
 
-    def __init__(self, competition_group, competition_team, rank, oid):
-        self.competition_group = competition_group
-        self.competition_team = competition_team,
+    def __init__(self, competition_group, competition_team, rank, oid=None):
+        self.group = competition_group
+        self.team = competition_team
         self.rank = rank
-        self.oid = oid
+        self.oid = IDHelper.get_id(oid)
 
     @staticmethod
     def get_dictionary_of_groups_from_rankings(competition_rankings):
@@ -227,7 +263,7 @@ class CompetitionRanking:
 
 class TableRecords(Record):
 
-    def __init__(self, sub_competition, rank, team, year, wins, loses, ties, goals_for, goals_against, skill, oid):
+    def __init__(self, sub_competition, rank, team, year, wins, loses, ties, goals_for, goals_against, skill, oid=None):
         self.sub_competition = sub_competition
 
         Record.__init__(self, rank, team, year, wins, loses, ties, goals_for, goals_against, skill, oid)

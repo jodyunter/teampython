@@ -50,9 +50,9 @@ class TableRanking:
 
 class TableRecord(Record):
 
-    def __init__(self, competition, rank, team, year, wins, loses, ties, goals_for, goals_against, skill, oid):
+    def __init__(self, competition, rank, team, year, wins, loses, ties, goals_for, goals_against, skill, oid=None):
         self.competition = competition
-        self.oid = oid
+        self.oid = IDHelper.get_id(oid)
         self.rank = rank
         self.team = team
         self.year = year
@@ -66,7 +66,8 @@ class TableRecord(Record):
 
 class TableGame(Game):
 
-    def __init__(self, competition, year, day, home_team, away_team, home_score, away_score, complete, processed, rules, oid):
+    def __init__(self, competition, year, day, home_team, away_team, home_score, away_score,
+                 complete, processed, rules, oid=None):
         self.competition = competition
         super().__init__(year, day, home_team, away_team, home_score, away_score, complete, processed, rules, oid)
 

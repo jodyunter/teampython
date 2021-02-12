@@ -1,7 +1,7 @@
 class Record:
 
-    def __init__(self, rank, team, year, wins, loses, ties, goals_for, goals_against, skill, oid):
-        self.oid = oid
+    def __init__(self, rank, team, year, wins, loses, ties, goals_for, goals_against, skill, oid=None):
+        self.oid = IDHelper.get_id(oid)
         self.rank = rank
         self.team = team
         self.year = year

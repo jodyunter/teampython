@@ -4,6 +4,11 @@ import uuid
 class IDHelper:
 
     @staticmethod
+    def get_id(oid):
+        if oid is None:
+            return IDHelper.get_new_id()
+
+    @staticmethod
     def get_new_id():
         return str(uuid.uuid4())
 

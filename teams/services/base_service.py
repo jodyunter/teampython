@@ -1,5 +1,3 @@
-import uuid
-
 from teams.data.database import Database
 from teams.domain.utility.utility_classes import IDHelper
 

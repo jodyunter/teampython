@@ -1,4 +1,3 @@
-import uuid
 from abc import ABC, abstractmethod
 
 from teams.domain.competition import SeriesGame
@@ -14,7 +13,7 @@ class Series(ABC):
                  winner_to_group, winner_rank_from,
                  loser_to_group, loser_rank_from,
                  setup, post_processed,
-                 oid):
+                 oid=None):
         self.sub_competition = sub_competition
         self.name = name
         self.series_round = series_round
@@ -32,7 +31,7 @@ class Series(ABC):
         self.loser_rank_from = loser_rank_from
         self.setup = setup
         self.post_processed = post_processed
-        self.oid = oid
+        self.oid = IDHelper.get_id(oid)
 
     @abstractmethod
     def process_game(self, game):
@@ -57,7 +56,7 @@ class Series(ABC):
     def create_game(self, game_number):
         return SeriesGame(self, game_number, self.sub_competition.competition,
                           self.sub_competition, -1, self.home_team, self.away_team,
-                          0, 0, False, False, self.series_rules.game_rules, IDHelper.get_new_id())
+                          0, 0, False, False, self.series_rules.game_rules)
 
     # we could add a check on the game if it is one of the two teams
     def can_process_game(self, game, ):
@@ -74,7 +73,7 @@ class SeriesByWins(Series):
                  winner_to_group, winner_rank_from,
                  loser_to_group, loser_rank_from,
                  setup, post_processed,
-                 oid):
+                 oid=None):
         self.home_wins = home_wins
         self.away_wins = away_wins
 
@@ -151,7 +150,7 @@ class SeriesByGoals(Series):
                  winner_to_group, winner_rank_from,
                  loser_to_group, loser_rank_from,
                  setup, post_processed,
-                 oid):
+                 oid=None):
         self.home_goals = home_goals
         self.away_goals = away_goals
         self.games_played = games_played
@@ -217,4 +216,4 @@ class SeriesByGoals(Series):
 
         return SeriesGame(self, game_number, self.sub_competition.competition,
                           self.sub_competition, -1, self.home_team, self.away_team,
-                          0, 0, False, False, game_rules, IDHelper.get_new_id())
+                          0, 0, False, False, game_rules)

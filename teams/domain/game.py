@@ -1,12 +1,15 @@
+from teams.domain.utility.utility_classes import IDHelper
+
+
 class GameRules:
-    def __init__(self, name, can_tie, oid):
-        self.oid = oid
+    def __init__(self, name, can_tie, oid=None):
+        self.oid = IDHelper.get_id(oid)
         self.name = name
         self.can_tie = can_tie
 
 
 class Game:
-    def __init__(self, year, day, home_team, away_team, home_score, away_score, complete, processed, rules, oid):
+    def __init__(self, year, day, home_team, away_team, home_score, away_score, complete, processed, rules, oid=None):
         self.year = year
         self.day = day
         self.home_team = home_team
@@ -14,7 +17,7 @@ class Game:
         self.home_score = home_score
         self.away_score = away_score
         self.complete = complete
-        self.oid = oid
+        self.oid = IDHelper.get_id(oid)
         self.rules = rules
         self.processed = processed
 

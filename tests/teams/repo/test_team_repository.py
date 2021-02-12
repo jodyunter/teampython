@@ -12,7 +12,7 @@ class TestTeamRepository(TestBaseRepository, TestCase):
     def test_get_by_name(self):
         name = "team 1 by name"
         session = self.setup_basic_test()
-        session.add(TeamDTO(Team(name, 12, True, IDHelper.get_new_id())))
+        session.add(TeamDTO(Team(name, 12, True)))
         session.commit()
 
         repo = TeamRepository()
@@ -27,7 +27,7 @@ class TestTeamRepository(TestBaseRepository, TestCase):
 
         repo = TeamRepository()
         for i in range(5):
-            repo.add(TeamDTO(Team("team " + str(i) + " add_all", i, True, IDHelper.get_new_id())), session)
+            repo.add(TeamDTO(Team("team " + str(i) + " add_all", i, True)), session)
 
         session.commit()
 
