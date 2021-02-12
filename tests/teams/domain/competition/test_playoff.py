@@ -21,6 +21,9 @@ class TestPlayoffSubCompetition(TestCase):
     def test_setup_round(self):
         raise NotImplementedError
 
+    def test_post_process_round(self):
+        raise NotImplementedError
+
     def test_is_round_complete(self):
         raise NotImplementedError
 
@@ -29,3 +32,4 @@ class TestPlayoffSubCompetition(TestCase):
 
     def test_is_round_setup(self):
         raise NotImplementedError
+

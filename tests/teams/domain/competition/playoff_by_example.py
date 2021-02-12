@@ -1,11 +1,11 @@
 import random
 from teams.ConsoleUI.views.playoff_views import SeriesView
-from teams.domain.competition import PlayoffSubCompetition, CompetitionTeam, Competition, CompetitionGroup, \
-    CompetitionRanking
+from teams.domain.competition import CompetitionTeam, Competition, CompetitionGroup
 from teams.domain.competition_configuration import CompetitionGroupConfiguration
 from teams.domain.game import GameRules
 from teams.domain.series import SeriesByGoals, SeriesByWins
 from teams.domain.series_rules import SeriesByGoalsRules, SeriesByWinsRules
+from teams.domain.sub_competition import PlayoffSubCompetition
 from teams.domain.team import Team
 from teams.services.game_service import GameService
 from teams.services.view_models.playoff_view_models import SeriesViewModel
@@ -16,9 +16,9 @@ competition = Competition("My Comp", 25, None, True, True, False, False)
 playoff = PlayoffSubCompetition("My Playoff", None, competition, 1, 1, True, True, False, False)
 competition.sub_competitions = [playoff]
 
-league = CompetitionGroup("League", None, None, CompetitionGroupConfiguration.RANKING_TYPE)
-eastern = CompetitionGroup("Eastern", league, None, CompetitionGroupConfiguration.RANKING_TYPE)
-western = CompetitionGroup("Western", league, None, CompetitionGroupConfiguration.RANKING_TYPE)
+league = CompetitionGroup("League", None, None, [], CompetitionGroupConfiguration.RANKING_TYPE)
+eastern = CompetitionGroup("Eastern", league, None, [], CompetitionGroupConfiguration.RANKING_TYPE)
+western = CompetitionGroup("Western", league, None, [], CompetitionGroupConfiguration.RANKING_TYPE)
 
 groups = [league, eastern, western]
 
@@ -51,22 +51,22 @@ for i in range(10):
 
 
 series1 = SeriesByGoals(playoff, "Series 1", 1, None, None, 0, 0, 0,
-                        series_goals2_rules, league, 1, league, 2, None, None, None, None, None, True, False)
+                        series_goals2_rules, league, 1, league, 2, None, None, None, None, False, False)
 
 series2 = SeriesByGoals(playoff, "Series 2", 1, None, None, 0, 0, 0,
-                        series_goals2_rules, league, 3, league, 4, None, None, None, None, None, True, False)
+                        series_goals2_rules, league, 3, league, 4, None, None, None, None, False, False)
 
 series3 = SeriesByWins(playoff, "Series 3", 1, None, None, 0, 0,
-                       series_wins2_rules, league, 5, league, 6, None, None, None, None, True, False)
+                       series_wins2_rules, league, 5, league, 6, None, None, None, None, False, False)
 
 series4 = SeriesByWins(playoff, "Series 4", 1, None, None, 0, 0,
-                       series_wins4_rules, league, 7, league, 8, None, None, None, None, True, False)
+                       series_wins4_rules, league, 7, league, 8, None, None, None, None, False, False)
 
 series5 = SeriesByWins(playoff, "Series 5", 2, competition_team_list[8], competition_team_list[9], 0, 0,
-                       series_wins4_rules, None, None, None, None, None, None, None, None, True, False)
+                       series_wins4_rules, None, None, None, None, None, None, None, None, False, False)
 
 series6 = SeriesByGoals(playoff, "Series 6", 3, competition_team_list[2], competition_team_list[3], 0, 0, 0,
-                        series_goals3_rules, None, None, None, None, None, None, None, None, True, False)
+                        series_goals3_rules, None, None, None, None, None, None, None, None, False, False)
 
 playoff.series = [series1, series2, series3, series4]
 
@@ -84,7 +84,7 @@ while not playoff.is_complete():
     print(f'Current Round: {playoff.current_round}')
     while not playoff.is_round_complete(playoff.current_round):
         if not playoff.is_round_setup(playoff.current_round):
-            playoff.setup_round(playoff.current_round, groups)
+            playoff.setup_round(playoff.current_round)
         # print(loop)
         new_games = playoff.create_new_games(game_status_map[COMPLETE], game_status_map[INCOMPLETE])
         games.extend(new_games)
