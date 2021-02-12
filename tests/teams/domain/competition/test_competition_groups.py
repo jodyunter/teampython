@@ -63,6 +63,8 @@ class TestCompetitionGroup(TestCase):
         self.assertEqual("Team 5", group.get_team_by_rank(25).team.name)
         self.assertEqual("Team 6", group.get_team_by_rank(15).team.name)
 
+    def test_get_rank_for_team(self):
+        raise NotImplementedError
 
 class TestCompetitionRanking(TestCase):
 

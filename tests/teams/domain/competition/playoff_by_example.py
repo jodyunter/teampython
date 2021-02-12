@@ -20,6 +20,9 @@ league = CompetitionGroup("League", None, None, [], CompetitionGroupConfiguratio
 eastern = CompetitionGroup("Eastern", league, None, [], CompetitionGroupConfiguration.RANKING_TYPE)
 western = CompetitionGroup("Western", league, None, [], CompetitionGroupConfiguration.RANKING_TYPE)
 
+r1_winners = CompetitionGroup("R1 Winners", None, playoff, [], CompetitionGroupConfiguration.RANKING_TYPE)
+r1_losers = CompetitionGroup("R1 Losers", None, playoff, [], CompetitionGroupConfiguration.RANKING_TYPE)
+
 groups = [league, eastern, western]
 
 tie_game_rules = GameRules("Can Tie", True)

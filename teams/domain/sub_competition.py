@@ -6,7 +6,8 @@ from teams.domain.utility.utility_classes import IDHelper
 
 class SubCompetition(ABC):
 
-    def __init__(self, name, sub_competition_type, competition, order, setup, started, finished, post_processed, oid=None):
+    def __init__(self, name, sub_competition_type, competition, order, setup, started, finished, post_processed,
+                 oid=None):
         self.name = name
         self.sub_competition_type = sub_competition_type
         self.competition = competition
@@ -87,7 +88,8 @@ class TableSubCompetition(SubCompetition):
 
 class PlayoffSubCompetition(SubCompetition):
 
-    def __init__(self, name, series, competition, order, current_round, setup, started, finished, post_processed, oid=None):
+    def __init__(self, name, series, competition, order, current_round, setup, started, finished, post_processed,
+                 oid=None):
         self.series = series
         self.current_round = current_round
 
@@ -127,12 +129,13 @@ class PlayoffSubCompetition(SubCompetition):
         for s in self.series:
             series_games = [g for g in games if g.series.oid == s.oid]
             game_status_map[complete_string][s.oid] = len([g for g in series_games if g.complete and g.processed])
-            game_status_map[incomplete_string][s.oid] = len([g for g in series_games if not (g.complete and g.processed)])
+            game_status_map[incomplete_string][s.oid] = len(
+                [g for g in series_games if not (g.complete and g.processed)])
 
         return game_status_map
 
     def is_round_complete(self, round_number):
-        series_for_round = [s for s in self.series if s.series_round == round_number]
+        series_for_round = self.get_series_for_round(round_number)
 
         if series_for_round is None or len(series_for_round) == 0:
             return False
@@ -153,10 +156,20 @@ class PlayoffSubCompetition(SubCompetition):
 
         return True
 
-    def post_processed_round(self, round_number):
-        pass
+    def post_process_round(self, round_number):
+        if self.is_round_complete(round_number):
+            series_for_round = self.get_series_for_round(round_number)
 
-    #  setup grabs the team from the groups
+            for s in series_for_round:
+                self.add_team_to_group(s.get_winner(), s.winner_to_group, s.winner_rank_from)
+                self.add_team_to_group(s.get_loser(), s.loser_to_group, s.loser_rank_from)
+                s.post_processed = True
+            #  setup grabs the team from the groups
+
+    @staticmethod
+    def add_team_to_group(team, group, group_with_rank):
+        group.add_team_to_group(team, group_with_rank.get_rank_for_team(team))
+
     #  setup makes sure the round can be setup
     def setup_round(self, round_number):
         i = 1
@@ -166,6 +179,7 @@ class PlayoffSubCompetition(SubCompetition):
                 #  if a previous round is not complete and processed, we can't set this one up
                 if not self.is_round_complete(i) and self.is_round_post_processed(i):
                     can_setup = False
+                i += 1
 
             if can_setup:
                 series = [s for s in self.series if s.series_round == round_number]
@@ -175,3 +189,6 @@ class PlayoffSubCompetition(SubCompetition):
                         s.home_team = s.home_team_from_group.get_team_by_order(s.home_team_value).team
                         s.away_team = s.away_team_from_group.get_team_by_order(s.away_team_value).team
                         s.setup = True
+
+    def get_series_for_round(self, round_number):
+        return [s for s in self.series if s.series_round == round_number]

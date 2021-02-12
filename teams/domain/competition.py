@@ -57,6 +57,9 @@ class CompetitionGroup:
     def add_team_to_group(self, competition_team, rank):
         self.rankings.append(CompetitionRanking(self, competition_team, rank))
 
+    def get_rank_for_team(self, team):
+        return [r.rank for r in self.rankings if r.team.oid == team.oid][0]
+
     def get_team_by_rank(self, rank):
         return [t for t in self.rankings if t.rank == rank][0]
 
