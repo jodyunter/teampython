@@ -55,12 +55,39 @@ class Series(ABC):
 
     def create_game(self, game_number):
         return SeriesGame(self, game_number, self.sub_competition.competition,
-                          self.sub_competition, -1, self.home_team, self.away_team,
+                          self.sub_competition, -1,
+                          self.get_home_team_for_game(game_number),
+                          self.get_away_team_for_game(game_number),
                           0, 0, False, False, self.series_rules.game_rules)
 
     # we could add a check on the game if it is one of the two teams
     def can_process_game(self, game, ):
         return game.complete and not game.processed and not self.is_complete()
+
+    def get_home_pattern_value(self, game_number):
+        index_num = game_number - 1
+        if self.series_rules.home_pattern is None or game_number > len(self.series_rules.home_pattern):
+            value = index_num % 2
+        else:
+            value = self.series_rules.home_pattern[index_num]
+
+        return value
+
+    def get_home_team_for_game(self, game_number):
+        value = self.get_home_pattern_value(game_number)
+
+        if value % 2 == 0:
+            return self.home_team
+        else:
+            return self.away_team
+
+    def get_away_team_for_game(self, game_number):
+        value = self.get_home_pattern_value(game_number)
+
+        if value % 2 == 0:
+            return self.away_team
+        else:
+            return self.home_team
 
 
 # TODO: Implement the home pattern.
@@ -215,5 +242,6 @@ class SeriesByGoals(Series):
             game_rules = self.series_rules.last_game_rules
 
         return SeriesGame(self, game_number, self.sub_competition.competition,
-                          self.sub_competition, -1, self.home_team, self.away_team,
+                          self.sub_competition, -1, self.get_home_team_for_game(game_number),
+                          self.get_away_team_for_game(game_number),
                           0, 0, False, False, game_rules)

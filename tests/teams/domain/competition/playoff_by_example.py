@@ -25,8 +25,8 @@ groups = [league, eastern, western]
 tie_game_rules = GameRules("Can Tie", True)
 not_tie_game_rules = GameRules("Not Tie", False)
 
-series_goals2_rules = SeriesByGoalsRules("By Goals 2 games", 2, tie_game_rules, not_tie_game_rules)
-series_goals3_rules = SeriesByGoalsRules("By Goals 3 games", 3, tie_game_rules, not_tie_game_rules)
+series_goals2_rules = SeriesByGoalsRules("By Goals 2 games", 2, tie_game_rules, not_tie_game_rules, None)
+series_goals3_rules = SeriesByGoalsRules("By Goals 3 games", 3, tie_game_rules, not_tie_game_rules, None)
 series_wins2_rules = SeriesByWinsRules("By Wins 2 wins", 2, not_tie_game_rules, None)
 series_wins4_rules = SeriesByWinsRules("By Wins 4 wins", 4, not_tie_game_rules, None)
 

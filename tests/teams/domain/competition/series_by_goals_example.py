@@ -19,7 +19,7 @@ away_competition_team = CompetitionTeam(competition, away_team)
 game_rules = GameRules("Playoff", True)
 last_game_rules = GameRules("Last Game", False)
 
-series_rules = SeriesByGoalsRules("My Rules", 2, game_rules, last_game_rules)
+series_rules = SeriesByGoalsRules("My Rules", 2, game_rules, last_game_rules, None)
 
 
 series = SeriesByGoals(sub_competition, "My Series", 1, home_competition_team, away_competition_team,
@@ -28,6 +28,7 @@ series = SeriesByGoals(sub_competition, "My Series", 1, home_competition_team, a
 
 games = []
 
+print(series.name)
 while not series.is_complete():
     complete_games = [g for g in games if g.complete and g.processed]
     incomplete_games = [g for g in games if not g.complete]
@@ -37,13 +38,11 @@ while not series.is_complete():
     r = random
     for game in games:
         game.play(r)
+        if not game.processed:
+            series.process_game(game)
+            print(f'{game.game_number}. {game.home_team.name} : {game.home_score} - {game.away_score} : {game.away_team.name}')
 
-        series.process_game(game)
-
-        print(series.name)
-        print(f'{game.game_number}. {game.home_team.name} : {game.home_score} - {game.away_score} : {game.away_team.name}')
-        print(series.home_team.name + " : " + str(series.home_goals))
-        print(series.away_team.name + " : " + str(series.away_goals))
-
+    print(series.home_team.name + " : " + str(series.home_goals))
+    print(series.away_team.name + " : " + str(series.away_goals))
 
 print("Winner is: " + series.get_winner().name)

@@ -2,10 +2,65 @@ from unittest import TestCase
 
 from teams.domain.competition import CompetitionTeam, CompetitionGame, Competition, SeriesGame
 from teams.domain.game import GameRules
-from teams.domain.series import SeriesByGoals, SeriesByWins
-from teams.domain.series_rules import SeriesByWinsRules, SeriesByGoalsRules
+from teams.domain.series import SeriesByGoals, SeriesByWins, Series
+from teams.domain.series_rules import SeriesByWinsRules, SeriesByGoalsRules, SeriesRules
 from teams.domain.sub_competition import PlayoffSubCompetition
 from teams.domain.team import Team
+
+# implementation for testing basic and common methods
+from tests.teams.domain.competition import helpers
+
+
+class TesterSeries(Series):
+
+    def process_game(self, game):
+        pass
+
+    def is_complete(self):
+        pass
+
+    def get_winner(self):
+        pass
+
+    def get_loser(self):
+        pass
+
+    def get_new_games(self, complete_games, incomplete_games):
+        pass
+
+
+class TestSeries(TestCase):
+
+    def test_get_home_and_away_team_for_game(self):
+        series_rules = SeriesRules("My Rules", None, None, [0, 0, 1])
+        series = TesterSeries(None, "Test", 1,
+                              helpers.new_comp_team(None, "Team 1", 5),
+                              helpers.new_comp_team(None, "Team 2", 5),
+                              "Tester", series_rules,
+                              None, None, None, None, None, None, None, None,
+                              False, False)
+
+        self.assertEqual("Team 1", series.get_home_team_for_game(1).name, "1")
+        self.assertEqual("Team 1", series.get_home_team_for_game(2).name, "2")
+        self.assertEqual("Team 2", series.get_home_team_for_game(3).name, "3")
+        self.assertEqual("Team 2", series.get_away_team_for_game(1).name, "4")
+        self.assertEqual("Team 2", series.get_away_team_for_game(2).name, "5")
+        self.assertEqual("Team 1", series.get_away_team_for_game(3).name, "6")
+
+        series_rules = SeriesRules("My Rules", None, None, None)
+        series = TesterSeries(None, "Test", 1,
+                              helpers.new_comp_team(None, "Team 1", 5),
+                              helpers.new_comp_team(None, "Team 2", 5),
+                              "Tester", series_rules,
+                              None, None, None, None, None, None, None, None,
+                              False, False)
+
+        self.assertEqual("Team 1", series.get_home_team_for_game(1).name, "7")
+        self.assertEqual("Team 2", series.get_home_team_for_game(2).name, "8")
+        self.assertEqual("Team 1", series.get_home_team_for_game(3).name, "9")
+        self.assertEqual("Team 2", series.get_away_team_for_game(1).name, "10")
+        self.assertEqual("Team 1", series.get_away_team_for_game(2).name, "11")
+        self.assertEqual("Team 2", series.get_away_team_for_game(3).name, "12")
 
 
 class TestSeriesByGoals(TestCase):
@@ -16,7 +71,7 @@ class TestSeriesByGoals(TestCase):
         away_team = Team("Team 2", 5, True)
 
         competition = Competition("My Comp", 1, None, True, True, False, False)
-        sub_competition = PlayoffSubCompetition("Playoff A", None, competition, True, True, False, False)
+        sub_competition = PlayoffSubCompetition("Playoff A", None, competition, 1, 1, True, True, False, False)
 
         home_competition_team = CompetitionTeam(competition, home_team)
         away_competition_team = CompetitionTeam(competition, away_team)
@@ -24,7 +79,7 @@ class TestSeriesByGoals(TestCase):
         game_rules = GameRules("A", True)
         last_game_rules = GameRules("B", False)
 
-        series_rules = SeriesByGoalsRules("My Rules", games, game_rules, last_game_rules)
+        series_rules = SeriesByGoalsRules("My Rules", games, game_rules, last_game_rules, None)
 
         series = SeriesByGoals(sub_competition, "My Series", 1, home_competition_team, away_competition_team,
                                0, 0, 0, series_rules, None, None, None, None, None, None, None, None,
@@ -99,13 +154,15 @@ class TestSeriesByGoals(TestCase):
     def test_process_game(self):
         series = TestSeriesByGoals.setup_default_series(3)
 
-        game = SeriesGame(series, 1, series.sub_competition.competition, None, 1, series.home_team, series.away_team, 5, 1, True,
+        game = SeriesGame(series, 1, series.sub_competition.competition, None, 1, series.home_team, series.away_team, 5,
+                          1, True,
                           False, None)
         series.process_game(game)
         self.assertEqual(5, series.home_goals)
         self.assertEqual(1, series.away_goals)
 
-        game = SeriesGame(series, 2, series.sub_competition.competition, None, 1, series.home_team, series.away_team, 5, 15, True, False,
+        game = SeriesGame(series, 2, series.sub_competition.competition, None, 1, series.home_team, series.away_team, 5,
+                          15, True, False,
                           None)
 
         series.process_game(game)
@@ -211,7 +268,7 @@ class TestSeriesByWins(TestCase):
         away_team = Team("Team 2", 5, True)
 
         competition = Competition("My Comp", 1, None, True, True, False, False)
-        sub_competition = PlayoffSubCompetition("My Playoff", None, competition, True, False, False, False)
+        sub_competition = PlayoffSubCompetition("My Playoff", None, competition, 1, 1, True, False, False, False)
 
         home_competition_team = CompetitionTeam(competition, home_team)
         away_competition_team = CompetitionTeam(competition, away_team)
