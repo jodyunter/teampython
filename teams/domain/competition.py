@@ -108,8 +108,9 @@ class TableSubCompetition(SubCompetition):
 
 class PlayoffSubCompetition(SubCompetition):
 
-    def __init__(self, name, series, competition, order, setup, started, finished, post_processed, oid):
+    def __init__(self, name, series, competition, order, current_round, setup, started, finished, post_processed, oid):
         self.series = series
+        self.current_round = current_round
 
         SubCompetition.__init__(self, name, SubCompetitionConfiguration.PLAYOFF_TYPE, competition, order, setup, started,
                                 finished, post_processed, oid)
@@ -122,7 +123,7 @@ class PlayoffSubCompetition(SubCompetition):
     # dictionaries of the series id and how many complete and incomplete games there are
     def create_new_games(self, complete_games_by_series, incomplete_games_by_series):
         new_games = []
-        for series in self.series:
+        for series in [s for s in self.series if s.series_round == self.current_round]:
             new_games.extend(series.get_new_games(complete_games_by_series[series.oid],
                                                   incomplete_games_by_series[series.oid]))
 
@@ -156,7 +157,8 @@ class PlayoffSubCompetition(SubCompetition):
         if series is None or len(series) == 0:
             return False
 
-        return len([s for s in series if  not s.is_complete()]) == 0
+        return len([s for s in series if not s.is_complete()]) == 0
+
 
 class CompetitionTeam(Team):
 

@@ -14,15 +14,16 @@ from teams.services.view_models.team_view_models import TeamViewModel
 
 competition = Competition("My Comp", 25, None, True, True, False, False, IDHelper.get_new_id())
 
-playoff = PlayoffSubCompetition("My Playoff", None, competition, 1, True, True, False, False, IDHelper.get_new_id())
+playoff = PlayoffSubCompetition("My Playoff", None, competition, 1, 1, True, True, False, False, IDHelper.get_new_id())
 competition.sub_competitions = [playoff]
 
 tie_game_rules = GameRules("Can Tie", True, IDHelper.get_new_id())
 not_tie_game_rules = GameRules("Not Tie", False, IDHelper.get_new_id())
 
-series_goals_rules = SeriesByGoalsRules("By Goals", 2, tie_game_rules, not_tie_game_rules, IDHelper.get_new_id())
-series_wins2_rules = SeriesByWinsRules("By Wins", 2, not_tie_game_rules, None, IDHelper.get_new_id())
-series_wins4_rules = SeriesByWinsRules("By Wins", 4, not_tie_game_rules, None, IDHelper.get_new_id())
+series_goals2_rules = SeriesByGoalsRules("By Goals 2 games", 2, tie_game_rules, not_tie_game_rules, IDHelper.get_new_id())
+series_goals3_rules = SeriesByGoalsRules("By Goals 3 games", 3, tie_game_rules, not_tie_game_rules, IDHelper.get_new_id())
+series_wins2_rules = SeriesByWinsRules("By Wins 2 wins", 2, not_tie_game_rules, None, IDHelper.get_new_id())
+series_wins4_rules = SeriesByWinsRules("By Wins 4 wins", 4, not_tie_game_rules, None, IDHelper.get_new_id())
 
 team_list = []
 competition_team_list = []
@@ -33,16 +34,12 @@ for i in range(10):
     competition_team_list.append(CompetitionTeam(competition, team, IDHelper.get_new_id()))
 
 series1 = SeriesByGoals(playoff, "Series 1", 1, competition_team_list[0], competition_team_list[1], 0, 0, 0,
-                        series_goals_rules, None, None, None, None, None, None, None, None, True, False,
+                        series_goals2_rules, None, None, None, None, None, None, None, None, True, False,
                         IDHelper.get_new_id())
 
 series2 = SeriesByGoals(playoff, "Series 2", 1, competition_team_list[2], competition_team_list[3], 0, 0, 0,
-                        series_goals_rules, None, None, None, None, None, None, None, None, True, False,
+                        series_goals2_rules, None, None, None, None, None, None, None, None, True, False,
                         IDHelper.get_new_id())
-
-series3 = SeriesByWins(playoff, "Series 3", 1, competition_team_list[4], competition_team_list[5], 0, 0,
-                       series_wins2_rules, None, None, None, None, None, None, None, None,
-                       True, False, IDHelper.get_new_id())
 
 series3 = SeriesByWins(playoff, "Series 3", 1, competition_team_list[4], competition_team_list[5], 0, 0,
                        series_wins2_rules, None, None, None, None, None, None, None, None,
@@ -52,7 +49,15 @@ series4 = SeriesByWins(playoff, "Series 4", 1, competition_team_list[6], competi
                        series_wins4_rules, None, None, None, None, None, None, None, None,
                        True, False, IDHelper.get_new_id())
 
-playoff.series = [series1, series2, series3, series4]
+series5 = SeriesByWins(playoff, "Series 5", 2, competition_team_list[8], competition_team_list[9], 0, 0,
+                       series_wins4_rules, None, None, None, None, None, None, None, None,
+                       True, False, IDHelper.get_new_id())
+
+series6 = SeriesByGoals(playoff, "Series 6", 3, competition_team_list[2], competition_team_list[3], 0, 0, 0,
+                        series_goals3_rules, None, None, None, None, None, None, None, None, True, False,
+                        IDHelper.get_new_id())
+
+playoff.series = [series1, series2, series3, series4, series5, series6]
 
 COMPLETE = "Complete Games"
 INCOMPLETE = "Incomplete Games"
@@ -61,11 +66,12 @@ game_status_map = playoff.create_series_map([])
 r = random
 
 games = []
-current_round = 1
 loop = 0
 
+#  setup first round of playoff
 while not playoff.is_complete():
-    while not playoff.is_round_complete(current_round):
+    print(f'Current Round: {playoff.current_round}')
+    while not playoff.is_round_complete(playoff.current_round):
         # print(loop)
         new_games = playoff.create_new_games(game_status_map[COMPLETE], game_status_map[INCOMPLETE])
         games.extend(new_games)
@@ -77,7 +83,7 @@ while not playoff.is_complete():
         loop += 1
         game_status_map = playoff.create_series_map(games)
 
-    for s in playoff.series:
+    for s in [ps for ps in playoff.series if ps.series_round == playoff.current_round]:
         home_value = -1
         away_value = -1
         if isinstance(s, SeriesByGoals):
@@ -94,7 +100,8 @@ while not playoff.is_complete():
                                      away_value,
                                      "Done")
         print(SeriesView.get_basic_series_view(view_model))
-    # post process round
+    # post process round and series
+    playoff.current_round += 1
 
 
 # post process the playoff

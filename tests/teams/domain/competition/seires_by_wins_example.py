@@ -12,7 +12,7 @@ home_team = Team("Team 1", 5, True, IDHelper.get_new_id())
 away_team = Team("Team 2", 5, True, IDHelper.get_new_id())
 
 competition = Competition("My Comp", 1, None, True, True, False, False, IDHelper.get_new_id())
-sub_competition = PlayoffSubCompetition("Playoff A", None, competition, True, True, False, False, IDHelper.get_new_id())
+sub_competition = PlayoffSubCompetition("Playoff A", None, competition, 1, 1, True, True, False, False, IDHelper.get_new_id())
 
 home_competition_team = CompetitionTeam(competition, home_team, IDHelper.get_new_id())
 away_competition_team = CompetitionTeam(competition, away_team, IDHelper.get_new_id())
