@@ -19,7 +19,7 @@ class TestTableSubCompetition(TestCase):
 
         team_map = TableSubCompetition.get_dictionary_of_team_records(comp_records)
         self.assertEqual(7, len(team_map))
-        self.assertTrue(comp_records[0].oid in team_map)
+        self.assertTrue(comp_records[0].team.oid in team_map)
 
     def test_sort_rankings(self):
         raise NotImplementedError
