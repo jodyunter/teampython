@@ -1,16 +1,17 @@
 import random
 
-from teams.domain.competition import Competition, CompetitionTeam, PlayoffSubCompetition
+from teams.domain.competition import Competition, CompetitionTeam
 from teams.domain.series import SeriesByGoals
 from teams.domain.game import GameRules
 from teams.domain.series_rules import SeriesByGoalsRules
+from teams.domain.sub_competition import PlayoffSubCompetition
 from teams.domain.team import Team
 
 home_team = Team("Team 1", 5, True)
 away_team = Team("Team 2", 5, True)
 
 competition = Competition("My Comp", 1, None, True, True, False, False)
-sub_competition = PlayoffSubCompetition("Playoff A", None, competition, True, True, False, False)
+sub_competition = PlayoffSubCompetition("Playoff A", None, competition, 1, 1, True, True, False, False)
 
 home_competition_team = CompetitionTeam(competition, home_team)
 away_competition_team = CompetitionTeam(competition, away_team)
