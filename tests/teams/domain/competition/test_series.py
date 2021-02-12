@@ -1,9 +1,10 @@
 from unittest import TestCase
 
-from teams.domain.competition import CompetitionTeam, CompetitionGame, Competition, PlayoffSubCompetition, SeriesGame
+from teams.domain.competition import CompetitionTeam, CompetitionGame, Competition, SeriesGame
 from teams.domain.game import GameRules
 from teams.domain.series import SeriesByGoals, SeriesByWins
 from teams.domain.series_rules import SeriesByWinsRules, SeriesByGoalsRules
+from teams.domain.sub_competition import PlayoffSubCompetition
 from teams.domain.team import Team
 
 

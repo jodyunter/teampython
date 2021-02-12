@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from teams.domain.competition import TableSubCompetition
+from teams.domain.sub_competition import TableSubCompetition
 from tests.teams.domain.competition import helpers
 
 

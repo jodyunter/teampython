@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 from teams.domain.record import Record
+from teams.domain.team import Team
 
 
 class TestRecord(TestCase):
@@ -64,4 +65,30 @@ class TestRecord(TestCase):
         self.assertEqual(2, record.goals_against)
 
     def test_sort_records_default(self):
-        raise NotImplementedError
+        r1 = Record(-1, Team("Team 1", 5, False), 255, 10, 0, 0, 0, 0, 0, "")
+        r2 = Record(-1, Team("Team 2", 5, False), 255, 9, 0, 2, 0, 0, 0, "")
+        r3 = Record(-1, Team("Team 3", 5, False), 255, 6, 2, 2, 0, 0, 0, "")
+        r4 = Record(-1, Team("Team 4", 5, False), 255, 7, 3, 0, 0, 0, 0, "")
+        r5 = Record(-1, Team("Team 5", 5, False), 255, 0, 0, 4, 12, 12, 0, "")
+        r6 = Record(-1, Team("Team 6", 5, False), 255, 0, 0, 4, 6, 12, 0, "")
+        r7 = Record(-1, Team("Team 7", 5, False), 255, 0, 0, 4, 12, 6, 0, "")
+
+        records = [r7, r5, r6, r1, r2, r4, r3]
+
+        Record.sort_records_default(records)
+
+        self.assertEqual(1, records[0].rank)
+        self.assertEqual(2, records[1].rank)
+        self.assertEqual(3, records[2].rank)
+        self.assertEqual(4, records[3].rank)
+        self.assertEqual(5, records[4].rank)
+        self.assertEqual(6, records[5].rank)
+        self.assertEqual(7, records[6].rank)
+
+        self.assertEqual("Team 1", records[0].team.name)
+        self.assertEqual("Team 2", records[1].team.name)
+        self.assertEqual("Team 4", records[2].team.name)
+        self.assertEqual("Team 3", records[3].team.name)
+        self.assertEqual("Team 7", records[4].team.name)
+        self.assertEqual("Team 5", records[5].team.name)
+        self.assertEqual("Team 6", records[6].team.name)

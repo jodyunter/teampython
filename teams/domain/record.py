@@ -1,3 +1,6 @@
+from teams.domain.utility.utility_classes import IDHelper
+
+
 class Record:
 
     def __init__(self, rank, team, year, wins, loses, ties, goals_for, goals_against, skill, oid=None):
@@ -35,10 +38,10 @@ class Record:
         self.goals_for += us
         self.goals_against += them
 
-
     @staticmethod
     def sort_records_default(records):
         rank = 1
-        for r in records.sort(key=lambda rec: (-rec.points, -rec.wins, rec.games, -rec.goal_difference)):
+        records.sort(key=lambda rec: (-rec.points, -rec.wins, rec.games, -rec.goal_difference))
+        for r in records:
             r.rank = rank
             rank += 1

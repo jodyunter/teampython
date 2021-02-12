@@ -7,6 +7,8 @@ class IDHelper:
     def get_id(oid):
         if oid is None:
             return IDHelper.get_new_id()
+        else:
+            return oid
 
     @staticmethod
     def get_new_id():

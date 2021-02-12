@@ -13,9 +13,10 @@
 #  all sub competitions must be done before we can go onto the next order of sub comps
 #  all sub comps should be created at the same time but not setup until their order comes up so that we can rely on groups populated by previouis comps
 
-from teams.domain.competition import Competition, SubCompetition, CompetitionGroup, CompetitionTeam, CompetitionRanking
+from teams.domain.competition import Competition, CompetitionGroup, CompetitionTeam, CompetitionRanking
 from teams.domain.competition_configuration import CompetitionConfiguration, CompetitionGroupConfiguration, \
     SubCompetitionConfiguration
+from teams.domain.sub_competition import SubCompetition
 from teams.domain.table_competition import TableRecord
 
 comp_config = CompetitionConfiguration("My Comp", 1, 1, None)

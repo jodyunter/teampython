@@ -1,6 +1,8 @@
 from unittest import TestCase
 
+from teams.domain.game import Game
 from teams.domain.scheduler import Scheduler
+from teams.domain.team import Team
 
 
 class TestScheduler(TestCase):
@@ -108,10 +110,40 @@ class TestScheduler(TestCase):
                [2, 3]] == scheduler.matrix
 
     def test_does_team_play_in_games_list(self):
-        raise NotImplementedError
+        team1 = Team("Team 1", 5, False)
+        team2 = Team("Team 2", 5, False)
+        team3 = Team("Team 3", 5, False)
+        team4 = Team("Team 4", 5, False)
+
+        game1 = Game(1, 1, team1, team2, 0, 0, False, False, None)
+        game2 = Game(1, 1, team3, team4, 0, 0, False, False, None)
+
+        game_list_1 = [game1, game2]
+        game_list_2 = [game2]
+
+        self.assertTrue(Scheduler.does_team_play_in_games_list(game_list_1, team1))
+        self.assertTrue(Scheduler.does_team_play_in_games_list(game_list_1, team2))
+        self.assertTrue(Scheduler.does_team_play_in_games_list(game_list_1, team3))
+        self.assertTrue(Scheduler.does_team_play_in_games_list(game_list_1, team4))
+
+        self.assertFalse(Scheduler.does_team_play_in_games_list(game_list_2, team1))
+        self.assertFalse(Scheduler.does_team_play_in_games_list(game_list_2, team2))
+        self.assertTrue(Scheduler.does_team_play_in_games_list(game_list_2, team3))
+        self.assertTrue(Scheduler.does_team_play_in_games_list(game_list_2, team4))
 
     def test_does_any_team_play_in_other_list(self):
         raise NotImplementedError
 
     def test_set_day_for_new_series_game(self):
         raise NotImplementedError
+
+    def test_does_team_play_in_game(self):
+        team1 = Team("Team 1", 5, True)
+        team2 = Team("Team 2", 5, True)
+        team3 = Team("Team 3", 5, True)
+
+        game = Game(1, 1, team2, team3, 0, 0, False, False, None)
+
+        self.assertTrue(Scheduler.does_team_play_in_game(game, team2))
+        self.assertTrue(Scheduler.does_team_play_in_game(game, team3))
+        self.assertFalse(Scheduler.does_team_play_in_game(game, team1))

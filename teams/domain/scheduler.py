@@ -8,12 +8,6 @@ class ScheduledGame:
         self.year = year
         self.day = day
 
-    def does_team_play_in_game(self, other_game):
-        home_plays = other_game.home_id == self.home_id or other_game.home_id == self.away_id
-        away_plays = other_game.away_id == self.home_id or other_game.away_id == self.away_id
-
-        return home_plays or away_plays
-
 
 class Scheduler:
     matrix = []
@@ -98,9 +92,13 @@ class Scheduler:
         self.num_list = list(range(self.anchor + 1, self.total_teams))
 
     @staticmethod
-    def does_team_play_in_games_list(games, team_id):
+    def does_team_play_in_game(game, team):
+        return game.home_team.oid == team.oid or game.away_team.oid == team.oid
+
+    @staticmethod
+    def does_team_play_in_games_list(games, team):
         for g in games:
-            if g.home_team.oid == team_id or g.away_team.oid == team_id:
+            if Scheduler.does_team_play_in_game(g, team):
                 return True
 
         return False

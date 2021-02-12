@@ -1,6 +1,6 @@
 from teams.domain.game import Game
 from teams.domain.record import Record
-from teams.domain.utility.utility_classes import YearRestricted
+from teams.domain.utility.utility_classes import YearRestricted, IDHelper
 
 
 class TableCompetition:
