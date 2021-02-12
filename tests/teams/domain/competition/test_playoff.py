@@ -177,9 +177,3 @@ class TestPlayoffSubCompetition(TestCase):
         # test we have no series cases
         raise NotImplementedError
 
-    def test_is_round_post_processed(self):
-        raise NotImplementedError
-
-    def test_is_round_setup(self):
-        raise NotImplementedError
-
