@@ -168,7 +168,11 @@ class PlayoffSubCompetition(SubCompetition):
 
     @staticmethod
     def add_team_to_group(team, group, group_with_rank):
-        group.add_team_to_group(team, group_with_rank.get_rank_for_team(team))
+        # TODO: need to make this better
+        if team is None or group is None or group_with_rank is None:
+            return
+        else:
+            group.add_team_to_group(team, group_with_rank.get_rank_for_team(team))
 
     #  setup makes sure the round can be setup
     def setup_round(self, round_number):
