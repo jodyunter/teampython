@@ -3,11 +3,10 @@ from unittest import TestCase
 import pytest
 
 from teams.domain.comp_configorator import CompetitionConfigurator
-from teams.domain.competition import Competition
-from teams.domain.competition_configuration import SubCompetitionConfiguration, CompetitionGroupConfiguration, \
-    CompetitionTeamConfiguration
+from teams.domain.competition import Competition, CompetitionTeam
+from teams.domain.competition_configuration import SubCompetitionConfiguration, CompetitionGroupConfiguration, CompetitionTeamConfiguration
 from teams.domain.errors import DomainError
-from teams.domain.sub_competition import SubCompetition, TableSubCompetition
+from teams.domain.sub_competition import TableSubCompetition
 from teams.domain.team import Team
 
 
@@ -241,25 +240,105 @@ class TestCompConfiguratorTeams(TestCase):
     def test_should_fail_group_not_created(self):
         with pytest.raises(DomainError, match="Group Team Group 1 has not been created yet."):
             competition = Competition("My Comp", 1, [], False, False, False, False)
-            comp_group = CompetitionGroupConfiguration("Team Group 1", None, None, 1, CompetitionGroupConfiguration.RANKING_TYPE, 1, None)
+            comp_group_config = CompetitionGroupConfiguration("Team Group 1", None, None, 1, CompetitionGroupConfiguration.RANKING_TYPE, 1, None)
             team = Team("My Team", 5, True)
-            competition_team_configuration = CompetitionTeamConfiguration(None, team, comp_group, 1, None)
+            competition_team_configuration = CompetitionTeamConfiguration(team, None, comp_group_config, 1, None)
             CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration, [], [], competition)
 
     def test_should_fail_too_many_groups(self):
-        raise NotImplementedError
+        with pytest.raises(DomainError, match="Group Team Group 1 has multiple groups 2."):
+            competition = Competition("My Comp", 1, [], False, False, False, False)
+            comp_group_config = CompetitionGroupConfiguration("Team Group 1", None, None, 1, CompetitionGroupConfiguration.RANKING_TYPE, 1, None)
+            current_groups = []
+            comp_group = CompetitionConfigurator.create_competition_group(comp_group_config, current_groups, competition)
+            current_groups.append(comp_group)
+            team = Team("My Team", 5, True)
+            competition_team_configuration = CompetitionTeamConfiguration(team, None, comp_group_config, 1, None)
+            CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration, current_groups, [], competition)
 
     def test_should_fail_too_many_teams(self):
-        raise NotImplementedError
+        with pytest.raises(DomainError, match=r"Team My Team has too many 2 teams created."):
+            competition = Competition("My Comp", 1, [], False, False, False, False)
+            comp_group_config = CompetitionGroupConfiguration("Team Group 1", None, None, 1, CompetitionGroupConfiguration.RANKING_TYPE, 1, None)
+            current_groups = []
+            comp_group = CompetitionConfigurator.create_competition_group(comp_group_config, current_groups, competition)
+            team = Team("My Team", 5, True)
+            competition_team_configuration = CompetitionTeamConfiguration(team, None, comp_group_config, 1, None)
+            comp_team = CompetitionTeam(competition, team)
+            current_teams = [comp_team, comp_team]
+            CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration, current_groups, current_teams, competition)
 
     def test_should_add_team_team_does_not_exist(self):
-        raise NotImplementedError
+        competition = Competition("My Comp", 1, [], False, False, False, False)
+        comp_group_config = CompetitionGroupConfiguration("Team Group 1", None, None, 1, CompetitionGroupConfiguration.RANKING_TYPE, 1, None)
+        current_groups = []
+        comp_group = CompetitionConfigurator.create_competition_group(comp_group_config, current_groups, competition)
+        team = Team("My Team", 5, True)
+        competition_team_configuration = CompetitionTeamConfiguration(team, None, comp_group_config, 1, None)
+        current_teams = []
+        CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration, current_groups, current_teams, competition)
+
+        self.assertEqual(1, len(current_teams))
+        self.assertEqual(1, len(comp_group.rankings))
+        self.assertEqual(team.oid, comp_group.rankings[0].team.parent_team.oid)
 
     def test_should_add_team_team_exists(self):
-        raise NotImplementedError
+        competition = Competition("My Comp", 1, [], False, False, False, False)
+        comp_group_config = CompetitionGroupConfiguration("Team Group 1", None, None, 1, CompetitionGroupConfiguration.RANKING_TYPE, 1, None)
+        current_groups = []
+        comp_group = CompetitionConfigurator.create_competition_group(comp_group_config, current_groups, competition)
+        team = Team("My Team", 5, True)
+        competition_team_configuration = CompetitionTeamConfiguration(team, None, comp_group_config, 1, None)
+        comp_team = CompetitionTeam(competition, team)
+        current_teams = [comp_team]
+        CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration, current_groups, current_teams, competition)
+
+        self.assertEqual(1, len(current_teams))
+        self.assertEqual(1, len(comp_group.rankings))
+        self.assertEqual(comp_team.oid, comp_group.rankings[0].team.oid)
 
     def test_should_add_team_multiple_parents(self):
-        raise NotImplementedError
+        competition = Competition("My Comp", 1, [], False, False, False, False)
+        parent_comp_group_config = CompetitionGroupConfiguration("Parent Group 1", None, None, 1,
+                                                          CompetitionGroupConfiguration.RANKING_TYPE, 1, None)
+        comp_group_config = CompetitionGroupConfiguration("Team Group 1", None, parent_comp_group_config, 1, CompetitionGroupConfiguration.RANKING_TYPE, 1, None)
+        current_groups = []
+        comp_group = CompetitionConfigurator.create_competition_group(comp_group_config, current_groups, competition)
+        self.assertEqual(2, len(current_groups))
+        team = Team("My Team", 5, True)
+        competition_team_configuration = CompetitionTeamConfiguration(team, None, comp_group_config, 1, None)
+        comp_team = CompetitionTeam(competition, team)
+        current_teams = [comp_team]
+        CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration, current_groups, current_teams, competition)
 
-    def test_should_add_team_single_parent(self):
-        raise NotImplementedError
+        self.assertEqual(1, len(current_teams))
+        self.assertEqual(1, len(comp_group.rankings))
+        self.assertEqual(1, len(comp_group.parent_group.rankings))
+        self.assertEqual(comp_team.oid, comp_group.rankings[0].team.oid)
+        self.assertEqual(comp_team.oid, comp_group.parent_group.rankings[0].team.oid)
+
+    def test_should_add_multiple_teams(self):
+        competition = Competition("My Comp", 1, [], False, False, False, False)
+        parent_comp_group_config = CompetitionGroupConfiguration("Parent Group 1", None, None, 1,
+                                                          CompetitionGroupConfiguration.RANKING_TYPE, 1, None)
+        comp_group_config = CompetitionGroupConfiguration("Team Group 1", None, parent_comp_group_config, 1, CompetitionGroupConfiguration.RANKING_TYPE, 1, None)
+        current_groups = []
+        comp_group = CompetitionConfigurator.create_competition_group(comp_group_config, current_groups, competition)
+        self.assertEqual(2, len(current_groups))
+        team = Team("My Team", 5, True)
+        team2 = Team("My Team", 5, True)
+        competition_team_configuration = CompetitionTeamConfiguration(team, None, comp_group_config, 1, None)
+        competition_team_configuration2 = CompetitionTeamConfiguration(team2, None, comp_group_config, 1, None)
+        comp_team = CompetitionTeam(competition, team)
+        current_teams = [comp_team]
+        CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration, current_groups, current_teams, competition)
+        CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration2, current_groups,
+                                                                       current_teams, competition)
+
+        self.assertEqual(2, len(current_teams))
+        self.assertEqual(2, len(comp_group.rankings))
+        self.assertEqual(2, len(comp_group.parent_group.rankings))
+        self.assertEqual(comp_team.oid, comp_group.rankings[0].team.oid)
+        self.assertEqual(comp_team.oid, comp_group.parent_group.rankings[0].team.oid)
+        self.assertEqual(current_teams[1].oid, comp_group.rankings[1].team.oid)
+        self.assertEqual(current_teams[1].oid, comp_group.parent_group.rankings[1].team.oid)

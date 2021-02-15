@@ -62,14 +62,14 @@ class CompetitionConfigurator:
             group = groups_with_name[0]
 
         # check if team exists
-        team_created = [c for c in current_teams if c.parent.oid == team_configuration.team.oid]
+        team_created = [c for c in current_teams if c.parent_team.oid == team_configuration.team.oid]
         if team_created is None or len(team_created) == 0:
             team = CompetitionTeam(competition, team_configuration.team)
+            current_teams.append(team)
         elif len(team_created) > 1:
             raise DomainError(f'Team {team_configuration.team.name} has too many {len(team_created)} teams created.')
         else:
             team = team_created[0]
-            current_teams.append(team)
 
         current_group = group
         while current_group is not None:
