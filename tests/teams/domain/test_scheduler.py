@@ -1,5 +1,7 @@
 from unittest import TestCase
 
+from pytest import mark
+
 from teams.domain.game import Game
 from teams.domain.scheduler import Scheduler
 from teams.domain.team import Team
@@ -168,8 +170,9 @@ class TestScheduler(TestCase):
         # no teams play
         self.assertFalse(Scheduler.does_any_team_play_in_other_list(game_list_5, game_list_6))
 
+    @mark.notwritten
     def test_set_day_for_new_series_game(self):
-        raise NotImplementedError
+        pass
 
     def test_does_team_play_in_game(self):
         team1 = Team("Team 1", 5, True)

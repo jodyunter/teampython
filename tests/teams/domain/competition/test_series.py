@@ -11,7 +11,22 @@ from teams.domain.team import Team
 from tests.teams.domain.competition import helpers
 
 
-class TesterSeries(Series):
+class SeriesForTests(Series):
+
+    def __init__(self, sub_competition, name, series_round, home_team, away_team, series_type, series_rules,
+                 home_team_from_group, home_team_value,
+                 away_team_from_group, away_team_value,
+                 winner_to_group, winner_rank_from,
+                 loser_to_group, loser_rank_from,
+                 setup, post_processed,
+                 oid=None):
+        Series.__init__(self, sub_competition, name, series_round, home_team, away_team, series_type, series_rules,
+                        home_team_from_group, home_team_value,
+                        away_team_from_group, away_team_value,
+                        winner_to_group, winner_rank_from,
+                        loser_to_group, loser_rank_from,
+                        setup, post_processed,
+                        oid)
 
     def process_game(self, game):
         pass
@@ -33,12 +48,12 @@ class TestSeries(TestCase):
 
     def test_get_home_and_away_team_for_game(self):
         series_rules = SeriesRules("My Rules", None, None, [0, 0, 1])
-        series = TesterSeries(None, "Test", 1,
-                              helpers.new_comp_team(None, "Team 1", 5),
-                              helpers.new_comp_team(None, "Team 2", 5),
+        series = SeriesForTests(None, "Test", 1,
+                                helpers.new_comp_team(None, "Team 1", 5),
+                                helpers.new_comp_team(None, "Team 2", 5),
                               "Tester", series_rules,
-                              None, None, None, None, None, None, None, None,
-                              False, False)
+                                None, None, None, None, None, None, None, None,
+                                False, False)
 
         self.assertEqual("Team 1", series.get_home_team_for_game(1).name, "1")
         self.assertEqual("Team 1", series.get_home_team_for_game(2).name, "2")
@@ -48,12 +63,12 @@ class TestSeries(TestCase):
         self.assertEqual("Team 1", series.get_away_team_for_game(3).name, "6")
 
         series_rules = SeriesRules("My Rules", None, None, None)
-        series = TesterSeries(None, "Test", 1,
-                              helpers.new_comp_team(None, "Team 1", 5),
-                              helpers.new_comp_team(None, "Team 2", 5),
+        series = SeriesForTests(None, "Test", 1,
+                                helpers.new_comp_team(None, "Team 1", 5),
+                                helpers.new_comp_team(None, "Team 2", 5),
                               "Tester", series_rules,
-                              None, None, None, None, None, None, None, None,
-                              False, False)
+                                None, None, None, None, None, None, None, None,
+                                False, False)
 
         self.assertEqual("Team 1", series.get_home_team_for_game(1).name, "7")
         self.assertEqual("Team 2", series.get_home_team_for_game(2).name, "8")

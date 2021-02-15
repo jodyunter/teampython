@@ -1,5 +1,7 @@
 from unittest import TestCase
 
+from pytest import mark
+
 from teams.domain.competition import CompetitionGroup
 from teams.domain.competition_configuration import CompetitionGroupConfiguration
 from tests.teams.domain.competition import helpers
@@ -7,11 +9,13 @@ from tests.teams.domain.competition import helpers
 
 class TestCompetitionGroup(TestCase):
 
+    @mark.notwritten
     def test_add_team_to_group_again(self):
-        raise NotImplementedError
+        pass
 
+    @mark.notwritten
     def test_add_team_to_group_no_rank(self):
-        raise NotImplementedError
+        pass
 
     def test_add_team_to_group(self):
         group = CompetitionGroup("My Group", None, None, None, CompetitionGroupConfiguration.RANKING_TYPE)
@@ -69,11 +73,13 @@ class TestCompetitionGroup(TestCase):
         self.assertEqual("Team 5", group.get_team_by_rank(25).team.name)
         self.assertEqual("Team 6", group.get_team_by_rank(15).team.name)
 
+    @mark.notwritten
     def test_get_rank_for_team(self):
-        raise NotImplementedError
+        pass
 
 
 class TestCompetitionRanking(TestCase):
 
+    @mark.notwritten
     def test_get_dictionary_of_groups_from_rankings(self):
-        raise NotImplementedError
+        pass

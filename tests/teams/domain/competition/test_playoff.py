@@ -1,6 +1,8 @@
 import random
 from unittest import TestCase
 
+from pytest import mark
+
 from teams.domain.competition import Competition, CompetitionGroup, CompetitionRanking
 from teams.domain.competition_configuration import CompetitionGroupConfiguration
 from teams.domain.game import GameRules
@@ -131,8 +133,9 @@ class TestPlayoffSubCompetition(TestCase):
             else:
                 self.assertFalse(True, "Why are we here?")
 
+    @mark.notwritten
     def test_is_complete(self):
-        raise NotImplementedError
+        pass
 
     def test_create_status_map(self):
         groups = []
@@ -255,10 +258,11 @@ class TestPlayoffSubCompetition(TestCase):
         self.assertEqual(0, len(groups[3].rankings))
         self.assertEqual(0, len(groups[4].rankings))
 
+    @mark.notwritten
     def test_is_round_complete(self):
         # test normal case
         groups = []
         playoff = TestPlayoffSubCompetition.create_default_playoff(groups)
         # test we have no series cases
-        raise NotImplementedError
+        pass
 
