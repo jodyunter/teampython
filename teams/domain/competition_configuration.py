@@ -84,7 +84,7 @@ class SeriesConfiguration(CompetitionGameConfiguration):
         self.winner_group_configuration = winner_group_configuration
         self.loser_group_configuration = loser_group_configuration
 
-        CompetitionGameConfiguration.__init__(name, sub_competition_configuration,
+        CompetitionGameConfiguration.__init__(self, name, sub_competition_configuration,
                                               CompetitionGameConfiguration.PLAYOFF_TYPE,
                                               first_year, last_year, oid)
 
@@ -107,6 +107,6 @@ class TableGameConfiguration(CompetitionGameConfiguration):
         self.number_of_matches = number_of_matches
         self.home_and_away = home_and_away
 
-        CompetitionGameConfiguration.__init__(name, sub_competition_configuration,
+        CompetitionGameConfiguration.__init__(self, name, sub_competition_configuration,
                                               CompetitionGameConfiguration.TABLE_TYPE,
                                               first_year, last_year, oid)

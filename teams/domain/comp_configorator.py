@@ -1,5 +1,6 @@
 #  this class may become a service in the long run
 from teams.domain.competition import CompetitionGroup, CompetitionTeam
+from teams.domain.competition_configuration import CompetitionGameConfiguration
 from teams.domain.errors import DomainError
 
 
@@ -57,7 +58,8 @@ class CompetitionConfigurator:
         if groups_with_name is None or len(groups_with_name) == 0:
             raise DomainError(f'Group {team_configuration.group_configuration.name} has not been created yet.')
         elif len(groups_with_name) > 1:
-            raise DomainError(f'Group {team_configuration.group_configuration.name} has multiple groups {len(groups_with_name)}.')
+            raise DomainError(
+                f'Group {team_configuration.group_configuration.name} has multiple groups {len(groups_with_name)}.')
         else:
             group = groups_with_name[0]
 
@@ -76,3 +78,22 @@ class CompetitionConfigurator:
             current_group.add_team_to_group(team)
             current_group = current_group.parent_group
 
+    @staticmethod
+    def process_competition_game_configuration(competition_game_configuration, sub_competition):
+        if sub_competition is None:
+            raise DomainError("Sub Competition must be setup before competition games can be processed.")
+
+        method_map = {
+            CompetitionGameConfiguration.TABLE_TYPE: CompetitionConfigurator.process_table_game_configuration,
+            CompetitionGameConfiguration.PLAYOFF_TYPE: CompetitionConfigurator.process_series_game_configuration
+        }
+
+        method_map[competition_game_configuration.competition_game_type](competition_game_configuration)
+
+    @staticmethod
+    def process_series_game_configuration(series_game_configuration):
+        pass
+
+    @staticmethod
+    def process_table_game_configuration(table_game_configuration):
+        pass
