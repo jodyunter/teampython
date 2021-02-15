@@ -7,6 +7,9 @@ from tests.teams.domain.competition import helpers
 
 class TestCompetitionGroup(TestCase):
 
+    def test_add_team_to_group_again(self):
+        raise NotImplementedError
+
     def test_add_team_to_group(self):
         group = CompetitionGroup("My Group", None, None, None, CompetitionGroupConfiguration.RANKING_TYPE)
         rankings = []

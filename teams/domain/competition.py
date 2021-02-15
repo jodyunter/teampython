@@ -56,7 +56,11 @@ class CompetitionGroup:
         self.oid = IDHelper.get_id(oid)
 
     def add_team_to_group(self, competition_team, rank):
-        self.rankings.append(CompetitionRanking(self, competition_team, rank))
+        team_in_group = [t for t in self.rankings if t.oid == competition_team.oid]
+        if team_in_group is None or len(team_in_group) == 0:
+            self.rankings.append(CompetitionRanking(self, competition_team, rank))
+        else:
+            return
 
     def get_rank_for_team(self, team):
         return [r.rank for r in self.rankings if r.team.oid == team.oid][0]

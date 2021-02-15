@@ -49,7 +49,7 @@ class CompetitionTeamConfiguration(YearRestricted):
         self.group_configuration = group_configuration
         self.oid = IDHelper.get_id(oid)
 
-        YearRestricted.__init__(first_year, last_year)
+        YearRestricted.__init__(self, first_year, last_year)
 
 
 class CompetitionGameConfiguration(YearRestricted):
