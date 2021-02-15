@@ -79,7 +79,7 @@ class CompetitionConfigurator:
             current_group = current_group.parent_group
 
     @staticmethod
-    def process_competition_game_configuration(competition_game_configuration, sub_competition):
+    def process_competition_game_configuration(competition_game_configuration, current_groups, sub_competition):
         if sub_competition is None:
             raise DomainError("Sub Competition must be setup before competition games can be processed.")
 
@@ -88,12 +88,12 @@ class CompetitionConfigurator:
             CompetitionGameConfiguration.PLAYOFF_TYPE: CompetitionConfigurator.process_series_game_configuration
         }
 
-        method_map[competition_game_configuration.competition_game_type](competition_game_configuration)
+        method_map[competition_game_configuration.competition_game_type](competition_game_configuration, current_groups)
 
     @staticmethod
-    def process_series_game_configuration(series_game_configuration):
+    def process_series_game_configuration(series_game_configuration, current_groups):
         pass
 
     @staticmethod
-    def process_table_game_configuration(table_game_configuration):
+    def process_table_game_configuration(table_game_configuration, current_groups):
         pass
