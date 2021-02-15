@@ -44,6 +44,7 @@ class CompetitionGame(Game):
                       oid)
 
 
+# TODO: need to put the level in here!
 class CompetitionGroup:
 
     def __init__(self, name, parent_group, sub_competition, rankings, group_type, oid=None):

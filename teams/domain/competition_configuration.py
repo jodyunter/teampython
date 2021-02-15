@@ -22,7 +22,7 @@ class SubCompetitionConfiguration(YearRestricted):
         self.sub_competition_type = sub_competition_type
         self.oid = IDHelper.get_id(oid)
 
-        YearRestricted.__init__(first_year, last_year)
+        YearRestricted.__init__(self, first_year, last_year)
 
 
 class CompetitionGroupConfiguration(YearRestricted):
@@ -38,7 +38,7 @@ class CompetitionGroupConfiguration(YearRestricted):
         self.group_type = group_type
         self.oid = IDHelper.get_id(oid)
 
-        YearRestricted.__init__(first_year, last_year)
+        YearRestricted.__init__(self, first_year, last_year)
 
 
 class CompetitionTeamConfiguration(YearRestricted):

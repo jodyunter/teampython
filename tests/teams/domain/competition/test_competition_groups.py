@@ -66,6 +66,7 @@ class TestCompetitionGroup(TestCase):
     def test_get_rank_for_team(self):
         raise NotImplementedError
 
+
 class TestCompetitionRanking(TestCase):
 
     def test_get_dictionary_of_groups_from_rankings(self):
