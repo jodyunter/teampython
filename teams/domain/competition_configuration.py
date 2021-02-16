@@ -71,7 +71,8 @@ class SeriesConfiguration(CompetitionGameConfiguration):
                  home_team_group_configuration, home_team_value,
                  away_team_group_configuration, away_team_value,
                  series_rules, game_rules,
-                 winner_group_configuration, loser_group_configuration,
+                 winner_group_configuration, winner_rank_from_configuration,
+                 loser_group_configuration, loser_rank_from_configuration,
                  first_year, last_year,
                  oid=None):
         self.series_round = series_round
@@ -82,7 +83,9 @@ class SeriesConfiguration(CompetitionGameConfiguration):
         self.series_rules = series_rules
         self.game_rules = game_rules
         self.winner_group_configuration = winner_group_configuration
+        self.winner_rank_from_configuration = winner_rank_from_configuration
         self.loser_group_configuration = loser_group_configuration
+        self.loser_rank_from_configuration = loser_rank_from_configuration
 
         CompetitionGameConfiguration.__init__(self, name, sub_competition_configuration,
                                               CompetitionGameConfiguration.PLAYOFF_TYPE,

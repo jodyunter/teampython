@@ -342,3 +342,7 @@ class TestCompConfiguratorTeams(TestCase):
         self.assertEqual(comp_team.oid, comp_group.parent_group.rankings[0].team.oid)
         self.assertEqual(current_teams[1].oid, comp_group.rankings[1].team.oid)
         self.assertEqual(current_teams[1].oid, comp_group.parent_group.rankings[1].team.oid)
+
+
+class TestCompConfiguratorSeriesGames(TestCase):
+    pass
