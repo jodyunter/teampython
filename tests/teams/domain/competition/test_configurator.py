@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 import pytest
+from pytest import mark
 
 from teams.domain.comp_configorator import CompetitionConfigurator
 from teams.domain.competition import Competition, CompetitionTeam
@@ -344,5 +345,39 @@ class TestCompConfiguratorTeams(TestCase):
         self.assertEqual(current_teams[1].oid, comp_group.parent_group.rankings[1].team.oid)
 
 
+class TestCompConfiguratorCompGame(TestCase):
+
+    @mark.notwritten
+    def test_should_process_comp_game_with_series(self):
+        pass
+
+    @mark.notwritten
+    def test_should_process_comp_game_with_table(self):
+        pass
+
+
+class TestCompConfiguratorTableGames(TestCase):
+
+    @mark.notwritten
+    def test_should_process_table_game(self):
+        # need multiple types
+        pass
+
+
 class TestCompConfiguratorSeriesGames(TestCase):
-    pass
+
+    @mark.notwritten
+    def should_process_by_goals_method(self):
+        pass
+
+    @mark.notwritten
+    def should_process_by_wins_method(self):
+        pass
+
+    @mark.notwritten
+    def should_process_series_with_by_wins(self):
+        pass
+
+    @mark.notwritten
+    def should_process_series_with_by_goals(self):
+        pass
