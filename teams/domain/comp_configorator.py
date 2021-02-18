@@ -122,7 +122,13 @@ class CompetitionConfigurator:
     # TODO: we're assuming the group is there
     @staticmethod
     def get_group_from_list(group_name, group_list):
-        return [g for g in group_list if g.name == group_name][0]
+        found_list = [g for g in group_list if g.name == group_name]
+        if found_list is None or len(found_list) == 0:
+            raise DomainError("Group was not found.  Need to create group before calling this.")
+        elif len(found_list) > 1:
+            raise DomainError(f"{group_name} has multiple {len(found_list)} entries.")
+        else:
+            return [g for g in group_list if g.name == group_name][0]
 
     @staticmethod
     def processes_series_by_wins_configuration(series_game_configuration, current_groups, sub_competition):
