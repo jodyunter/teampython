@@ -416,7 +416,6 @@ class TestCompConfiguratorTableGames(TestCase):
 
 class TestCompConfiguratorSeriesGames(TestCase):
 
-    @mark.notwritten
     def test_should_process_by_goals_method(self):
         series = CompetitionConfigurator.processes_series_by_goals_configuration(
             SeriesConfiguration("Series 1", 5, None,
@@ -451,7 +450,6 @@ class TestCompConfiguratorSeriesGames(TestCase):
                                     None, None, None, None, 1, None),
                 None, None)
 
-    @mark.notwritten
     def test_should_process_by_wins_method(self):
         series = CompetitionConfigurator.processes_series_by_wins_configuration(
             SeriesConfiguration("Series 1", 5, None,
@@ -487,9 +485,14 @@ class TestCompConfiguratorSeriesGames(TestCase):
                 None, None)
 
     @mark.notwritten
-    def test_should_process_series_with_by_wins(self):
+    def test_should_process_series_game_config(self):
         pass
 
     @mark.notwritten
-    def test_should_process_series_with_by_goals(self):
+    def test_should_process_series_game_not_playoff_sub_comp(self):
         pass
+
+    @mark.notwritten
+    def test_should_process_series_game_sub_comp_is_none(self):
+        pass
+

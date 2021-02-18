@@ -4,6 +4,7 @@ from teams.domain.competition_configuration import CompetitionGameConfiguration
 from teams.domain.errors import DomainError
 from teams.domain.series import SeriesByWins, SeriesByGoals
 from teams.domain.series_rules import SeriesRules
+from teams.domain.sub_competition import PlayoffSubCompetition
 
 
 class CompetitionConfigurator:
@@ -97,6 +98,11 @@ class CompetitionConfigurator:
 
     @staticmethod
     def process_series_game_configuration(series_game_configuration, current_groups, sub_competition):
+        if sub_competition is None:
+            raise DomainError("Sub Competition is null.")
+        elif not isinstance(PlayoffSubCompetition, sub_competition):
+            raise DomainError(f"Sub Competition {sub_competition.name} is not a playoff sub competition.")
+
         series_rules = series_game_configuration.series_rules
 
         if series_rules is None:
@@ -116,8 +122,9 @@ class CompetitionConfigurator:
             SeriesRules.WINS_TYPE: CompetitionConfigurator.processes_series_by_wins_configuration
         }
 
-        method_map[series_game_configuration.series_rules.series_type](series_game_configuration, current_groups,
-                                                                       sub_competition)
+        new_series = method_map[series_game_configuration.series_rules.series_type](series_game_configuration, current_groups,
+                                                                                    sub_competition)
+        sub_competition.series.append(new_series)
 
     # TODO: we're assuming the group is there
     @staticmethod
