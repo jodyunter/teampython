@@ -6,8 +6,9 @@ from pytest import mark
 from teams.domain.comp_configorator import CompetitionConfigurator
 from teams.domain.competition import Competition, CompetitionTeam, CompetitionGroup
 from teams.domain.competition_configuration import SubCompetitionConfiguration, CompetitionGroupConfiguration, \
-    CompetitionTeamConfiguration
+    CompetitionTeamConfiguration, SeriesConfiguration
 from teams.domain.errors import DomainError
+from teams.domain.series_rules import SeriesByWinsRules, SeriesByGoalsRules
 from teams.domain.sub_competition import TableSubCompetition
 from teams.domain.team import Team
 
@@ -416,17 +417,79 @@ class TestCompConfiguratorTableGames(TestCase):
 class TestCompConfiguratorSeriesGames(TestCase):
 
     @mark.notwritten
-    def should_process_by_goals_method(self):
+    def test_should_process_by_goals_method(self):
+        series = CompetitionConfigurator.processes_series_by_goals_configuration(
+            SeriesConfiguration("Series 1", 5, None,
+                                CompetitionGroupConfiguration("Group 1", None, None, 1, None, 1, None), 1,
+                                CompetitionGroupConfiguration("Group 1", None, None, 1, None, 1, None), 2,
+                                SeriesByGoalsRules("My Rules", 5, None, None, None), None,
+                                CompetitionGroupConfiguration("Group 3", None, None, 1, None, 1, None),
+                                CompetitionGroupConfiguration("Group 4", None, None, 1, None, 1, None),
+                                CompetitionGroupConfiguration("Group 3", None, None, 1, None, 1, None),
+                                CompetitionGroupConfiguration("Group 4", None, None, 1, None, 1, None),
+                                1, None),
+            [
+                CompetitionGroup("Group 1", None, None, None, None),
+                CompetitionGroup("Group 3", None, None, None, None),
+                CompetitionGroup("Group 4", None, None, None, None),
+            ],
+            None)
+
+        self.assertEqual("Series 1", series.name)
+        self.assertEqual("Group 1", series.home_team_from_group.name)
+        self.assertEqual("Group 1", series.away_team_from_group.name)
+        self.assertEqual("Group 3", series.winner_to_group.name)
+        self.assertEqual("Group 3", series.loser_to_group.name)
+        self.assertEqual("Group 4", series.winner_rank_from.name)
+        self.assertEqual("Group 4", series.loser_rank_from.name)
+
+    def test_should_process_by_goals_method_wrong_rules(self):
+        with pytest.raises(DomainError, match="Series My Configuration does not have the correct rules."):
+            series = CompetitionConfigurator.processes_series_by_goals_configuration(
+                SeriesConfiguration("My Configuration", 5, None, None, None, None,
+                                    None, SeriesByWinsRules("Test Rules", 4, None, None), None,
+                                    None, None, None, None, 1, None),
+                None, None)
+
+    @mark.notwritten
+    def test_should_process_by_wins_method(self):
+        series = CompetitionConfigurator.processes_series_by_wins_configuration(
+            SeriesConfiguration("Series 1", 5, None,
+                                CompetitionGroupConfiguration("Group 1", None, None, 1, None, 1, None), 1,
+                                CompetitionGroupConfiguration("Group 1", None, None, 1, None, 1, None), 2,
+                                SeriesByWinsRules("My Rules", 5, None, None, None), None,
+                                CompetitionGroupConfiguration("Group 3", None, None, 1, None, 1, None),
+                                CompetitionGroupConfiguration("Group 4", None, None, 1, None, 1, None),
+                                CompetitionGroupConfiguration("Group 3", None, None, 1, None, 1, None),
+                                CompetitionGroupConfiguration("Group 4", None, None, 1, None, 1, None),
+                                1, None),
+            [
+                CompetitionGroup("Group 1", None, None, None, None),
+                CompetitionGroup("Group 3", None, None, None, None),
+                CompetitionGroup("Group 4", None, None, None, None),
+            ],
+            None)
+
+        self.assertEqual("Series 1", series.name)
+        self.assertEqual("Group 1", series.home_team_from_group.name)
+        self.assertEqual("Group 1", series.away_team_from_group.name)
+        self.assertEqual("Group 3", series.winner_to_group.name)
+        self.assertEqual("Group 3", series.loser_to_group.name)
+        self.assertEqual("Group 4", series.winner_rank_from.name)
+        self.assertEqual("Group 4", series.loser_rank_from.name)
+
+    def test_should_process_by_wins_method_wrong_rules(self):
+        with pytest.raises(DomainError, match="Series My Configuration does not have the correct rules."):
+            series = CompetitionConfigurator.processes_series_by_wins_configuration(
+                SeriesConfiguration("My Configuration", 5, None, None, None, None,
+                                    None, SeriesByGoalsRules("Test Rules", 4, None, None, None), None,
+                                    None, None, None, None, 1, None),
+                None, None)
+
+    @mark.notwritten
+    def test_should_process_series_with_by_wins(self):
         pass
 
     @mark.notwritten
-    def should_process_by_wins_method(self):
-        pass
-
-    @mark.notwritten
-    def should_process_series_with_by_wins(self):
-        pass
-
-    @mark.notwritten
-    def should_process_series_with_by_goals(self):
+    def test_should_process_series_with_by_goals(self):
         pass

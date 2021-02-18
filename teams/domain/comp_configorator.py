@@ -124,7 +124,7 @@ class CompetitionConfigurator:
     def get_group_from_list(group_name, group_list):
         found_list = [g for g in group_list if g.name == group_name]
         if found_list is None or len(found_list) == 0:
-            raise DomainError("Group was not found.  Need to create group before calling this.")
+            raise DomainError(f"Group {group_name} was not found.  Need to create group before calling this.")
         elif len(found_list) > 1:
             raise DomainError(f"{group_name} has multiple {len(found_list)} entries.")
         else:
@@ -132,7 +132,7 @@ class CompetitionConfigurator:
 
     @staticmethod
     def processes_series_by_wins_configuration(series_game_configuration, current_groups, sub_competition):
-        series_rules = series_game_configuration
+        series_rules = series_game_configuration.series_rules
         if series_rules.series_type != SeriesRules.WINS_TYPE:
             raise DomainError(f"Series {series_game_configuration.name} does not have the correct rules.")
 
@@ -145,20 +145,20 @@ class CompetitionConfigurator:
                                   series_game_configuration.away_team_group_configuration.name, current_groups),
                               series_game_configuration.away_team_value,
                               CompetitionConfigurator.get_group_from_list(
-                                  series_game_configuration.winner_group_configuration, current_groups),
+                                  series_game_configuration.winner_group_configuration.name, current_groups),
                               CompetitionConfigurator.get_group_from_list(
-                                  series_game_configuration.winner_rank_from_configuration, current_groups),
+                                  series_game_configuration.winner_rank_from_configuration.name, current_groups),
                               CompetitionConfigurator.get_group_from_list(
-                                  series_game_configuration.loser_group_configuration, current_groups),
+                                  series_game_configuration.loser_group_configuration.name, current_groups),
                               CompetitionConfigurator.get_group_from_list(
-                                  series_game_configuration.loser_rank_from_configuration, current_groups),
+                                  series_game_configuration.loser_rank_from_configuration.name, current_groups),
                               False, False)
 
         return series
 
     @staticmethod
     def processes_series_by_goals_configuration(series_game_configuration, current_groups, sub_competition):
-        series_rules = series_game_configuration
+        series_rules = series_game_configuration.series_rules
         if series_rules.series_type != SeriesRules.GOALS_TYPE:
             raise DomainError(f"Series {series_game_configuration.name} does not have the correct rules.")
 
@@ -171,13 +171,13 @@ class CompetitionConfigurator:
                                    series_game_configuration.away_team_group_configuration.name, current_groups),
                                series_game_configuration.away_team_value,
                                CompetitionConfigurator.get_group_from_list(
-                                   series_game_configuration.winner_group_configuration, current_groups),
+                                   series_game_configuration.winner_group_configuration.name, current_groups),
                                CompetitionConfigurator.get_group_from_list(
-                                   series_game_configuration.winner_rank_from_configuration, current_groups),
+                                   series_game_configuration.winner_rank_from_configuration.name, current_groups),
                                CompetitionConfigurator.get_group_from_list(
-                                   series_game_configuration.loser_group_configuration, current_groups),
+                                   series_game_configuration.loser_group_configuration.name, current_groups),
                                CompetitionConfigurator.get_group_from_list(
-                                   series_game_configuration.loser_rank_from_configuration, current_groups),
+                                   series_game_configuration.loser_rank_from_configuration.name, current_groups),
                                False, False)
 
         return series

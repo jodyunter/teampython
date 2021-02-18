@@ -10,6 +10,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\teams\domain\competition_configuration.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\tests\teams\domain\competition\test_configurator.py">
           <value>
             <Attribute>

@@ -62,7 +62,7 @@ class CompetitionGameConfiguration(YearRestricted):
         self.competition_game_type = competition_game_type
         self.oid = IDHelper.get_id(oid)
 
-        YearRestricted.__init__(first_year, last_year)
+        YearRestricted.__init__(self, first_year, last_year)
 
 
 class SeriesConfiguration(CompetitionGameConfiguration):
