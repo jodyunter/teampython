@@ -1,6 +1,6 @@
 #  this class may become a service in the long run
-from teams.domain.competition import CompetitionGroup, CompetitionTeam
-from teams.domain.competition_configuration import CompetitionGameConfiguration
+from teams.domain.competition import CompetitionGroup, CompetitionTeam, Competition
+from teams.domain.competition_configuration import CompetitionGameConfiguration, SubCompetitionConfiguration
 from teams.domain.errors import DomainError
 from teams.domain.series import SeriesByWins, SeriesByGoals
 from teams.domain.series_rules import SeriesRules
@@ -10,6 +10,27 @@ from teams.domain.sub_competition import PlayoffSubCompetition
 #  we need to create the competition, sub competitions,  competition teams, groups and series at the start
 #  later on we need to be able to create and schedule games
 class CompetitionConfigurator:
+
+    @staticmethod
+    def create_competition(competition_config, year):
+        competition = Competition(competition_config.name, year, [], False, False, False, False)
+
+        return competition
+
+    @staticmethod
+    def create_sub_competition(sub_competition_config, competition):
+        if competition is None:
+            raise DomainError("Can't setup sub competition if competition is not setup.")
+
+        if sub_competition_config.name in [r.name for r in competition.sub_competitions]:
+            raise DomainError(f"Sub competition {sub_competition_config.name} is already setup.")
+
+        method_map = {
+            SubCompetitionConfiguration.TABLE_TYPE: CompetitionConfigurator.create_table_sub_competition,
+            SubCompetitionConfiguration.PLAYOFF_TYPE: CompetitionConfigurator.create_playoff_sub_competition
+        }
+
+        return method_map[sub_competition_config.sub_competition_type](sub_competition_config, competition)
 
     @staticmethod
     def create_competition_group(competition_group_config, current_groups, competition):

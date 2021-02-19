@@ -6,7 +6,7 @@ from pytest import mark
 from teams.domain.comp_configorator import CompetitionConfigurator
 from teams.domain.competition import Competition, CompetitionTeam, CompetitionGroup
 from teams.domain.competition_configuration import SubCompetitionConfiguration, CompetitionGroupConfiguration, \
-    CompetitionTeamConfiguration, SeriesConfiguration
+    CompetitionTeamConfiguration, SeriesConfiguration, CompetitionConfiguration
 from teams.domain.errors import DomainError
 from teams.domain.series_rules import SeriesByWinsRules, SeriesByGoalsRules
 from teams.domain.sub_competition import TableSubCompetition, PlayoffSubCompetition
@@ -44,6 +44,53 @@ class TestCompConfigurator(TestCase):
                                                                                   None)])
         self.assertEqual("My group 3", result.name)
 
+
+class TestCompConfigurationCompetition(TestCase):
+
+    def test_should_create_competition(self):
+        competition_config = CompetitionConfiguration("Comp Name", 5, 5, None)
+        competition = CompetitionConfigurator.create_competition(competition_config, 5)
+
+        self.assertEqual("Comp Name", competition.name)
+        self.assertEqual(5, competition.year)
+        self.assertFalse(competition.setup)
+        self.assertFalse(competition.started)
+        self.assertEqual(0, len(competition.sub_competitions))
+        self.assertFalse(competition.finished)
+        self.assertFalse(competition.post_processed)
+
+
+class TestCompConfiguratorSubCompetition(TestCase):
+
+    @mark.notwritten
+    def test_create_sub_comp_no_comp(self):
+        pass
+
+    @mark.notwritten
+    def tet_create_sub_com_sub_comp_already_created(self):
+        pass
+
+    @mark.notwritten
+    def test_create_table_sub_comp(self):
+        pass
+
+    @mark.notwritten
+    def test_create_playoff_sub_com(self):
+        pass
+
+
+class TestCompConfiguratorPlayoffSubComp(TestCase):
+
+    @mark.notwritten
+    def test_create_playoff_sub_comp(self):
+        pass
+
+
+class TestCompConfiguratorTableSubComp(TestCase):
+
+    @mark.notwritten
+    def test_create_table_sub_com(self):
+        pass
 
 class TestCompConfiguratorGroups(TestCase):
 
@@ -528,3 +575,4 @@ class TestCompConfiguratorSeriesGames(TestCase):
                 None,
                 None
             )
+
