@@ -48,7 +48,9 @@ class TableSubCompetition(SubCompetition):
             home_record.process_game(game.home_score, game.away_score)
             away_record.prorces_game(game.away_score, game.home_score)
 
-    def create_new_games(self):
+    # TODO:  this will need the configuration.
+    # We should only create new games when previous round of sub comps is done.  This way the previous comps populate groups that we'll use to create games
+    def create_new_games(self, **kwargs):
         pass
 
     def is_complete(self, incomplete_games):
