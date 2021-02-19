@@ -96,6 +96,9 @@ class CompetitionConfigurator:
 
         method_map[competition_game_configuration.competition_game_type](competition_game_configuration, current_groups)
 
+    #  this not used to schedule or create games
+    #  this the pre-processing done before the competitions start
+    #  right now table competitions don't do anything here as they only take teams from groups
     @staticmethod
     def process_series_game_configuration(series_game_configuration, current_groups, sub_competition):
         if sub_competition is None:
