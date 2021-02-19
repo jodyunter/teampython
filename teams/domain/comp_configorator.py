@@ -4,7 +4,7 @@ from teams.domain.competition_configuration import CompetitionGameConfiguration,
 from teams.domain.errors import DomainError
 from teams.domain.series import SeriesByWins, SeriesByGoals
 from teams.domain.series_rules import SeriesRules
-from teams.domain.sub_competition import PlayoffSubCompetition
+from teams.domain.sub_competition import PlayoffSubCompetition, TableSubCompetition
 
 
 # TODO: Need to start using the setup flags
@@ -32,7 +32,32 @@ class CompetitionConfigurator:
             SubCompetitionConfiguration.PLAYOFF_TYPE: CompetitionConfigurator.create_playoff_sub_competition
         }
 
-        return method_map[sub_competition_config.sub_competition_type](sub_competition_config, competition)
+        sub_comp = method_map[sub_competition_config.sub_competition_type](sub_competition_config, competition)
+
+        competition.sub_competitions.append(sub_comp)
+
+        return sub_comp
+
+    @staticmethod
+    def create_playoff_sub_competition(sub_competition_config, competition):
+        sub_comp = PlayoffSubCompetition(sub_competition_config.name,
+                                         [],
+                                         competition,
+                                         sub_competition_config.order,
+                                         1,
+                                         False, False, False, False)
+
+        return sub_comp
+
+    @staticmethod
+    def create_table_sub_competition(sub_competition_config, competition):
+        sub_comp = TableSubCompetition(sub_competition_config.name,
+                                       [],
+                                       competition,
+                                       sub_competition_config.order,
+                                       False, False, False, False)
+
+        return sub_comp
 
     @staticmethod
     def create_competition_group(competition_group_config, current_groups, competition):
@@ -119,16 +144,14 @@ class CompetitionConfigurator:
             CompetitionGameConfiguration.PLAYOFF_TYPE: CompetitionConfigurator.process_series_game_configuration
         }
 
-        method_map[competition_game_configuration.competition_game_type](competition_game_configuration, current_groups)
+        method_map[competition_game_configuration.competition_game_type](competition_game_configuration, current_groups, sub_competition)
 
     #  this not used to schedule or create games
     #  this the pre-processing done before the competitions start
     #  right now table competitions don't do anything here as they only take teams from groups
     @staticmethod
     def process_series_game_configuration(series_game_configuration, current_groups, sub_competition):
-        if sub_competition is None:
-            raise DomainError("Sub Competition is null.")
-        elif not isinstance(sub_competition, PlayoffSubCompetition):
+        if not isinstance(sub_competition, PlayoffSubCompetition):
             raise DomainError(f"Sub Competition {sub_competition.name} is not a playoff sub competition.")
 
         series_rules = series_game_configuration.series_rules

@@ -73,27 +73,82 @@ class TestCompConfiguratorSubCompetition(TestCase):
 
             CompetitionConfigurator.create_sub_competition(sub_comp, competition)
 
-    @mark.notwritten
-    def test_create_table_sub_comp(self):
-        pass
+    def test_create_playoff_sub_comp(self):
+        sub_competition_config = SubCompetitionConfiguration("Playoff Sub Sub", None, 3, SubCompetitionConfiguration.PLAYOFF_TYPE ,1, None)
 
-    @mark.notwritten
-    def test_create_playoff_sub_com(self):
-        pass
+        competition = Competition("My Comp", 5, [], False, False, False, False)
+
+        sub_comp = CompetitionConfigurator.create_sub_competition(sub_competition_config, competition)
+
+        self.assertEqual(sub_competition_config.name, sub_comp.name)
+        self.assertEqual(0, len(sub_comp.series))
+        self.assertEqual(competition.oid, sub_comp.competition.oid)
+        self.assertEqual(sub_competition_config.order, sub_comp.order)
+        self.assertFalse(sub_comp.setup)
+        self.assertFalse(sub_comp.started)
+        self.assertFalse(sub_comp.finished)
+        self.assertFalse(sub_comp.post_processed)
+        self.assertEqual(1, sub_comp.current_round, "Round")
+        self.assertEqual(1, len(competition.sub_competitions), "Sub Comps")
+        self.assertEqual(sub_competition_config.name, competition.sub_competitions[0].name)
+
+    def test_create_table_sub_comp(self):
+        sub_competition_config = SubCompetitionConfiguration("Table Sub", None, 3,
+                                                             SubCompetitionConfiguration.TABLE_TYPE, 1, None)
+
+        competition = Competition("My Comp", 5, [], False, False, False, False)
+
+        sub_comp = CompetitionConfigurator.create_sub_competition(sub_competition_config, competition)
+
+        self.assertEqual(sub_competition_config.name, sub_comp.name)
+        self.assertEqual(0, len(sub_comp.records))
+        self.assertEqual(competition.oid, sub_comp.competition.oid)
+        self.assertEqual(sub_competition_config.order, sub_comp.order)
+        self.assertFalse(sub_comp.setup)
+        self.assertFalse(sub_comp.started)
+        self.assertFalse(sub_comp.finished)
+        self.assertFalse(sub_comp.post_processed)
+        self.assertEqual(1, len(competition.sub_competitions), "Sub Comps")
+        self.assertEqual(sub_competition_config.name, competition.sub_competitions[0].name)
 
 
 class TestCompConfiguratorPlayoffSubComp(TestCase):
 
-    @mark.notwritten
     def test_create_playoff_sub_comp(self):
-        pass
+        sub_competition_config = SubCompetitionConfiguration("Playoff Sub Sub", None, 3, SubCompetitionConfiguration.TABLE_TYPE,1, None)
+
+        competition = Competition("My Comp", 5, [], False, False, False, False)
+
+        sub_comp = CompetitionConfigurator.create_playoff_sub_competition(sub_competition_config, competition)
+
+        self.assertEqual(sub_competition_config.name, sub_comp.name)
+        self.assertEqual(0, len(sub_comp.series))
+        self.assertEqual(competition.oid, sub_comp.competition.oid)
+        self.assertEqual(sub_competition_config.order, sub_comp.order)
+        self.assertFalse(sub_comp.setup)
+        self.assertFalse(sub_comp.started)
+        self.assertFalse(sub_comp.finished)
+        self.assertFalse(sub_comp.post_processed)
+        self.assertEqual(1, sub_comp.current_round)
 
 
 class TestCompConfiguratorTableSubComp(TestCase):
 
-    @mark.notwritten
     def test_create_table_sub_com(self):
-        pass
+        sub_competition_config = SubCompetitionConfiguration("Table Sub", None, 3, SubCompetitionConfiguration.TABLE_TYPE,1, None)
+
+        competition = Competition("My Comp", 5, [], False, False, False, False)
+
+        sub_comp = CompetitionConfigurator.create_table_sub_competition(sub_competition_config, competition)
+
+        self.assertEqual(sub_competition_config.name, sub_comp.name)
+        self.assertEqual(0, len(sub_comp.records))
+        self.assertEqual(competition.oid, sub_comp.competition.oid)
+        self.assertEqual(sub_competition_config.order, sub_comp.order)
+        self.assertFalse(sub_comp.setup)
+        self.assertFalse(sub_comp.started)
+        self.assertFalse(sub_comp.finished)
+        self.assertFalse(sub_comp.post_processed)
 
 
 class TestCompConfiguratorGroups(TestCase):
@@ -449,9 +504,78 @@ class TestCompConfiguratorTeams(TestCase):
 
 class TestCompConfiguratorCompGame(TestCase):
 
-    @mark.notwritten
+    def test_should_process_comp_game_no_comp(self):
+        with pytest.raises(DomainError, match="Competition must be created before competition games can be processed."):
+            sub_comp = PlayoffSubCompetition("test", [], None, 1, 1, False, False, False, False)
+
+            series = CompetitionConfigurator.process_competition_game_configuration(
+                SeriesConfiguration("Series 1", 5, sub_comp,
+                                    CompetitionGroupConfiguration("Group 1", None, None, 1, None, 1, None), 1,
+                                    CompetitionGroupConfiguration("Group 1", None, None, 1, None, 1, None), 2,
+                                    SeriesByGoalsRules("My Rules", 5, None, None, None), None,
+                                    CompetitionGroupConfiguration("Group 3", None, None, 1, None, 1, None),
+                                    CompetitionGroupConfiguration("Group 4", None, None, 1, None, 1, None),
+                                    CompetitionGroupConfiguration("Group 3", None, None, 1, None, 1, None),
+                                    CompetitionGroupConfiguration("Group 4", None, None, 1, None, 1, None),
+                                    1, None),
+                [
+                    CompetitionGroup("Group 1", None, None, None, None),
+                    CompetitionGroup("Group 3", None, None, None, None),
+                    CompetitionGroup("Group 4", None, None, None, None),
+                ],
+                sub_comp)
+
+    def test_should_process_comp_game_no_sub_comp(self):
+        with pytest.raises(DomainError, match="Sub Competition must be created before competition games can be processed."):
+            series = CompetitionConfigurator.process_competition_game_configuration(
+                SeriesConfiguration("Series 1", 5, None,
+                                    CompetitionGroupConfiguration("Group 1", None, None, 1, None, 1, None), 1,
+                                    CompetitionGroupConfiguration("Group 1", None, None, 1, None, 1, None), 2,
+                                    SeriesByGoalsRules("My Rules", 5, None, None, None), None,
+                                    CompetitionGroupConfiguration("Group 3", None, None, 1, None, 1, None),
+                                    CompetitionGroupConfiguration("Group 4", None, None, 1, None, 1, None),
+                                    CompetitionGroupConfiguration("Group 3", None, None, 1, None, 1, None),
+                                    CompetitionGroupConfiguration("Group 4", None, None, 1, None, 1, None),
+                                    1, None),
+                [
+                    CompetitionGroup("Group 1", None, None, None, None),
+                    CompetitionGroup("Group 3", None, None, None, None),
+                    CompetitionGroup("Group 4", None, None, None, None),
+                ],
+                None)
+
     def test_should_process_comp_game_with_series(self):
-        pass
+        competition = Competition("Comp", 5, [], False, False, False, False)
+        sub_comp = PlayoffSubCompetition("test", [], None, 1, 1, False, False, False, False)
+        sub_comp.competition = competition
+        competition.sub_competitions.append(sub_comp)
+
+        CompetitionConfigurator.process_competition_game_configuration(
+            SeriesConfiguration("Series 1", 5, sub_comp,
+                                CompetitionGroupConfiguration("Group 1", None, None, 1, None, 1, None), 1,
+                                CompetitionGroupConfiguration("Group 1", None, None, 1, None, 1, None), 2,
+                                SeriesByGoalsRules("My Rules", 5, None, None, None), None,
+                                CompetitionGroupConfiguration("Group 3", None, None, 1, None, 1, None),
+                                CompetitionGroupConfiguration("Group 4", None, None, 1, None, 1, None),
+                                CompetitionGroupConfiguration("Group 3", None, None, 1, None, 1, None),
+                                CompetitionGroupConfiguration("Group 4", None, None, 1, None, 1, None),
+                                1, None),
+            [
+                CompetitionGroup("Group 1", None, None, None, None),
+                CompetitionGroup("Group 3", None, None, None, None),
+                CompetitionGroup("Group 4", None, None, None, None),
+            ],
+            sub_comp)
+
+        series = sub_comp.series[0]
+
+        self.assertEqual("Series 1", series.name)
+        self.assertEqual("Group 1", series.home_team_from_group.name)
+        self.assertEqual("Group 1", series.away_team_from_group.name)
+        self.assertEqual("Group 3", series.winner_to_group.name)
+        self.assertEqual("Group 3", series.loser_to_group.name)
+        self.assertEqual("Group 4", series.winner_rank_from.name)
+        self.assertEqual("Group 4", series.loser_rank_from.name)
 
     @mark.notwritten
     def test_should_process_comp_game_with_table(self):
@@ -572,11 +696,4 @@ class TestCompConfiguratorSeriesGames(TestCase):
                 TableSubCompetition("My Comp", None, None, None, None, None, None, None)
             )
 
-    def test_should_process_series_game_sub_comp_is_none(self):
-        with pytest.raises(DomainError, match="Sub Competition is null."):
-            CompetitionConfigurator.process_series_game_configuration(
-                None,
-                None,
-                None
-            )
 
