@@ -100,7 +100,7 @@ class CompetitionConfigurator:
     def process_series_game_configuration(series_game_configuration, current_groups, sub_competition):
         if sub_competition is None:
             raise DomainError("Sub Competition is null.")
-        elif not isinstance(PlayoffSubCompetition, sub_competition):
+        elif not isinstance(sub_competition, PlayoffSubCompetition):
             raise DomainError(f"Sub Competition {sub_competition.name} is not a playoff sub competition.")
 
         series_rules = series_game_configuration.series_rules
@@ -113,6 +113,8 @@ class CompetitionConfigurator:
         required_groups.add(series_game_configuration.away_team_group_configuration)
         required_groups.add(series_game_configuration.winner_group_configuration)
         required_groups.add(series_game_configuration.loser_group_configuration)
+        required_groups.add(series_game_configuration.winner_rank_from_configuration)
+        required_groups.add(series_game_configuration.loser_rank_from_configuration)
 
         for gc in required_groups:
             CompetitionConfigurator.create_competition_group(gc, current_groups, sub_competition.competition)
@@ -164,7 +166,7 @@ class CompetitionConfigurator:
         return series
 
     @staticmethod
-    def processes_series_by_goals_configuration(series_game_configuration, current_groups, sub_competition):
+    def process_series_by_goals_configuration(series_game_configuration, current_groups, sub_competition):
         series_rules = series_game_configuration.series_rules
         if series_rules.series_type != SeriesRules.GOALS_TYPE:
             raise DomainError(f"Series {series_game_configuration.name} does not have the correct rules.")
