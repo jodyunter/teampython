@@ -7,6 +7,8 @@ from teams.domain.series_rules import SeriesRules
 from teams.domain.sub_competition import PlayoffSubCompetition
 
 
+#  we need to create the competition, sub competitions,  competition teams, groups and series at the start
+#  later on we need to be able to create and schedule games
 class CompetitionConfigurator:
 
     @staticmethod
@@ -196,4 +198,5 @@ class CompetitionConfigurator:
 
     @staticmethod
     def process_table_game_configuration(table_game_configuration, current_groups):
+        #  this method isn't used at first
         pass
