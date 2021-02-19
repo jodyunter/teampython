@@ -62,13 +62,16 @@ class TestCompConfigurationCompetition(TestCase):
 
 class TestCompConfiguratorSubCompetition(TestCase):
 
-    @mark.notwritten
     def test_create_sub_comp_no_comp(self):
-        pass
+        with pytest.raises(DomainError, match="Can't setup sub competition if competition is not setup."):
+            CompetitionConfigurator.create_sub_competition(SubCompetitionConfiguration("My Sub Comp", None, 1, None, 1, None), None)
 
-    @mark.notwritten
-    def tet_create_sub_com_sub_comp_already_created(self):
-        pass
+    def test_create_sub_com_sub_comp_already_created(self):
+        with pytest.raises(DomainError, match="Sub competition My Sub Comp is already setup."):
+            sub_comp = SubCompetitionConfiguration("My Sub Comp", None, 1, None, 1, None)
+            competition = Competition("My Comp", 5, [sub_comp], False, False, False, False)
+
+            CompetitionConfigurator.create_sub_competition(sub_comp, competition)
 
     @mark.notwritten
     def test_create_table_sub_comp(self):

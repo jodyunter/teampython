@@ -7,6 +7,8 @@ from teams.domain.series_rules import SeriesRules
 from teams.domain.sub_competition import PlayoffSubCompetition
 
 
+# TODO: Need to start using the setup flags
+
 #  we need to create the competition, sub competitions,  competition teams, groups and series at the start
 #  later on we need to be able to create and schedule games
 class CompetitionConfigurator:
