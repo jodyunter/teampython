@@ -92,6 +92,7 @@ class TestCompConfiguratorTableSubComp(TestCase):
     def test_create_table_sub_com(self):
         pass
 
+
 class TestCompConfiguratorGroups(TestCase):
 
     def test_should_not_create_group_competition_not_there(self):
