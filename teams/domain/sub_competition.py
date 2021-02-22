@@ -92,6 +92,18 @@ class TableSubCompetition(SubCompetition):
                 ranking.rank = rank
                 rank += 1
 
+    @staticmethod
+    def get_records_by_group(ranking_group, table_records):
+        return TableSubCompetition.get_records_by_team([r.team for r in ranking_group.rankings], table_records)
+
+    @staticmethod
+    def get_records_by_team(teams, table_records):
+        result = []
+        for t in teams:
+            result.append([r for r in table_records if r.team.oid == t.oid][0])
+
+        return result
+
 
 class PlayoffSubCompetition(SubCompetition):
 

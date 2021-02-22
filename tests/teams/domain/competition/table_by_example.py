@@ -61,7 +61,10 @@ for g in games:
 
 table.sort_rankings(rankings, table.records)
 
-for r in table.records:
+recs = TableSubCompetition.get_records_by_group(east, table.records)
+
+for r in recs:
     print(RecordView.get_table_row(RecordService.get_view_from_model(r)))
+
 
 
