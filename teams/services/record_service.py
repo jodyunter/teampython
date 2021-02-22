@@ -66,10 +66,12 @@ class RecordService(BaseService):
         return view_list
 
     @staticmethod
-    def get_view_from_model(r):
+    def get_view_from_model(r, rank=None):
         if r is None:
             return None
-        return RecordViewModel(r.oid, r.rank, r.team.oid, r.team.name, r.year, r.wins,
+        if rank is None:
+            rank = r.rank
+        return RecordViewModel(r.oid, rank, r.team.oid, r.team.name, r.year, r.wins,
                                r.loses, r.ties, r.goals_for, r.goals_against, r.points, r.games,
                                r.goal_difference, r.skill)
 

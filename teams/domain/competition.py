@@ -1,3 +1,4 @@
+from teams.domain.competition_configuration import CompetitionGroupConfiguration
 from teams.domain.game import Game
 from teams.domain.record import Record
 
@@ -76,6 +77,12 @@ class CompetitionGroup:
         self.rankings.sort(key=lambda team_rank: team_rank.rank)
 
         return self.rankings[order - 1]
+
+
+class RankingGroup(CompetitionGroup):
+
+    def __init__(self, name, parent_group, sub_competition, rankings, oid=None):
+        CompetitionGroup.__init__(self, name, parent_group, sub_competition, rankings, CompetitionGroupConfiguration.RANKING_TYPE, oid)
 
 
 class CompetitionRanking:
