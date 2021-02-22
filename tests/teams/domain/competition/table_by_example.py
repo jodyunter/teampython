@@ -66,6 +66,15 @@ game_rules = GameRules("Season", True)
 scheduler = Scheduler()
 games = scheduler.schedule_games(teams, game_rules, 5, 1, True, table.create_game)
 
+max_day = max([g.day for g in games])
+games.extend(scheduler.schedule_games(west_teams, game_rules, 5, max_day, True, table.create_game))
+max_day = max([g.day for g in games])
+games.extend(scheduler.schedule_games(east_teams, game_rules, 5, max_day, True, table.create_game))
+max_day = max([g.day for g in games])
+games.extend(scheduler.schedule_games(central_teams, game_rules, 5, max_day, True, table.create_game))
+max_day = max([g.day for g in games])
+games.extend(scheduler.schedule_games(pacific_teams, game_rules, 5, max_day, True, table.create_game))
+
 r = random
 for g in games:
     g.play(r)
@@ -73,12 +82,13 @@ for g in games:
 
 table.sort_rankings(rankings, table.records)
 
-recs = TableSubCompetition.get_records_by_group(ontario, table.records)
+recs = TableSubCompetition.get_records_by_group(league, table.records)
 recs.sort(key=lambda rec:rec.rank)
 
 print(RecordView.get_table_header())
 for r in recs:
     print(RecordView.get_table_row(RecordService.get_view_from_model(r)))
+
 
 
 
