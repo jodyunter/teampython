@@ -1,6 +1,6 @@
 #  this class may become a service in the long run
 from teams.domain.competition import CompetitionGroup, CompetitionTeam, Competition
-from teams.domain.competition_configuration import CompetitionGameConfiguration, SubCompetitionConfiguration
+from teams.domain.competition_configuration import SubCompetitionConfiguration
 from teams.domain.errors import DomainError
 from teams.domain.series import SeriesByWins, SeriesByGoals
 from teams.domain.series_rules import SeriesRules
@@ -131,26 +131,18 @@ class CompetitionConfigurator:
             current_group.add_team_to_group(team)
             current_group = current_group.parent_group
 
+    #  this not used to schedule or create games
+    #  this the pre-processing done before the competitions start
+    #  right now table competitions don't do anything here as they only take teams from groups
+    # todo: test the errors raised
     @staticmethod
-    def process_competition_game_configuration(competition_game_configuration, current_groups, sub_competition):
+    def process_series_configuration(series_game_configuration, current_groups, sub_competition):
         if sub_competition is None:
             raise DomainError("Sub Competition must be created before competition games can be processed.")
 
         if sub_competition.competition is None:
             raise DomainError("Competition must be created before competition games can be processed.")
 
-        method_map = {
-            CompetitionGameConfiguration.TABLE_TYPE: CompetitionConfigurator.process_table_game_configuration,
-            CompetitionGameConfiguration.PLAYOFF_TYPE: CompetitionConfigurator.process_series_game_configuration
-        }
-
-        method_map[competition_game_configuration.competition_game_type](competition_game_configuration, current_groups, sub_competition)
-
-    #  this not used to schedule or create games
-    #  this the pre-processing done before the competitions start
-    #  right now table competitions don't do anything here as they only take teams from groups
-    @staticmethod
-    def process_series_game_configuration(series_game_configuration, current_groups, sub_competition):
         if not isinstance(sub_competition, PlayoffSubCompetition):
             raise DomainError(f"Sub Competition {sub_competition.name} is not a playoff sub competition.")
 

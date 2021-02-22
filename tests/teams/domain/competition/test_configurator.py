@@ -502,32 +502,19 @@ class TestCompConfiguratorTeams(TestCase):
         self.assertEqual(current_teams[1].oid, comp_group.parent_group.rankings[1].team.oid)
 
 
-class TestCompConfiguratorCompGame(TestCase):
+class TestCompConfiguratorTableGames(TestCase):
 
-    def test_should_process_comp_game_no_comp(self):
-        with pytest.raises(DomainError, match="Competition must be created before competition games can be processed."):
-            sub_comp = PlayoffSubCompetition("test", [], None, 1, 1, False, False, False, False)
+    @mark.notwritten
+    def test_should_process_table_game(self):
+        # need multiple types
+        pass
 
-            series = CompetitionConfigurator.process_competition_game_configuration(
-                SeriesConfiguration("Series 1", 5, sub_comp,
-                                    CompetitionGroupConfiguration("Group 1", None, None, 1, None, 1, None), 1,
-                                    CompetitionGroupConfiguration("Group 1", None, None, 1, None, 1, None), 2,
-                                    SeriesByGoalsRules("My Rules", 5, None, None, None), None,
-                                    CompetitionGroupConfiguration("Group 3", None, None, 1, None, 1, None),
-                                    CompetitionGroupConfiguration("Group 4", None, None, 1, None, 1, None),
-                                    CompetitionGroupConfiguration("Group 3", None, None, 1, None, 1, None),
-                                    CompetitionGroupConfiguration("Group 4", None, None, 1, None, 1, None),
-                                    1, None),
-                [
-                    CompetitionGroup("Group 1", None, None, None, None),
-                    CompetitionGroup("Group 3", None, None, None, None),
-                    CompetitionGroup("Group 4", None, None, None, None),
-                ],
-                sub_comp)
 
-    def test_should_process_comp_game_no_sub_comp(self):
+class TestCompConfiguratorSeriesGames(TestCase):
+
+    def test_should_process_comp_series_no_sub_comp(self):
         with pytest.raises(DomainError, match="Sub Competition must be created before competition games can be processed."):
-            series = CompetitionConfigurator.process_competition_game_configuration(
+            series = CompetitionConfigurator.process_series_configuration(
                 SeriesConfiguration("Series 1", 5, None,
                                     CompetitionGroupConfiguration("Group 1", None, None, 1, None, 1, None), 1,
                                     CompetitionGroupConfiguration("Group 1", None, None, 1, None, 1, None), 2,
@@ -544,53 +531,26 @@ class TestCompConfiguratorCompGame(TestCase):
                 ],
                 None)
 
-    def test_should_process_comp_game_with_series(self):
-        competition = Competition("Comp", 5, [], False, False, False, False)
-        sub_comp = PlayoffSubCompetition("test", [], None, 1, 1, False, False, False, False)
-        sub_comp.competition = competition
-        competition.sub_competitions.append(sub_comp)
+    def test_should_process_comp_series_no_comp(self):
+        with pytest.raises(DomainError, match="Competition must be created before competition games can be processed."):
+            sub_comp = PlayoffSubCompetition("test", [], None, 1, 1, False, False, False, False)
 
-        CompetitionConfigurator.process_competition_game_configuration(
-            SeriesConfiguration("Series 1", 5, sub_comp,
-                                CompetitionGroupConfiguration("Group 1", None, None, 1, None, 1, None), 1,
-                                CompetitionGroupConfiguration("Group 1", None, None, 1, None, 1, None), 2,
-                                SeriesByGoalsRules("My Rules", 5, None, None, None), None,
-                                CompetitionGroupConfiguration("Group 3", None, None, 1, None, 1, None),
-                                CompetitionGroupConfiguration("Group 4", None, None, 1, None, 1, None),
-                                CompetitionGroupConfiguration("Group 3", None, None, 1, None, 1, None),
-                                CompetitionGroupConfiguration("Group 4", None, None, 1, None, 1, None),
-                                1, None),
-            [
-                CompetitionGroup("Group 1", None, None, None, None),
-                CompetitionGroup("Group 3", None, None, None, None),
-                CompetitionGroup("Group 4", None, None, None, None),
-            ],
-            sub_comp)
-
-        series = sub_comp.series[0]
-
-        self.assertEqual("Series 1", series.name)
-        self.assertEqual("Group 1", series.home_team_from_group.name)
-        self.assertEqual("Group 1", series.away_team_from_group.name)
-        self.assertEqual("Group 3", series.winner_to_group.name)
-        self.assertEqual("Group 3", series.loser_to_group.name)
-        self.assertEqual("Group 4", series.winner_rank_from.name)
-        self.assertEqual("Group 4", series.loser_rank_from.name)
-
-    @mark.notwritten
-    def test_should_process_comp_game_with_table(self):
-        pass
-
-
-class TestCompConfiguratorTableGames(TestCase):
-
-    @mark.notwritten
-    def test_should_process_table_game(self):
-        # need multiple types
-        pass
-
-
-class TestCompConfiguratorSeriesGames(TestCase):
+            series = CompetitionConfigurator.process_series_configuration(
+                SeriesConfiguration("Series 1", 5, sub_comp,
+                                    CompetitionGroupConfiguration("Group 1", None, None, 1, None, 1, None), 1,
+                                    CompetitionGroupConfiguration("Group 1", None, None, 1, None, 1, None), 2,
+                                    SeriesByGoalsRules("My Rules", 5, None, None, None), None,
+                                    CompetitionGroupConfiguration("Group 3", None, None, 1, None, 1, None),
+                                    CompetitionGroupConfiguration("Group 4", None, None, 1, None, 1, None),
+                                    CompetitionGroupConfiguration("Group 3", None, None, 1, None, 1, None),
+                                    CompetitionGroupConfiguration("Group 4", None, None, 1, None, 1, None),
+                                    1, None),
+                [
+                    CompetitionGroup("Group 1", None, None, None, None),
+                    CompetitionGroup("Group 3", None, None, None, None),
+                    CompetitionGroup("Group 4", None, None, None, None),
+                ],
+                sub_comp)
 
     def test_should_process_by_goals_method(self):
         series = CompetitionConfigurator.process_series_by_goals_configuration(
@@ -677,7 +637,7 @@ class TestCompConfiguratorSeriesGames(TestCase):
         competition = Competition("My Comp", 1, [], False, False, False, False)
         playoff_comp = PlayoffSubCompetition("Playoff Comp", [], competition, None, None, None, None, None, None)
         competition.sub_competitions.append(playoff_comp)
-        CompetitionConfigurator.process_series_game_configuration(
+        CompetitionConfigurator.process_series_configuration(
             series_config,
             current_groups,
             playoff_comp
@@ -689,11 +649,12 @@ class TestCompConfiguratorSeriesGames(TestCase):
         self.assertEqual(3, len(current_groups))
 
     def test_should_process_series_game_not_playoff_sub_comp(self):
-        with pytest.raises(DomainError, match="Sub Competition My Comp is not a playoff sub competition."):
-            CompetitionConfigurator.process_series_game_configuration(
+        competition = Competition("MY Comp", 1, [], False, False, False, False)
+        with pytest.raises(DomainError, match="Sub Competition Table Comp is not a playoff sub competition."):
+            CompetitionConfigurator.process_series_configuration(
                 None,
-                None,
-                TableSubCompetition("My Comp", None, None, None, None, None, None, None)
+                [],
+                TableSubCompetition("Table Comp", None, competition, None, None, None, None, None)
             )
 
 

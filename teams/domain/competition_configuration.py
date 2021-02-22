@@ -52,20 +52,7 @@ class CompetitionTeamConfiguration(YearRestricted):
         YearRestricted.__init__(self, first_year, last_year)
 
 
-class CompetitionGameConfiguration(YearRestricted):
-    TABLE_TYPE = "Table"
-    PLAYOFF_TYPE = "Playoff"
-
-    def __init__(self, name, sub_competition_configuration, competition_game_type, first_year, last_year, oid=None):
-        self.name = name
-        self.sub_competition_configuration = sub_competition_configuration
-        self.competition_game_type = competition_game_type
-        self.oid = IDHelper.get_id(oid)
-
-        YearRestricted.__init__(self, first_year, last_year)
-
-
-class SeriesConfiguration(CompetitionGameConfiguration):
+class SeriesConfiguration(YearRestricted):
 
     def __init__(self, name, series_round, sub_competition_configuration,
                  home_team_group_configuration, home_team_value,
@@ -87,12 +74,14 @@ class SeriesConfiguration(CompetitionGameConfiguration):
         self.loser_group_configuration = loser_group_configuration
         self.loser_rank_from_configuration = loser_rank_from_configuration
 
-        CompetitionGameConfiguration.__init__(self, name, sub_competition_configuration,
-                                              CompetitionGameConfiguration.PLAYOFF_TYPE,
-                                              first_year, last_year, oid)
+        self.name = name
+        self.sub_competition_configuration = sub_competition_configuration
+        self.oid = oid
+
+        YearRestricted.__init__(self, first_year, last_year)
 
 
-class TableGameConfiguration(CompetitionGameConfiguration):
+class TableGameConfiguration(YearRestricted):
     GROUP_TYPE = "Group"
     TEAM_TYPE = "Team"
 
@@ -110,6 +99,7 @@ class TableGameConfiguration(CompetitionGameConfiguration):
         self.number_of_matches = number_of_matches
         self.home_and_away = home_and_away
 
-        CompetitionGameConfiguration.__init__(self, name, sub_competition_configuration,
-                                              CompetitionGameConfiguration.TABLE_TYPE,
-                                              first_year, last_year, oid)
+        self.name = name
+        self.sub_competition_configuration = sub_competition_configuration
+        self.oid = oid
+        YearRestricted.__init__(first_year, last_year)
