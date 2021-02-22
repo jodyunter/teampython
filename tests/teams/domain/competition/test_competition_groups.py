@@ -9,13 +9,28 @@ from tests.teams.domain.competition import helpers
 
 class TestCompetitionGroup(TestCase):
 
-    @mark.notwritten
     def test_add_team_to_group_again(self):
-        pass
+        group = CompetitionGroup("My Group", None, None, None, CompetitionGroupConfiguration.RANKING_TYPE)
+        rankings = []
+        comp_team = helpers.new_comp_team(None, "Team 1", 5)
+        group.rankings = rankings
 
-    @mark.notwritten
+        group.add_team_to_group(comp_team, None)
+        self.assertEqual(1, len(group.rankings))
+        self.assertEqual(-1, group.rankings[0].rank)
+
+        group.add_team_to_group(comp_team, None)
+        self.assertEqual(1, len(group.rankings))
+        self.assertEqual(-1, group.rankings[0].rank)
+
     def test_add_team_to_group_no_rank(self):
-        pass
+        group = CompetitionGroup("My Group", None, None, None, CompetitionGroupConfiguration.RANKING_TYPE)
+        rankings = []
+        group.rankings = rankings
+
+        group.add_team_to_group(helpers.new_comp_team(None, "Team 1", 5), None)
+        self.assertEqual(1, len(group.rankings))
+        self.assertEqual(-1, group.rankings[0].rank)
 
     def test_add_team_to_group(self):
         group = CompetitionGroup("My Group", None, None, None, CompetitionGroupConfiguration.RANKING_TYPE)
@@ -73,9 +88,26 @@ class TestCompetitionGroup(TestCase):
         self.assertEqual("Team 5", group.get_team_by_rank(25).team.name)
         self.assertEqual("Team 6", group.get_team_by_rank(15).team.name)
 
-    @mark.notwritten
     def test_get_rank_for_team(self):
-        pass
+        group = CompetitionGroup("My Group", None, None, None, CompetitionGroupConfiguration.RANKING_TYPE)
+        rankings = []
+        group.rankings = rankings
+
+        group.add_team_to_group(helpers.new_comp_team(None, "Team 1", 5), 5)
+        group.add_team_to_group(helpers.new_comp_team(None, "Team 2", 5), 45)
+        group.add_team_to_group(helpers.new_comp_team(None, "Team 3", 5), 65)
+        group.add_team_to_group(helpers.new_comp_team(None, "Team 4", 5), 35)
+        group.add_team_to_group(helpers.new_comp_team(None, "Team 5", 5), 25)
+        group.add_team_to_group(helpers.new_comp_team(None, "Team 6", 5), 15)
+
+        self.assertEqual(6, len(group.rankings))
+
+        self.assertEqual("Team 1", group.get_team_by_rank(5).team.name)
+        self.assertEqual("Team 2", group.get_team_by_rank(45).team.name)
+        self.assertEqual("Team 3", group.get_team_by_rank(65).team.name)
+        self.assertEqual("Team 4", group.get_team_by_rank(35).team.name)
+        self.assertEqual("Team 5", group.get_team_by_rank(25).team.name)
+        self.assertEqual("Team 6", group.get_team_by_rank(15).team.name)
 
 
 class TestCompetitionRanking(TestCase):

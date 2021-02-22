@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from teams.domain.competition import TableRecord, CompetitionRanking
 from teams.domain.competition_configuration import SubCompetitionConfiguration
 from teams.domain.utility.utility_classes import IDHelper
 
@@ -71,15 +72,16 @@ class TableSubCompetition(SubCompetition):
     # one day we need to be able to apply ranking rules, like top in each division or something like that
     def sort_rankings(team_rankings, records):
         #  sort the teams into their groups
-        ranking_group_dict = TableSubCompetition.get_dictionary_of_groups_from_rankings(team_rankings)
-        TableSubCompetition.sort_records_default(records)
+        ranking_group_dict = CompetitionRanking.get_dictionary_of_groups_from_rankings(team_rankings)
+        TableRecord.sort_records_default(records)
         #  sort the records with the team id as the key
         team_record_dict = TableSubCompetition.get_dictionary_of_team_records(records)
 
-        for group in ranking_group_dict.keys():
+        for group_name in ranking_group_dict.keys():
+            group = ranking_group_dict[group_name]
             #  set the team ranking to the same as their record ranking
             for team_ranking in group:
-                team_ranking.rank = team_record_dict[team_ranking.team.oid]
+                team_ranking.rank = team_record_dict[team_ranking.team.oid].rank
             #  starting at 1 for the group
             group.sort(key=lambda team_rank: team_rank.rank)
             rank = 1

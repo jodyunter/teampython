@@ -58,7 +58,7 @@ class CompetitionGroup:
     def add_team_to_group(self, competition_team, rank=None):
         if rank is None:
             rank = -1
-        team_in_group = [t for t in self.rankings if t.oid == competition_team.oid]
+        team_in_group = [t for t in self.rankings if t.team.oid == competition_team.oid]
         if team_in_group is None or len(team_in_group) == 0:
             self.rankings.append(CompetitionRanking(self, competition_team, rank))
         else:
@@ -90,10 +90,10 @@ class CompetitionRanking:
         ranking_group_dict = {}
 
         for tr in competition_rankings:
-            if tr.competition_group.name not in ranking_group_dict:
-                ranking_group_dict[tr.competition_group.name] = []
+            if tr.group.name not in ranking_group_dict:
+                ranking_group_dict[tr.group.name] = []
 
-            ranking_group_dict[tr.tr.competition_group.name].append(tr)
+            ranking_group_dict[tr.group.name].append(tr)
 
         return ranking_group_dict
 
