@@ -103,3 +103,19 @@ class TableGameConfiguration(YearRestricted):
         self.sub_competition_configuration = sub_competition_configuration
         self.oid = oid
         YearRestricted.__init__(first_year, last_year)
+
+    @staticmethod
+    def create_team_vs_group():
+        pass
+
+    @staticmethod
+    def create_team_vs_team():
+        pass
+
+    @staticmethod
+    def create_group_vs_group():
+        pass
+
+    @staticmethod
+    def create_group_vs_self():
+        pass
