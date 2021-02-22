@@ -41,9 +41,9 @@ class GameService(BaseService):
             session = self.repo.get_session()
             commit = True
 
-        team_a = self.team_repo.get_by_oid(schedule_game.home_id, session)
-        team_b = self.team_repo.get_by_oid(schedule_game.away_id, session)
-        rules = self.game_rules_repo.get_by_oid(schedule_game.rules_id, session)
+        team_a = self.team_repo.get_by_oid(schedule_game.home_team, session)
+        team_b = self.team_repo.get_by_oid(schedule_game.home_team, session)
+        rules = self.game_rules_repo.get_by_oid(schedule_game.rules, session)
 
         if team_a is None:
             raise AttributeError("Team A cannot be none.")

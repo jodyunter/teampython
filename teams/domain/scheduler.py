@@ -21,10 +21,7 @@ class Scheduler:
     pairs = 0
     total_teams = -1
 
-    def schedule_games(self, team_ids, rules_id, year, starting_day, home_and_away):
-        self.schedule_games(team_ids, rules_id, year, starting_day, home_and_away, ScheduledGame.create_game)
-
-    def schedule_games(self, teams, rules, year, starting_day, home_and_away, create_game_method):
+    def schedule_games(self, teams, rules, year, starting_day, home_and_away, create_game_method=ScheduledGame.create_game):
         self.total_teams = len(teams)
         result = []
         self.setup()

@@ -10,9 +10,9 @@ from teams.services.game_service import GameService, GameRulesService
 from teams.services.record_service import RecordService
 from teams.services.team_service import TeamService
 
-setup = False
+setup = True
 
-add_teams = False
+add_teams = True
 rounds = 1
 do_home_and_away = False
 rules_name = "Season"  # other is Playoff
