@@ -2,11 +2,15 @@
 class ScheduledGame:
 
     def __init__(self, home_id, away_id, rules_id, year, day):
-        self.home_id = home_id
-        self.away_id = away_id
-        self.rules_id = rules_id
+        self.home_team = home_id
+        self.away_team = away_id
+        self.rules = rules_id
         self.year = year
         self.day = day
+
+    @staticmethod
+    def create_game(home, away, rules, year, day):
+        return ScheduledGame(home, away, rules, year, day)
 
 
 class Scheduler:
@@ -18,7 +22,10 @@ class Scheduler:
     total_teams = -1
 
     def schedule_games(self, team_ids, rules_id, year, starting_day, home_and_away):
-        self.total_teams = len(team_ids)
+        self.schedule_games(team_ids, rules_id, year, starting_day, home_and_away, ScheduledGame.create_game)
+
+    def schedule_games(self, teams, rules, year, starting_day, home_and_away, create_game_method):
+        self.total_teams = len(teams)
         result = []
         self.setup()
         current_day = starting_day
@@ -35,10 +42,10 @@ class Scheduler:
                 away_num = self.matrix[n][1]
 
                 if not home_num == -1:
-                    result.append(ScheduledGame(team_ids[home_num],
-                                                team_ids[away_num],
-                                                rules_id,
-                                                year, current_day))
+                    result.append(create_game_method(teams[home_num],
+                                                     teams[away_num],
+                                                     rules,
+                                                     year, current_day))
 
             # increment day
             current_day += 1
@@ -48,7 +55,7 @@ class Scheduler:
             new_games = []
 
             for game in result:
-                new_games.append(ScheduledGame(game.away_id, game.home_id, game.rules_id,
+                new_games.append(create_game_method(game.home_team, game.away_team, game.rules,
                                                game.year, game.day + days_to_add))
 
             result.extend(new_games)
@@ -107,7 +114,8 @@ class Scheduler:
     def does_any_team_play_in_other_list(new_games, games):
         for n in new_games:
             for g in games:
-                if n.home_team.oid in [g.home_team.oid, g.away_team.oid] or n.away_team.oid in [g.home_team.oid, g.away_team.oid]:
+                if n.home_team.oid in [g.home_team.oid, g.away_team.oid] or n.away_team.oid in [g.home_team.oid,
+                                                                                                g.away_team.oid]:
                     return True
 
         return False
@@ -119,5 +127,3 @@ class Scheduler:
         new_game_day = last_day + 1 + days_between
 
         new_game.day = new_game_day
-
-

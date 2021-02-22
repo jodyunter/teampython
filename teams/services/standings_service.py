@@ -2,7 +2,7 @@ from teams.services.app_service import AppService
 from teams.services.base_service import BaseService
 from teams.services.record_service import RecordService
 from teams.services.team_service import TeamService
-from teams.services.view_models.standings_view_modles import StandingsHistoryViewModel, StandingsCurrentViewModel, \
+from teams.services.view_models.standings_view_models import StandingsHistoryViewModel, StandingsCurrentViewModel, \
     StandingsTeamHistoryViewModel
 
 

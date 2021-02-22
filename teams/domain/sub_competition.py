@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from teams.domain.competition import TableRecord, CompetitionRanking
+from teams.domain.competition import TableRecord, CompetitionRanking, CompetitionGame
 from teams.domain.competition_configuration import SubCompetitionConfiguration
 from teams.domain.utility.utility_classes import IDHelper
 
@@ -41,13 +41,16 @@ class TableSubCompetition(SubCompetition):
                                 finished, post_processed,
                                 oid)
 
+    def create_game(self, home, away, rules, year, day):
+        return CompetitionGame(self.competition, self, day, home, away, 0, 0, False, False, rules)
+
     def process_game(self, game):
         if game.complete and not game.processed:
             home_record = [r for r in self.records if r.team.oid == game.home_team.oid][0]
             away_record = [r for r in self.records if r.team.oid == game.away_team.oid][0]
 
             home_record.process_game(game.home_score, game.away_score)
-            away_record.prorces_game(game.away_score, game.home_score)
+            away_record.process_game(game.away_score, game.home_score)
 
     # TODO:  this will need the configuration.
     # We should only create new games when previous round of sub comps is done.  This way the previous comps populate groups that we'll use to create games
