@@ -45,6 +45,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\teams\services\view_models\game_view_models.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\teams\services\view_models\standings_view_models.py">
           <value>
             <Attribute>

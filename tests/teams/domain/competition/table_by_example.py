@@ -1,10 +1,12 @@
 import random
 
+from teams.ConsoleUI.views.game_view import GameDayView
 from teams.ConsoleUI.views.record_view import RecordView
 from teams.domain.competition import Competition, TableRecord, RankingGroup
 from teams.domain.game import GameRules
 from teams.domain.scheduler import Scheduler
 from teams.domain.sub_competition import TableSubCompetition
+from teams.services.game_service import GameService
 from teams.services.record_service import RecordService
 from tests.teams.domain.competition import helpers
 
@@ -62,23 +64,19 @@ for g in groups:
     rankings.extend(g.rankings)
 
 game_rules = GameRules("Season", True)
-
-scheduler = Scheduler()
-games = scheduler.schedule_games(teams, game_rules, 5, 1, True, table.create_game)
-
-max_day = max([g.day for g in games])
-games.extend(scheduler.schedule_games(west_teams, game_rules, 5, max_day, True, table.create_game))
-max_day = max([g.day for g in games])
-games.extend(scheduler.schedule_games(east_teams, game_rules, 5, max_day, True, table.create_game))
-max_day = max([g.day for g in games])
-games.extend(scheduler.schedule_games(central_teams, game_rules, 5, max_day, True, table.create_game))
-max_day = max([g.day for g in games])
-games.extend(scheduler.schedule_games(pacific_teams, game_rules, 5, max_day, True, table.create_game))
-
 r = random
-for g in games:
-    g.play(r)
-    table.process_game(g)
+
+games = Scheduler.create_games_vs_teams(teams, teams, True, game_rules, -1, table.create_game)
+days = {}
+Scheduler.add_games_to_schedule(games, days, r, 1)
+
+for d in days.keys():
+    day = days[d]
+    for g in day:
+        g.play(r)
+        table.process_game(g)
+    game_day_view_model = GameService.games_to_game_day_view(day)
+    print(GameDayView.get_view(game_day_view_model))
 
 table.sort_rankings(rankings, table.records)
 

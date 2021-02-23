@@ -124,3 +124,59 @@ class Scheduler:
         new_game_day = last_day + 1 + days_between
 
         new_game.day = new_game_day
+
+    @staticmethod
+    def organize_games_into_days(games):
+        days = {
+
+        }
+
+        for g in games:
+            day = g.day
+            if not day in days:
+                days[day] = []
+
+            days[day].append(g)
+
+        return days
+
+    #  this assumes that games is organized like { day_number:[games], day_number:[games] }
+    @staticmethod
+    def add_game_to_schedule(new_game, games, starting_day=1):
+        scheduled = False
+        day = starting_day
+
+        while not scheduled:
+            if not day in games:
+                games[day] = []
+
+            if not Scheduler.does_any_team_play_in_other_list([new_game], games[day]):
+                games[day].append(new_game)
+                new_game.day = day
+                scheduled = True
+            else:
+                day += 1
+
+    #  this assumes that games is organized like { day_number:[games], day_number:[games] }
+    @staticmethod
+    def add_games_to_schedule(new_games, games, random, starting_day=1):
+        count = 0
+        day = starting_day
+        random.shuffle(new_games)
+        for g in new_games:
+            Scheduler.add_game_to_schedule(g, games, day)
+            count += 1
+
+    #  this creates an unscheduled game
+    @staticmethod
+    def create_games_vs_teams(list_a, list_b, home_and_away, rules, year, create_game_method):
+        new_games = []
+
+        for a in list_a:
+            for b in list_b:
+                if a.oid != b.oid:
+                    new_games.append(create_game_method(a, b, rules, year, -1))
+                    if home_and_away:
+                        new_games.append(create_game_method(b, a, rules, year, -1))
+
+        return new_games

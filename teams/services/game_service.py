@@ -7,7 +7,7 @@ from teams.domain.scheduler import Scheduler
 from teams.services.base_service import BaseService
 from teams.services.record_service import RecordService
 from teams.services.team_service import TeamService
-from teams.services.view_models.game_view_models import GameViewModel, GameRulesViewModel
+from teams.services.view_models.game_view_models import GameViewModel, GameRulesViewModel, GameDayViewModel
 
 
 class GameRulesService(BaseService):
@@ -75,6 +75,11 @@ class GameService(BaseService):
         [self.repo.add(g, session) for g in new_games]
 
         session.commit()
+
+    @staticmethod
+    def games_to_game_day_view(games):
+        game_vm = [GameService.game_to_vm(g) for g in games]
+        return GameDayViewModel(None, game_vm[0].day, game_vm[0].year, game_vm)
 
     @staticmethod
     def game_to_vm(g):
