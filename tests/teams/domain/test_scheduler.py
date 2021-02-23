@@ -15,7 +15,7 @@ class TestScheduler(TestCase):
         print()
         print("Game List")
         for x in result:
-            print(str(x.day) + ": " + x.home_id + " vs " + x.away_id)
+            print(str(x.day) + ": " + x.home_team + " vs " + x.away_team)
 
         print("Total Games: " + str(len(result)))
 

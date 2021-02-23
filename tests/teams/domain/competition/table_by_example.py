@@ -83,7 +83,7 @@ for g in games:
 table.sort_rankings(rankings, table.records)
 
 recs = TableSubCompetition.get_records_by_group(league, table.records)
-recs.sort(key=lambda rec:rec.rank)
+recs.sort(key=lambda rec: rec.rank)
 
 print(RecordView.get_table_header())
 for r in recs:
