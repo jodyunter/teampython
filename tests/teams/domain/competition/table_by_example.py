@@ -66,9 +66,16 @@ for g in groups:
 game_rules = GameRules("Season", True)
 r = random
 
-games = Scheduler.create_games_vs_teams(teams, teams, True, game_rules, -1, table.create_game)
-days = {}
-Scheduler.add_games_to_schedule(games, days, r, 1)
+scheduler = Scheduler()
+games = scheduler.schedule_games(teams, game_rules, 1, 1, True, table.create_game)
+days = Scheduler.organize_games_into_days(games)
+
+new_games = scheduler.schedule_games(teams, game_rules, 1, 1, True, table.create_game)
+new_days = Scheduler.organize_games_into_days(new_games)
+for day in new_days.keys():
+    Scheduler.add_day_to_scheduler(new_days[day], days, 1)
+
+#Scheduler.add_games_to_schedule(new_games, days, r, 1)
 
 for d in days.keys():
     day = days[d]

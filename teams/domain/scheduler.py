@@ -147,7 +147,7 @@ class Scheduler:
         day = starting_day
 
         while not scheduled:
-            if not day in games:
+            if day not in games:
                 games[day] = []
 
             if not Scheduler.does_any_team_play_in_other_list([new_game], games[day]):
@@ -180,3 +180,23 @@ class Scheduler:
                         new_games.append(create_game_method(b, a, rules, year, -1))
 
         return new_games
+
+    @staticmethod
+    def add_day_to_scheduler(day_of_games_to_add, dictionary_of_days, starting_day=1):
+        day = starting_day
+        added = False
+
+        while not added:
+            if day not in dictionary_of_days:
+                dictionary_of_days[day] = day_of_games_to_add
+                added = True
+            elif not Scheduler.does_any_team_play_in_other_list(day_of_games_to_add, dictionary_of_days[day]):
+                dictionary_of_days[day].append(day_of_games_to_add)
+                added = True
+
+            #  make sure to set the day on the games appropriately
+            if added:
+                for g in dictionary_of_days[day]:
+                    g.day = day
+
+            day += 1
