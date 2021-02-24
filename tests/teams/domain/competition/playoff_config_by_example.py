@@ -47,13 +47,15 @@ minnesota = Team("Minnesota", 5, True)
 colorado = Team("Colorado", 5, True)
 san_jose = Team("San Jose", 5, True)
 los_angelas = Team("Los Angelas", 5, True)
+pittsburgh = Team("Pittsburgh", 5, True)
 
-teams = [toronto, montreal, ottawa, quebec_city, calgary, edmonton, vancouver, winnipeg, victoria, saskatoon, hamilton, halifax, boston, new_york, detroit, chicago, seattle, minnesota, colorado, san_jose, los_angelas]
+teams = [toronto, montreal, ottawa, quebec_city, calgary, edmonton, vancouver, winnipeg, victoria, saskatoon,
+         hamilton, halifax, boston, new_york, detroit, chicago, seattle, minnesota, colorado, san_jose, los_angelas, pittsburgh]
 western_teams = [calgary, edmonton, vancouver, winnipeg, victoria, saskatoon, seattle, minnesota, colorado, san_jose, los_angelas]
-eastern_teams = [toronto, montreal, ottawa, quebec_city, hamilton, halifax, boston, new_york, detroit, chicago]
+eastern_teams = [toronto, montreal, ottawa, quebec_city, hamilton, halifax, boston, new_york, detroit, chicago, pittsburgh]
 pacific_teams = [vancouver, victoria, seattle, san_jose, colorado, los_angelas]
 central_teams = [edmonton, calgary, winnipeg, saskatoon, minnesota]
-atlantic_teams = [montreal, quebec_city, hamilton, boston, new_york]
+atlantic_teams = [montreal, quebec_city, halifax, boston, new_york, pittsburgh]
 north_teams = [toronto, ottawa, hamilton, detroit, chicago]
 
 playoff_game_rules = GameRules("Playoff Rules", False)
