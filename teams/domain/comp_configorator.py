@@ -17,6 +17,8 @@ class CompetitionConfigurator:
     def create_competition(competition_config, year):
         competition = Competition(competition_config.name, year, [], False, False, False, False)
 
+        competition_config.sub_competitions.sort(key=lambda sc: sc.order)
+
         for sub in competition_config.sub_competitions:
             CompetitionConfigurator.create_sub_competition(sub, competition)
 
@@ -50,10 +52,8 @@ class CompetitionConfigurator:
 
         competition.sub_competitions.append(sub_comp)
 
-        current_groups = []
-
-        for sub in competition.sub_competitions:
-            current_groups.extend(sub.groups)
+        current_groups = competition.get_all_groups()
+        CompetitionConfigurator.create_sub_competition_groups(sub_competition_config, current_groups, competition)
 
         for s in sub_competition_config.series:
             CompetitionConfigurator.process_series_configuration(s, current_groups, sub_comp)
@@ -69,6 +69,11 @@ class CompetitionConfigurator:
                                        False, False, False, False)
 
         return sub_comp
+
+    @staticmethod
+    def create_sub_competition_groups(sub_comp_config, current_groups, competition):
+        for g in sub_comp_config.competition_groups:
+            CompetitionConfigurator.create_competition_group(g, current_groups, competition)
 
     @staticmethod
     def create_competition_group(competition_group_config, current_groups, competition):
