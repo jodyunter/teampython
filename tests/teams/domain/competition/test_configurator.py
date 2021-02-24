@@ -91,6 +91,7 @@ class TestCompConfiguratorSubCompetition(TestCase):
         self.assertEqual(1, sub_comp.current_round, "Round")
         self.assertEqual(1, len(competition.sub_competitions), "Sub Comps")
         self.assertEqual(sub_competition_config.name, competition.sub_competitions[0].name)
+        self.assertIsNotNone(sub_comp.competition)
 
     def test_create_table_sub_comp(self):
         sub_competition_config = SubCompetitionConfiguration("Table Sub", None, 3,
@@ -586,6 +587,7 @@ class TestCompConfiguratorSeriesGames(TestCase):
                                     None, None, None, None, 1, None),
                 None, None)
 
+    # TODO: should handle a None comp group configuration
     def test_should_process_by_wins_method(self):
         series = CompetitionConfigurator.processes_series_by_wins_configuration(
             SeriesConfiguration("Series 1", 5, None,

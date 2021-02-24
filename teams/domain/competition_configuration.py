@@ -3,9 +3,10 @@ from teams.domain.utility.utility_classes import YearRestricted, IDHelper
 
 class CompetitionConfiguration(YearRestricted):
 
-    def __init__(self, name, order,  first_year, last_year, oid=None):
+    def __init__(self, name, sub_competitions, order,  first_year, last_year, oid=None):
         self.name = name
         self.order = order
+        self.sub_competitions = sub_competitions
         self.oid = IDHelper.get_id(oid)
 
         YearRestricted.__init__(self, first_year, last_year)
@@ -41,6 +42,15 @@ class CompetitionGroupConfiguration(YearRestricted):
         YearRestricted.__init__(self, first_year, last_year)
 
 
+class RankingGroupConfiguration(CompetitionGroupConfiguration):
+
+    def __init__(self, name, sub_competition_configuration, parent_group_configuration, group_level,
+                 first_year, last_year, oid=None):
+
+        CompetitionGroupConfiguration.__init__(self, name, sub_competition_configuration, parent_group_configuration, group_level,
+                                               CompetitionGroupConfiguration.RANKING_TYPE, first_year, last_year, oid)
+
+
 class CompetitionTeamConfiguration(YearRestricted):
 
     def __init__(self, team, competition_configuration, group_configuration, first_year, last_year, oid=None):
@@ -57,7 +67,7 @@ class SeriesConfiguration(YearRestricted):
     def __init__(self, name, series_round, sub_competition_configuration,
                  home_team_group_configuration, home_team_value,
                  away_team_group_configuration, away_team_value,
-                 series_rules, game_rules,
+                 series_rules,
                  winner_group_configuration, winner_rank_from_configuration,
                  loser_group_configuration, loser_rank_from_configuration,
                  first_year, last_year,
@@ -68,7 +78,6 @@ class SeriesConfiguration(YearRestricted):
         self.away_team_group_configuration = away_team_group_configuration
         self.away_team_value = away_team_value
         self.series_rules = series_rules
-        self.game_rules = game_rules
         self.winner_group_configuration = winner_group_configuration
         self.winner_rank_from_configuration = winner_rank_from_configuration
         self.loser_group_configuration = loser_group_configuration

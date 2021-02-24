@@ -73,6 +73,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\tests\teams\domain\competition\playoff_config_by_example.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\tests\teams\domain\competition\table_by_example.py">
           <value>
             <Attribute>
