@@ -17,17 +17,18 @@ class TestCompConfigurator(TestCase):
 
     def test_should_get_group_too_many(self):
         with pytest.raises(DomainError, match="My Group has multiple 2 entries."):
-            CompetitionConfigurator.get_group_from_list("My Group",
+            CompetitionConfigurator.get_group_from_list(CompetitionGroupConfiguration("My Group", None, None, None, None, None, None),
                                                         [
                                                             CompetitionGroup("My Group 2", None, None, None, None),
                                                             CompetitionGroup("My Group", None, None, None, None),
                                                             CompetitionGroup("My Group", None, None, None, None),
-                                                            CompetitionGroup("My Group 2", None, None, None, None)])
+                                                            CompetitionGroup("My Group 2", None, None, None, None)
+                                                        ])
 
     def test_should_get_group_no_group(self):
         with pytest.raises(DomainError,
                            match="Group My group was not found.  Need to create group before calling this."):
-            CompetitionConfigurator.get_group_from_list("My group",
+            CompetitionConfigurator.get_group_from_list(CompetitionGroupConfiguration("My group", None, None, None, None, None, None),
                                                         [
                                                             CompetitionGroup("My Group 2", None, None, None, None),
                                                             CompetitionGroup("My Group", None, None, None, None),
@@ -35,7 +36,7 @@ class TestCompConfigurator(TestCase):
                                                             CompetitionGroup("My Group 2", None, None, None, None)])
 
     def test_should_get_group(self):
-        result = CompetitionConfigurator.get_group_from_list("My group 3",
+        result = CompetitionConfigurator.get_group_from_list(CompetitionGroupConfiguration("My group 3", None, None, None, None, None, None),
                                                              [
                                                                  CompetitionGroup("My Group 2", None, None, None, None),
                                                                  CompetitionGroup("My Group", None, None, None, None),
