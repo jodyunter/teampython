@@ -18,7 +18,7 @@ class CompetitionConfigurator:
         competition = Competition(competition_config.name, year, [], False, False, False, False)
 
         for sub in competition_config.sub_competitions:
-            CompetitionConfigurator.create_sub_competition(sub)
+            CompetitionConfigurator.create_sub_competition(sub, competition)
 
         return competition
 
@@ -37,19 +37,26 @@ class CompetitionConfigurator:
 
         sub_comp = method_map[sub_competition_config.sub_competition_type](sub_competition_config, competition)
 
-        competition.sub_competitions.append(sub_comp)
-        sub_comp.competition = competition
-
         return sub_comp
 
     @staticmethod
     def create_playoff_sub_competition(sub_competition_config, competition):
         sub_comp = PlayoffSubCompetition(sub_competition_config.name,
                                          [],
-                                         competition,
+                                         competition, [],
                                          sub_competition_config.order,
                                          1,
                                          False, False, False, False)
+
+        competition.sub_competitions.append(sub_comp)
+
+        current_groups = []
+
+        for sub in competition.sub_competitions:
+            current_groups.extend(sub.groups)
+
+        for s in sub_competition_config.series:
+            CompetitionConfigurator.process_series_configuration(s, current_groups, sub_comp)
 
         return sub_comp
 
@@ -97,6 +104,8 @@ class CompetitionConfigurator:
             new_group = CompetitionGroup(competition_group_config.name,
                                          parent_group, sub_competition,
                                          [], competition_group_config.group_type)
+
+            sub_competition.groups.append(new_group)
 
             current_groups.append(new_group)
 

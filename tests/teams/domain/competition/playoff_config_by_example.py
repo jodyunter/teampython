@@ -4,7 +4,7 @@ from teams.ConsoleUI.views.playoff_views import SeriesView
 from teams.domain.comp_configorator import CompetitionConfigurator
 from teams.domain.competition import CompetitionTeam
 from teams.domain.competition_configuration import CompetitionConfiguration, RankingGroupConfiguration, \
-    SubCompetitionConfiguration, SeriesConfiguration
+    SubCompetitionConfiguration, SeriesConfiguration, PlayoffSubCompetitionConfiguration
 from teams.domain.game import GameRules
 from teams.domain.scheduler import Scheduler
 from teams.domain.series import SeriesByGoals, SeriesByWins
@@ -34,7 +34,7 @@ series_rules = SeriesByWinsRules("Best of 7", 4, playoff_game_rules, [0, 0, 1, 1
 
 competition_config = CompetitionConfiguration("Playoff Test", [], 1, 1, None)
 
-playoff_config = SubCompetitionConfiguration("Playoff", competition_config, [], 1, SubCompetitionConfiguration.PLAYOFF_TYPE, 1, None)
+playoff_config = PlayoffSubCompetitionConfiguration("Playoff", competition_config, [], [], 1, SubCompetitionConfiguration.PLAYOFF_TYPE, 1, None)
 competition_config.sub_competitions.append(playoff_config)
 
 # seeding group
@@ -60,14 +60,17 @@ r2s2 = SeriesConfiguration("R2S2", 2, playoff_config, r1_winners, 2, r1_winners,
 r3s1 = SeriesConfiguration("R3S1", 3, playoff_config, r2_winners, 1, r2_winners, 2, series_rules, champion, league_config, runner_up, league_config, 1, None)
 
 series_configs = [r1s1, r1s2, r1s3, r1s4, r2s2, r2s1, r3s1]
+playoff_config.series = series_configs
 
 current_groups = []
+
 competition = CompetitionConfigurator.create_competition(competition_config, 1)
-playoff = CompetitionConfigurator.create_sub_competition(playoff_config, competition)
+#playoff = CompetitionConfigurator.create_sub_competition(playoff_config, competition)
+playoff = competition.sub_competitions[0]
 league = CompetitionConfigurator.create_competition_group(league_config, current_groups, competition)
 
-for series_config in series_configs:
-    CompetitionConfigurator.process_series_configuration(series_config, current_groups, playoff)
+#for series_config in series_configs:
+#    CompetitionConfigurator.process_series_configuration(series_config, current_groups, playoff)
 
 r = random
 

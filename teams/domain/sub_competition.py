@@ -7,7 +7,7 @@ from teams.domain.utility.utility_classes import IDHelper
 
 class SubCompetition(ABC):
 
-    def __init__(self, name, sub_competition_type, competition, order, setup, started, finished, post_processed,
+    def __init__(self, name, sub_competition_type, competition, groups, order, setup, started, finished, post_processed,
                  oid=None):
         self.name = name
         self.sub_competition_type = sub_competition_type
@@ -17,6 +17,7 @@ class SubCompetition(ABC):
         self.started = started
         self.finished = finished
         self.post_processed = post_processed
+        self.groups = groups
         self.oid = IDHelper.get_id(oid)
 
     @abstractmethod
@@ -34,10 +35,10 @@ class SubCompetition(ABC):
 
 class TableSubCompetition(SubCompetition):
 
-    def __init__(self, name, records, competition, order, setup, started, finished, post_processed, oid=None):
+    def __init__(self, name, records, competition, groups, order, setup, started, finished, post_processed, oid=None):
         self.records = records
 
-        SubCompetition.__init__(self, name, SubCompetitionConfiguration.TABLE_TYPE, competition, order, setup, started,
+        SubCompetition.__init__(self, name, SubCompetitionConfiguration.TABLE_TYPE, competition, groups, order, setup, started,
                                 finished, post_processed,
                                 oid)
 
@@ -109,12 +110,12 @@ class TableSubCompetition(SubCompetition):
 
 class PlayoffSubCompetition(SubCompetition):
 
-    def __init__(self, name, series, competition, order, current_round, setup, started, finished, post_processed,
+    def __init__(self, name, series, competition, groups, order, current_round, setup, started, finished, post_processed,
                  oid=None):
         self.series = series
         self.current_round = current_round
 
-        SubCompetition.__init__(self, name, SubCompetitionConfiguration.PLAYOFF_TYPE, competition, order,
+        SubCompetition.__init__(self, name, SubCompetitionConfiguration.PLAYOFF_TYPE, competition, groups, order,
                                 setup, started, finished, post_processed, oid)
 
     def process_game(self, game):

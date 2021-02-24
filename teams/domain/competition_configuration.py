@@ -27,6 +27,24 @@ class SubCompetitionConfiguration(YearRestricted):
         YearRestricted.__init__(self, first_year, last_year)
 
 
+class PlayoffSubCompetitionConfiguration(SubCompetitionConfiguration):
+
+    def __init__(self, name, competition_configuration, competition_group_configs, series_configs, order,
+                 first_year, last_year, oid=None):
+        self.series = series_configs
+
+        SubCompetitionConfiguration.__init__(self, name, competition_configuration, competition_group_configs, order,
+                                             SubCompetitionConfiguration.PLAYOFF_TYPE, first_year, last_year, oid)
+
+
+class TableSubCompetitionConfiguration(SubCompetitionConfiguration):
+    def __init__(self, name, competition_configuration, competition_group_configs, order,
+                 first_year, last_year, oid=None):
+
+        SubCompetitionConfiguration.__init__(self, name, competition_configuration, competition_group_configs, order,
+                                             SubCompetitionConfiguration.PLAYOFF_TYPE, first_year, last_year, oid)
+
+
 class CompetitionGroupConfiguration(YearRestricted):
     REGIONAL_TYPE = "Regional"
     RANKING_TYPE = "Ranking"

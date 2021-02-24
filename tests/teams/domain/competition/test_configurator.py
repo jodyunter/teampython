@@ -6,7 +6,7 @@ from pytest import mark
 from teams.domain.comp_configorator import CompetitionConfigurator
 from teams.domain.competition import Competition, CompetitionTeam, CompetitionGroup
 from teams.domain.competition_configuration import SubCompetitionConfiguration, CompetitionGroupConfiguration, \
-    CompetitionTeamConfiguration, SeriesConfiguration, CompetitionConfiguration
+    CompetitionTeamConfiguration, SeriesConfiguration, CompetitionConfiguration, PlayoffSubCompetitionConfiguration
 from teams.domain.errors import DomainError
 from teams.domain.series_rules import SeriesByWinsRules, SeriesByGoalsRules
 from teams.domain.sub_competition import TableSubCompetition, PlayoffSubCompetition
@@ -80,7 +80,7 @@ class TestCompConfiguratorSubCompetition(TestCase):
             CompetitionConfigurator.create_sub_competition(sub_comp, competition)
 
     def test_create_playoff_sub_comp(self):
-        sub_competition_config = SubCompetitionConfiguration("Playoff Sub Sub", None, None, 3, SubCompetitionConfiguration.PLAYOFF_TYPE ,1, None)
+        sub_competition_config = PlayoffSubCompetitionConfiguration("Playoff Sub Sub", None, None, [], 3, 1, None)
 
         competition = Competition("My Comp", 5, [], False, False, False, False)
 
@@ -627,7 +627,7 @@ class TestCompConfiguratorSeriesGames(TestCase):
                 None, None)
 
     def test_should_process_series_game_config(self):
-        playoff_comp_config = SubCompetitionConfiguration("Playoff Comp", None, None, 1, SubCompetitionConfiguration.PLAYOFF_TYPE, 1, None)
+        playoff_comp_config = PlayoffSubCompetitionConfiguration("Playoff Comp", None, None, [], 1, 1, None)
         group1 = CompetitionGroupConfiguration("Group 1", None, None, 1, None, 1, None)
         group3 = CompetitionGroupConfiguration("Group 3", playoff_comp_config, None, 1, None, 1, None)
         group4 = CompetitionGroupConfiguration("Group 4", playoff_comp_config, None, 1, None, 1, None)
