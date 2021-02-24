@@ -31,7 +31,7 @@ class TestPlayoffSubCompetition(TestCase):
     @staticmethod
     def create_default_playoff(groups):
         competition = Competition("My Comp", 1, [], False, False, False, False)
-        playoff = PlayoffSubCompetition("Playoff", [], competition, 1, 1, False, False, False, False)
+        playoff = PlayoffSubCompetition("Playoff", [], competition, None, 1, 1, False, False, False, False)
         competition.sub_competitions.append(playoff)
 
         league = CompetitionGroup("League", None, None, [], CompetitionGroupConfiguration.RANKING_TYPE)

@@ -86,7 +86,7 @@ class TestSeriesByGoals(TestCase):
         away_team = Team("Team 2", 5, True)
 
         competition = Competition("My Comp", 1, None, True, True, False, False)
-        sub_competition = PlayoffSubCompetition("Playoff A", None, competition, 1, 1, True, True, False, False)
+        sub_competition = PlayoffSubCompetition("Playoff A", None, competition, None, 1, 1, True, True, False, False)
 
         home_competition_team = CompetitionTeam(competition, home_team)
         away_competition_team = CompetitionTeam(competition, away_team)
@@ -284,7 +284,7 @@ class TestSeriesByWins(TestCase):
         away_team = Team("Team 2", 5, True)
 
         competition = Competition("My Comp", 1, None, True, True, False, False)
-        sub_competition = PlayoffSubCompetition("My Playoff", None, competition, 1, 1, True, False, False, False)
+        sub_competition = PlayoffSubCompetition("My Playoff", None, competition, None, 1, 1, True, False, False, False)
 
         home_competition_team = CompetitionTeam(competition, home_team)
         away_competition_team = CompetitionTeam(competition, away_team)

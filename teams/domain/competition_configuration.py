@@ -1,3 +1,4 @@
+from teams.domain.errors import DomainError
 from teams.domain.utility.utility_classes import YearRestricted, IDHelper
 
 
@@ -16,12 +17,13 @@ class SubCompetitionConfiguration(YearRestricted):
     PLAYOFF_TYPE = "Playoff"
     TABLE_TYPE = "Table"
 
-    def __init__(self, name, competition_configuration, competition_group_configs, order, sub_competition_type, first_year, last_year, oid=None):
+    def __init__(self, name, competition_configuration, competition_group_configs, competition_team_configs, order, sub_competition_type, first_year, last_year, oid=None):
         self.name = name
         self.competition_configuration = competition_configuration
         self.competition_groups = competition_group_configs
         self.order = order
         self.sub_competition_type = sub_competition_type
+        self.competition_teams = competition_team_configs
         self.oid = IDHelper.get_id(oid)
 
         YearRestricted.__init__(self, first_year, last_year)
@@ -29,19 +31,19 @@ class SubCompetitionConfiguration(YearRestricted):
 
 class PlayoffSubCompetitionConfiguration(SubCompetitionConfiguration):
 
-    def __init__(self, name, competition_configuration, competition_group_configs, series_configs, order,
+    def __init__(self, name, competition_configuration, competition_group_configs, competition_team_configs, series_configs, order,
                  first_year, last_year, oid=None):
         self.series = series_configs
 
-        SubCompetitionConfiguration.__init__(self, name, competition_configuration, competition_group_configs, order,
+        SubCompetitionConfiguration.__init__(self, name, competition_configuration, competition_group_configs, competition_team_configs, order,
                                              SubCompetitionConfiguration.PLAYOFF_TYPE, first_year, last_year, oid)
 
 
 class TableSubCompetitionConfiguration(SubCompetitionConfiguration):
-    def __init__(self, name, competition_configuration, competition_group_configs, order,
+    def __init__(self, name, competition_configuration, competition_group_configs, competition_team_configs, order,
                  first_year, last_year, oid=None):
 
-        SubCompetitionConfiguration.__init__(self, name, competition_configuration, competition_group_configs, order,
+        SubCompetitionConfiguration.__init__(self, name, competition_configuration, competition_group_configs, competition_team_configs, order,
                                              SubCompetitionConfiguration.PLAYOFF_TYPE, first_year, last_year, oid)
 
 
@@ -52,6 +54,8 @@ class CompetitionGroupConfiguration(YearRestricted):
     def __init__(self, name, sub_competition_configuration, parent_group_configuration, group_level, group_type,
                  first_year, last_year, oid=None):
         self.name = name
+        if sub_competition_configuration is None:
+            raise DomainError("CompetitionGroupConfiguration must be part of a sub competition.")
         self.sub_competition_configuration = sub_competition_configuration
         self.parent_group_configuration = parent_group_configuration
         self.group_level = group_level

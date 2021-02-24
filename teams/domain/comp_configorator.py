@@ -65,8 +65,11 @@ class CompetitionConfigurator:
         sub_comp = TableSubCompetition(sub_competition_config.name,
                                        [],
                                        competition,
+                                       [],
                                        sub_competition_config.order,
                                        False, False, False, False)
+
+        competition.sub_competitions.append(sub_comp)
 
         return sub_comp
 

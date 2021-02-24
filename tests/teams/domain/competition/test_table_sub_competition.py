@@ -27,7 +27,7 @@ class TestTableSubCompetition(TestCase):
 
     def test_sort_rankings(self):
         competition = Competition("My Comp", 1, [], False, False, False, False)
-        table = TableSubCompetition("My Table", [], None, 1, False, False, False, False)
+        table = TableSubCompetition("My Table", [], None, None, 1, False, False, False, False)
         competition.sub_competitions.append(table)
 
         teams = [
