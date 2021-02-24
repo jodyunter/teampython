@@ -17,6 +17,9 @@ class CompetitionConfigurator:
     def create_competition(competition_config, year):
         competition = Competition(competition_config.name, year, [], False, False, False, False)
 
+        for sub in competition_config.sub_competitions:
+            CompetitionConfigurator.create_sub_competition(sub)
+
         return competition
 
     @staticmethod
@@ -173,7 +176,6 @@ class CompetitionConfigurator:
                                                                                sub_competition)
         sub_competition.series.append(new_series)
 
-    # TODO: we're assuming the group is there
     @staticmethod
     def get_group_from_list(group_config, group_list):
         if group_config is not None:
@@ -214,27 +216,27 @@ class CompetitionConfigurator:
         return series
 
     @staticmethod
-    def process_series_by_goals_configuration(series_game_configuration, current_groups, sub_competition):
-        series_rules = series_game_configuration.series_rules
+    def process_series_by_goals_configuration(series_configuration, current_groups, sub_competition):
+        series_rules = series_configuration.series_rules
         if series_rules.series_type != SeriesRules.GOALS_TYPE:
-            raise DomainError(f"Series {series_game_configuration.name} does not have the correct rules.")
+            raise DomainError(f"Series {series_configuration.name} does not have the correct rules.")
 
-        series = SeriesByGoals(sub_competition, series_game_configuration.name, series_game_configuration.series_round,
+        series = SeriesByGoals(sub_competition, series_configuration.name, series_configuration.series_round,
                                None, None, 0, 0, 0, series_rules,
                                CompetitionConfigurator.get_group_from_list(
-                                   series_game_configuration.home_team_group_configuration.name, current_groups),
-                               series_game_configuration.home_team_value,
+                                   series_configuration.home_team_group_configuration, current_groups),
+                               series_configuration.home_team_value,
                                CompetitionConfigurator.get_group_from_list(
-                                   series_game_configuration.away_team_group_configuration.name, current_groups),
-                               series_game_configuration.away_team_value,
+                                   series_configuration.away_team_group_configuration, current_groups),
+                               series_configuration.away_team_value,
                                CompetitionConfigurator.get_group_from_list(
-                                   series_game_configuration.winner_group_configuration.name, current_groups),
+                                   series_configuration.winner_group_configuration, current_groups),
                                CompetitionConfigurator.get_group_from_list(
-                                   series_game_configuration.winner_rank_from_configuration.name, current_groups),
+                                   series_configuration.winner_rank_from_configuration, current_groups),
                                CompetitionConfigurator.get_group_from_list(
-                                   series_game_configuration.loser_group_configuration.name, current_groups),
+                                   series_configuration.loser_group_configuration, current_groups),
                                CompetitionConfigurator.get_group_from_list(
-                                   series_game_configuration.loser_rank_from_configuration.name, current_groups),
+                                   series_configuration.loser_rank_from_configuration, current_groups),
                                False, False)
 
         return series

@@ -34,7 +34,7 @@ series_rules = SeriesByWinsRules("Best of 7", 4, playoff_game_rules, [0, 0, 1, 1
 
 competition_config = CompetitionConfiguration("Playoff Test", [], 1, 1, None)
 
-playoff_config = SubCompetitionConfiguration("Playoff", competition_config, 1, SubCompetitionConfiguration.PLAYOFF_TYPE, 1, None)
+playoff_config = SubCompetitionConfiguration("Playoff", competition_config, [], 1, SubCompetitionConfiguration.PLAYOFF_TYPE, 1, None)
 competition_config.sub_competitions.append(playoff_config)
 
 # seeding group
