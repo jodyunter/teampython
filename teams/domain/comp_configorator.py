@@ -52,11 +52,10 @@ class CompetitionConfigurator:
 
         competition.sub_competitions.append(sub_comp)
 
-        current_groups = competition.get_all_groups()
-        CompetitionConfigurator.create_sub_competition_groups(sub_competition_config, current_groups, competition)
+        CompetitionConfigurator.create_sub_competition_groups(sub_competition_config, competition)
 
         for s in sub_competition_config.series:
-            CompetitionConfigurator.process_series_configuration(s, current_groups, sub_comp)
+            CompetitionConfigurator.process_series_configuration(s, sub_comp)
 
         return sub_comp
 
@@ -74,15 +73,17 @@ class CompetitionConfigurator:
         return sub_comp
 
     @staticmethod
-    def create_sub_competition_groups(sub_comp_config, current_groups, competition):
+    def create_sub_competition_groups(sub_comp_config, competition):
         for g in sub_comp_config.competition_groups:
-            CompetitionConfigurator.create_competition_group(g, current_groups, competition)
+            CompetitionConfigurator.create_competition_group(g, competition)
 
     @staticmethod
-    def create_competition_group(competition_group_config, current_groups, competition):
+    def create_competition_group(competition_group_config, competition):
         if competition_group_config is not None:
             if competition is None:
                 raise DomainError("Competition has to exist before the groups can be setup.")
+
+            current_groups = competition.get_all_groups()
 
             current_group_list = [cg for cg in current_groups if cg.name == competition_group_config.name]
             if current_group_list is not None and len(current_group_list) == 1:
@@ -96,7 +97,7 @@ class CompetitionConfigurator:
                 if len(parent_group) == 0:
                     # parent group is not setup
                     parent_group = CompetitionConfigurator.create_competition_group(
-                        competition_group_config.parent_group_configuration, current_groups, competition)
+                        competition_group_config.parent_group_configuration, competition)
                 else:
                     parent_group = parent_group[0]
 
@@ -120,13 +121,15 @@ class CompetitionConfigurator:
             return new_group
 
     @staticmethod
-    def process_competition_team_configuration(team_configuration, current_groups, current_teams, competition):
+    def process_competition_team_configuration(team_configuration, current_teams, competition):
         # check if competition exists
         if competition is None:
             raise DomainError("Competition has to exist before the teams and rankings can be setup.")
 
         if team_configuration is None:
             raise DomainError("No team configuration given.")
+
+        current_groups = competition.get_all_groups()
 
         #  check if group exists
         groups_with_name = [g for g in current_groups if g.name == team_configuration.group_configuration.name]
@@ -158,7 +161,7 @@ class CompetitionConfigurator:
     #  right now table competitions don't do anything here as they only take teams from groups
     # todo: test the errors raised
     @staticmethod
-    def process_series_configuration(series_configuration, current_groups, sub_competition):
+    def process_series_configuration(series_configuration, sub_competition):
         if sub_competition is None:
             raise DomainError("Sub Competition must be created before competition games can be processed.")
 
@@ -182,15 +185,14 @@ class CompetitionConfigurator:
         required_groups.add(series_configuration.loser_rank_from_configuration)
 
         for gc in required_groups:
-            CompetitionConfigurator.create_competition_group(gc, current_groups, sub_competition.competition)
+            CompetitionConfigurator.create_competition_group(gc, sub_competition.competition)
 
         method_map = {
             SeriesRules.GOALS_TYPE: CompetitionConfigurator.process_series_by_goals_configuration,
             SeriesRules.WINS_TYPE: CompetitionConfigurator.processes_series_by_wins_configuration
         }
 
-        new_series = method_map[series_configuration.series_rules.series_type](series_configuration, current_groups,
-                                                                               sub_competition)
+        new_series = method_map[series_configuration.series_rules.series_type](series_configuration, sub_competition)
         sub_competition.series.append(new_series)
 
     @staticmethod
@@ -207,10 +209,12 @@ class CompetitionConfigurator:
             return None
 
     @staticmethod
-    def processes_series_by_wins_configuration(series_configuration, current_groups, sub_competition):
+    def processes_series_by_wins_configuration(series_configuration, sub_competition):
         series_rules = series_configuration.series_rules
         if series_rules.series_type != SeriesRules.WINS_TYPE:
             raise DomainError(f"Series {series_configuration.name} does not have the correct rules.")
+
+        current_groups = sub_competition.competition.get_all_groups()
 
         series = SeriesByWins(sub_competition, series_configuration.name, series_configuration.series_round,
                               None, None, 0, 0, series_rules,
