@@ -6,6 +6,7 @@ from teams.domain.competition import TableRecord, Competition, CompetitionGroup
 from teams.domain.competition_configuration import CompetitionGroupConfiguration
 from teams.domain.sub_competition import TableSubCompetition
 from tests.teams.domain.competition import helpers
+from tests.teams.domain.competition.test_configurator import TestCompConfigurator
 
 
 class TestTableSubCompetition(TestCase):
@@ -26,7 +27,7 @@ class TestTableSubCompetition(TestCase):
         self.assertTrue(comp_records[0].team.oid in team_map)
 
     def test_sort_rankings(self):
-        competition = Competition("My Comp", 1, [], False, False, False, False)
+        competition = TestCompConfigurator.create_default_competition_for_testing("My Comp")
         table = TableSubCompetition("My Table", [], None, None, 1, False, False, False, False)
         competition.sub_competitions.append(table)
 

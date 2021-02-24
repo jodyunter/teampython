@@ -10,9 +10,10 @@ from teams.domain.series import SeriesByGoals, SeriesGame, SeriesByWins
 from teams.domain.series_rules import SeriesByGoalsRules, SeriesByWinsRules
 from teams.domain.sub_competition import PlayoffSubCompetition
 from tests.teams.domain.competition import helpers
+from tests.teams.domain.competition.test_configurator import TestCompConfigurator, BaseTeamTestCase
 
 
-class TestPlayoffSubCompetition(TestCase):
+class TestPlayoffSubCompetition(BaseTeamTestCase):
     SEED = 1234
 
     @staticmethod
@@ -30,7 +31,7 @@ class TestPlayoffSubCompetition(TestCase):
 
     @staticmethod
     def create_default_playoff(groups):
-        competition = Competition("My Comp", 1, [], False, False, False, False)
+        competition = TestPlayoffSubCompetition.create_default_competition_for_testing("My Comp")
         playoff = PlayoffSubCompetition("Playoff", [], competition, None, 1, 1, False, False, False, False)
         competition.sub_competitions.append(playoff)
 

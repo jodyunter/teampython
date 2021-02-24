@@ -8,12 +8,13 @@ from teams.domain.utility.utility_classes import IDHelper
 
 class Competition:
 
-    def __init__(self, name, year, sub_competitions, setup, started, finished, post_processed, oid=None):
+    def __init__(self, name, year, sub_competitions, teams, setup, started, finished, post_processed, oid=None):
         self.name = name
         self.year = year
         self.setup = setup
         self.started = started
         self.sub_competitions = sub_competitions
+        self.teams = teams
         self.finished = finished
         self.post_processed = post_processed
         self.oid = IDHelper.get_id(oid)

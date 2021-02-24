@@ -87,6 +87,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\tests\teams\domain\competition\test_comp_configurator_groups.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\tests\teams\domain\competition\test_competition_groups.py">
           <value>
             <Attribute>

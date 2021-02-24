@@ -22,7 +22,7 @@ def add_teams_to_group(teams, group):
         count += 1
 
 
-competition = Competition("My Comp", 25, None, True, True, False, False)
+competition = Competition("My Comp", 25, None, None, True, True, False, False)
 
 playoff = PlayoffSubCompetition("My Playoff", None, competition, 1, 1, True, True, False, False)
 competition.sub_competitions = [playoff]

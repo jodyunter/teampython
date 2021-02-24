@@ -16,7 +16,7 @@ def add_teams_to_group(group, teams_to_add):
         group.add_team_to_group(t)
 
 
-competition = Competition("My Comp", 5, [], False, False, False, False)
+competition = Competition("My Comp", 5, [], [], False, False, False, False)
 
 table = TableSubCompetition("Table", [], competition, 1, True, True, False, False)
 

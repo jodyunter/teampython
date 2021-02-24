@@ -15,7 +15,7 @@ class CompetitionConfigurator:
 
     @staticmethod
     def create_competition(competition_config, year):
-        competition = Competition(competition_config.name, year, [], False, False, False, False)
+        competition = Competition(competition_config.name, year, [], [], False, False, False, False)
 
         competition_config.sub_competitions.sort(key=lambda sc: sc.order)
 
@@ -116,7 +116,7 @@ class CompetitionConfigurator:
 
             sub_competition.groups.append(new_group)
 
-            current_groups.append(new_group)
+            #current_groups.append(new_group)
 
             return new_group
 

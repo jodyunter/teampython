@@ -9,6 +9,7 @@ from teams.domain.team import Team
 
 # implementation for testing basic and common methods
 from tests.teams.domain.competition import helpers
+from tests.teams.domain.competition.test_configurator import TestCompConfigurator
 
 
 class SeriesForTests(Series):
@@ -85,7 +86,7 @@ class TestSeriesByGoals(TestCase):
         home_team = Team("Team 1", 5, True)
         away_team = Team("Team 2", 5, True)
 
-        competition = Competition("My Comp", 1, None, True, True, False, False)
+        competition = TestCompConfigurator.create_default_competition_for_testing("My Comp")
         sub_competition = PlayoffSubCompetition("Playoff A", None, competition, None, 1, 1, True, True, False, False)
 
         home_competition_team = CompetitionTeam(competition, home_team)
@@ -283,7 +284,7 @@ class TestSeriesByWins(TestCase):
         home_team = Team("Team 1", 5, True)
         away_team = Team("Team 2", 5, True)
 
-        competition = Competition("My Comp", 1, None, True, True, False, False)
+        competition = TestCompConfigurator.create_default_competition_for_testing("My Comp")
         sub_competition = PlayoffSubCompetition("My Playoff", None, competition, None, 1, 1, True, False, False, False)
 
         home_competition_team = CompetitionTeam(competition, home_team)

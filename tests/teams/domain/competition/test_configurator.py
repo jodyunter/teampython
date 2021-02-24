@@ -14,8 +14,22 @@ from teams.domain.sub_competition import TableSubCompetition, PlayoffSubCompetit
 from teams.domain.team import Team
 
 
-class TestCompConfigurator(TestCase):
+class BaseTeamTestCase(TestCase):
 
+    @staticmethod
+    def create_default_competition_for_testing(name, year=1, sub_comp=None, teams=None):
+        if sub_comp is None:
+            sub_comp = []
+
+        if teams is None:
+            teams = []
+
+        new_comp = Competition(name, year, sub_comp, teams, False, False, False, False)
+        return new_comp
+
+
+class TestCompConfigurator(BaseTeamTestCase):
+    
     def test_should_get_group_too_many(self):
         with pytest.raises(DomainError, match="My Group has multiple 2 entries."):
             sub_comp_config = SubCompetitionConfiguration("Test", None, None, None, None, None, None, None, None)
@@ -53,7 +67,7 @@ class TestCompConfigurator(TestCase):
         self.assertEqual("My group 3", result.name)
 
 
-class TestCompConfigurationCompetition(TestCase):
+class TestCompConfigurationCompetition(BaseTeamTestCase):
 
     def test_should_create_competition_no_sub_comps(self):
         competition_config = CompetitionConfiguration("Comp Name", [], 5, 5, None)
@@ -73,7 +87,7 @@ class TestCompConfigurationCompetition(TestCase):
         pass
 
 
-class TestCompConfiguratorSubCompetition(TestCase):
+class TestCompConfiguratorSubCompetition(BaseTeamTestCase):
 
     def test_create_sub_comp_no_comp(self):
         with pytest.raises(DomainError, match="Can't setup sub competition if competition is not setup."):
@@ -83,14 +97,14 @@ class TestCompConfiguratorSubCompetition(TestCase):
     def test_create_sub_com_sub_comp_already_created(self):
         with pytest.raises(DomainError, match="Sub competition My Sub Comp is already setup."):
             sub_comp = SubCompetitionConfiguration("My Sub Comp", None, None, None, 1, None, 1, None)
-            competition = Competition("My Comp", 5, [sub_comp], False, False, False, False)
+            competition = self.create_default_competition_for_testing("My Comp", 5, [sub_comp])
 
             CompetitionConfigurator.create_sub_competition(sub_comp, competition)
 
     def test_create_playoff_sub_comp(self):
         sub_competition_config = PlayoffSubCompetitionConfiguration("Playoff Comp", None, [], [], [], 3, 1, None)
 
-        competition = Competition("My Comp", 5, [], False, False, False, False)
+        competition = self.create_default_competition_for_testing("My Comp", 5)
 
         sub_comp = CompetitionConfigurator.create_sub_competition(sub_competition_config, competition)
 
@@ -111,7 +125,7 @@ class TestCompConfiguratorSubCompetition(TestCase):
         sub_competition_config = SubCompetitionConfiguration("Table Sub", None, None, None, 3,
                                                              SubCompetitionConfiguration.TABLE_TYPE, 1, None)
 
-        competition = Competition("My Comp", 5, [], False, False, False, False)
+        competition = self.create_default_competition_for_testing("My Comp", 5)
 
         sub_comp = CompetitionConfigurator.create_sub_competition(sub_competition_config, competition)
 
@@ -127,12 +141,12 @@ class TestCompConfiguratorSubCompetition(TestCase):
         self.assertEqual(sub_competition_config.name, competition.sub_competitions[0].name)
 
 
-class TestCompConfiguratorPlayoffSubComp(TestCase):
+class TestCompConfiguratorPlayoffSubComp(BaseTeamTestCase):
 
     def test_create_playoff_sub_comp(self):
         sub_competition_config = PlayoffSubCompetitionConfiguration("Playoff Sub Sub", None, [], [], [], 3, 1, None)
 
-        competition = Competition("My Comp", 5, [], False, False, False, False)
+        competition = self.create_default_competition_for_testing("My Comp", 5)
 
         sub_comp = CompetitionConfigurator.create_playoff_sub_competition(sub_competition_config, competition)
 
@@ -147,12 +161,12 @@ class TestCompConfiguratorPlayoffSubComp(TestCase):
         self.assertEqual(1, sub_comp.current_round)
 
 
-class TestCompConfiguratorTableSubComp(TestCase):
+class TestCompConfiguratorTableSubComp(BaseTeamTestCase):
 
     def test_create_table_sub_com(self):
         sub_competition_config = TableSubCompetitionConfiguration("Table Sub", None, None, None, 3, 1, None)
 
-        competition = Competition("My Comp", 5, [], False, False, False, False)
+        competition = self.create_default_competition_for_testing("My Comp", 5)
 
         sub_comp = CompetitionConfigurator.create_table_sub_competition(sub_competition_config, competition)
 
@@ -166,11 +180,11 @@ class TestCompConfiguratorTableSubComp(TestCase):
         self.assertFalse(sub_comp.post_processed)
 
 
-class TestCompConfiguratorGroups(TestCase):
+class TestCompConfiguratorGroups(BaseTeamTestCase):
 
     def test_should_not_create_group_competition_not_there(self):
         with pytest.raises(DomainError, match="Competition has to exist before the groups can be setup."):
-            competition = Competition("My Comp", 1, None, None, None, None, None)
+            competition = self.create_default_competition_for_testing("My Comp")
             competition.sub_competitions = [
                 TableSubCompetition("My Sub Comp", None, competition, [], None, None, None, None, None)]
             sub_comp_config = SubCompetitionConfiguration("My Sub Comp", None, [], None, 1,
@@ -201,7 +215,7 @@ class TestCompConfiguratorGroups(TestCase):
 
             current_groups = []
 
-            competition = Competition("My Comp", 1, [], False, False, False, False)
+            competition = self.create_default_competition_for_testing("My Comp")
 
             group = CompetitionConfigurator.create_competition_group(comp_group_config, competition)
 
@@ -213,7 +227,7 @@ class TestCompConfiguratorGroups(TestCase):
                                                           CompetitionGroupConfiguration.RANKING_TYPE,
                                                           1, None)
 
-        competition = Competition("My Comp", 1, [], False, False, False, False)
+        competition = self.create_default_competition_for_testing("My Comp")
         sub_comp = TableSubCompetition("My Sub Comp", [], competition, [], 1, False, False, False, False)
         competition.sub_competitions.append(sub_comp)
 
@@ -237,7 +251,7 @@ class TestCompConfiguratorGroups(TestCase):
                                                           1, None)
         # current_groups = []
 
-        competition = Competition("My Comp", 1, [], False, False, False, False)
+        competition = self.create_default_competition_for_testing("My Comp")
         sub_comp = TableSubCompetition("My Sub Comp", [], competition, [], 1, False, False, False, False)
         competition.sub_competitions.append(sub_comp)
 
@@ -265,7 +279,7 @@ class TestCompConfiguratorGroups(TestCase):
                                                           CompetitionGroupConfiguration.RANKING_TYPE,
                                                           1, None)
 
-        competition = Competition("My Comp", 1, [], False, False, False, False)
+        competition = self.create_default_competition_for_testing("My Comp")
         sub_comp = TableSubCompetition("My Sub Comp", [], competition, [], 1, False, False, False, False)
         competition.sub_competitions.append(sub_comp)
 
@@ -299,7 +313,7 @@ class TestCompConfiguratorGroups(TestCase):
                                                           CompetitionGroupConfiguration.RANKING_TYPE,
                                                           1, None)
 
-        competition = Competition("My Comp", 1, [], False, False, False, False)
+        competition = self.create_default_competition_for_testing("My Comp", 3)
         sub_comp = TableSubCompetition("My Sub Comp", [], competition, [], 1, False, False, False, False)
         competition.sub_competitions.append(sub_comp)
 
@@ -338,7 +352,7 @@ class TestCompConfiguratorGroups(TestCase):
                                                           CompetitionGroupConfiguration.RANKING_TYPE,
                                                           1, None)
 
-        competition = Competition("My Comp", 1, [], False, False, False, False)
+        competition = self.create_default_competition_for_testing("My Comp")
         sub_comp = TableSubCompetition("My Sub Comp", [], competition, [], 1, False, False, False, False)
         competition.sub_competitions.append(sub_comp)
 
@@ -367,7 +381,7 @@ class TestCompConfiguratorGroups(TestCase):
                                                           CompetitionGroupConfiguration.RANKING_TYPE,
                                                           1, None)
 
-        competition = Competition("My Comp", 1, [], False, False, False, False)
+        competition = self.create_default_competition_for_testing("My Comp")
         sub_comp = TableSubCompetition("My Sub Comp", [], competition, [], 1, False, False, False, False)
         competition.sub_competitions.append(sub_comp)
         parent_parent = CompetitionConfigurator.create_competition_group(comp_parent_group_config2, competition)
@@ -382,7 +396,7 @@ class TestCompConfiguratorGroups(TestCase):
         self.assertEqual(1, len([g for g in competition.get_all_groups() if g.oid == parent_parent.oid]))
 
 
-class TestCompConfiguratorTeams(TestCase):
+class TestCompConfiguratorTeams(BaseTeamTestCase):
 
     def test_should_fail_competition_no_created(self):
         with pytest.raises(DomainError, match="Competition has to exist before the teams and rankings can be setup."):
@@ -390,12 +404,12 @@ class TestCompConfiguratorTeams(TestCase):
 
     def test_should_fail_no_team_configuration(self):
         with pytest.raises(DomainError, match="No team configuration given."):
-            competition = Competition("My Comp", 1, [], False, False, False, False)
+            competition = self.create_default_competition_for_testing("My Comp")
             CompetitionConfigurator.process_competition_team_configuration(None, [], competition)
 
     def test_should_fail_group_not_created(self):
         with pytest.raises(DomainError, match="Group Team Group 1 has not been created yet."):
-            competition = Competition("My Comp", 1, [], False, False, False, False)
+            competition = self.create_default_competition_for_testing("My Comp")
             sub_comp_config = SubCompetitionConfiguration("Test", None, None, None, None, None, None, None, None)
             comp_group_config = CompetitionGroupConfiguration("Team Group 1", sub_comp_config, None, 1,
                                                               CompetitionGroupConfiguration.RANKING_TYPE, 1, None)
@@ -406,7 +420,7 @@ class TestCompConfiguratorTeams(TestCase):
 
     def test_should_fail_too_many_groups(self):
         with pytest.raises(DomainError, match="Group Team Group 1 has multiple groups 2."):
-            competition = Competition("My Comp", 1, [], False, False, False, False)
+            competition = self.create_default_competition_for_testing("My Comp")
             sub_comp = TableSubCompetition("My Sub Comp", None, competition, [], 1, False, False, False, False)
             competition.sub_competitions.append(sub_comp)
             comp_group_config = CompetitionGroupConfiguration("Team Group 1", sub_comp, None, 1,
@@ -421,7 +435,7 @@ class TestCompConfiguratorTeams(TestCase):
 
     def test_should_fail_too_many_teams(self):
         with pytest.raises(DomainError, match=r"Team My Team has too many 2 teams created."):
-            competition = Competition("My Comp", 1, [], False, False, False, False)
+            competition = self.create_default_competition_for_testing("My Comp")
             sub_comp = TableSubCompetition("My Sub Comp", None, competition, [], 1, False, False, False, False)
             competition.sub_competitions.append(sub_comp)
             comp_group_config = CompetitionGroupConfiguration("Team Group 1", sub_comp, None, 1,
@@ -436,7 +450,7 @@ class TestCompConfiguratorTeams(TestCase):
                                                                            current_teams, competition)
 
     def test_should_add_team_team_does_not_exist(self):
-        competition = Competition("My Comp", 1, [], False, False, False, False)
+        competition = self.create_default_competition_for_testing("My Comp")
         sub_comp = TableSubCompetition("My Sub Comp", None, competition, [], 1, False, False, False, False)
         competition.sub_competitions.append(sub_comp)
         comp_group_config = CompetitionGroupConfiguration("Team Group 1", sub_comp, None, 1,
@@ -454,7 +468,7 @@ class TestCompConfiguratorTeams(TestCase):
         self.assertEqual(team.oid, comp_group.rankings[0].team.parent_team.oid)
 
     def test_should_add_team_team_exists(self):
-        competition = Competition("My Comp", 1, [], False, False, False, False)
+        competition = self.create_default_competition_for_testing("My Comp")
         sub_comp = TableSubCompetition("My Sub Comp", None, competition, [], 1, False, False, False, False)
         competition.sub_competitions.append(sub_comp)
         comp_group_config = CompetitionGroupConfiguration("Team Group 1", sub_comp, None, 1,
@@ -473,7 +487,7 @@ class TestCompConfiguratorTeams(TestCase):
         self.assertEqual(comp_team.oid, comp_group.rankings[0].team.oid)
 
     def test_should_add_team_multiple_parents(self):
-        competition = Competition("My Comp", 1, [], False, False, False, False)
+        competition = self.create_default_competition_for_testing("My Comp", 3)
         sub_comp = TableSubCompetition("My Sub Comp", None, competition, [], 1, False, False, False, False)
         competition.sub_competitions.append(sub_comp)
         parent_comp_group_config = CompetitionGroupConfiguration("Parent Group 1", sub_comp, None, 1,
@@ -497,7 +511,7 @@ class TestCompConfiguratorTeams(TestCase):
         self.assertEqual(comp_team.oid, comp_group.parent_group.rankings[0].team.oid)
 
     def test_should_add_multiple_teams(self):
-        competition = Competition("My Comp", 1, [], False, False, False, False)
+        competition = self.create_default_competition_for_testing("My Comp")
         sub_comp = TableSubCompetition("My Sub Comp", None, competition, [], 1, False, False, False, False)
         competition.sub_competitions.append(sub_comp)
         parent_comp_group_config = CompetitionGroupConfiguration("Parent Group 1", sub_comp, None, 1,
@@ -526,7 +540,7 @@ class TestCompConfiguratorTeams(TestCase):
         self.assertEqual(current_teams[1].oid, comp_group.parent_group.rankings[1].team.oid)
 
 
-class TestCompConfiguratorTableGames(TestCase):
+class TestCompConfiguratorTableGames(BaseTeamTestCase):
 
     @mark.notwritten
     def test_should_process_table_game(self):
@@ -534,7 +548,7 @@ class TestCompConfiguratorTableGames(TestCase):
         pass
 
 
-class TestCompConfiguratorSeriesGames(TestCase):
+class TestCompConfiguratorSeriesGames(BaseTeamTestCase):
 
     def test_should_process_comp_series_no_sub_comp(self):
         with pytest.raises(DomainError,
@@ -613,7 +627,7 @@ class TestCompConfiguratorSeriesGames(TestCase):
 
     # TODO: should handle a None comp group configuration
     def test_should_process_by_wins_method(self):
-        competition = Competition("Test", 1, [], False, False, False, False)
+        competition = self.create_default_competition_for_testing("Test", 1)
         sub_comp = PlayoffSubCompetition("Test", [], competition, [], 1, 1, False, False, False, False)
         competition.sub_competitions.append(sub_comp)
 
@@ -668,7 +682,7 @@ class TestCompConfiguratorSeriesGames(TestCase):
                                             group3, group4,
                                             1, None)
 
-        competition = Competition("My Comp", 1, [], False, False, False, False)
+        competition = self.create_default_competition_for_testing("My Comp", 1)
         playoff_comp = PlayoffSubCompetition("Playoff Comp", [], competition, [], None, None, None, None, None, None)
         competition.sub_competitions.append(playoff_comp)
         CompetitionConfigurator.process_series_configuration(series_config, playoff_comp)
@@ -679,7 +693,7 @@ class TestCompConfiguratorSeriesGames(TestCase):
         self.assertEqual(3, len(competition.get_all_groups()))
 
     def test_should_process_series_game_not_playoff_sub_comp(self):
-        competition = Competition("MY Comp", 1, [], False, False, False, False)
+        competition = self.create_default_competition_for_testing("My Comp", 1)
         with pytest.raises(DomainError, match="Sub Competition Table Comp is not a playoff sub competition."):
             CompetitionConfigurator.process_series_configuration(
                 None,
