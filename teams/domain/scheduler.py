@@ -191,7 +191,7 @@ class Scheduler:
                 dictionary_of_days[day] = day_of_games_to_add
                 added = True
             elif not Scheduler.does_any_team_play_in_other_list(day_of_games_to_add, dictionary_of_days[day]):
-                dictionary_of_days[day].append(day_of_games_to_add)
+                dictionary_of_days[day].extend(day_of_games_to_add)
                 added = True
 
             #  make sure to set the day on the games appropriately

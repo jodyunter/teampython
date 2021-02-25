@@ -62,10 +62,25 @@ scheduler = Scheduler()
 games = scheduler.schedule_games(competition.teams, season_game_rules, 1, 1, True, table.create_game)
 days = Scheduler.organize_games_into_days(games)
 
-new_games = scheduler.schedule_games(competition.teams, season_game_rules, 1, 1, True, table.create_game)
-new_days = Scheduler.organize_games_into_days(new_games)
-for day in new_days.keys():
-    Scheduler.add_day_to_scheduler(new_days[day], days, 1)
+for cg in [competition.get_group_by_name(western_config.name),
+           competition.get_group_by_name(eastern_config.name)]:
+    cg_teams = [r.team for r in cg.rankings]
+    for i in range(2):
+        new_games = scheduler.schedule_games(cg_teams, season_game_rules, 1, 1, True, table.create_game)
+        new_days = Scheduler.organize_games_into_days(new_games)
+        for day in new_days.keys():
+            Scheduler.add_day_to_scheduler(new_days[day], days, 1)
+
+#for cg in [competition.get_group_by_name(pacific_config.name),
+#           competition.get_group_by_name(central_config.name),
+#           competition.get_group_by_name(atlantic_config.name),
+#           competition.get_group_by_name(north_config.name)]:
+#    cg_teams = [r.team for r in cg.rankings]
+#    new_games = scheduler.schedule_games(cg_teams, season_game_rules, 1, 1, True, table.create_game)
+#    new_days = Scheduler.organize_games_into_days(new_games)
+#    for day in new_days.keys():
+#        Scheduler.add_day_to_scheduler(new_days[day], days, 1)
+
 
 for d in days.keys():
     day = days[d]
