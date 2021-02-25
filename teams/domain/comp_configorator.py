@@ -1,5 +1,5 @@
 #  this class may become a service in the long run
-from teams.domain.competition import CompetitionGroup, CompetitionTeam, Competition
+from teams.domain.competition import CompetitionGroup, CompetitionTeam, Competition, TableRecord
 from teams.domain.competition_configuration import SubCompetitionConfiguration
 from teams.domain.errors import DomainError
 from teams.domain.series import SeriesByWins, SeriesByGoals
@@ -21,6 +21,12 @@ class CompetitionConfigurator:
 
         for sub in competition_config.sub_competitions:
             CompetitionConfigurator.create_sub_competition(sub, competition)
+
+        # create teams
+        for team_config in competition_config.teams:
+            CompetitionConfigurator.process_competition_team_configuration(team_config, competition)
+
+        # setup initial games
 
         return competition
 
@@ -70,6 +76,8 @@ class CompetitionConfigurator:
 
         competition.sub_competitions.append(sub_comp)
 
+        CompetitionConfigurator.create_sub_competition_groups(sub_competition_config, competition)
+
         return sub_comp
 
     @staticmethod
@@ -116,12 +124,10 @@ class CompetitionConfigurator:
 
             sub_competition.groups.append(new_group)
 
-            #current_groups.append(new_group)
-
             return new_group
 
     @staticmethod
-    def process_competition_team_configuration(team_configuration, current_teams, competition):
+    def process_competition_team_configuration(team_configuration, competition):
         # check if competition exists
         if competition is None:
             raise DomainError("Competition has to exist before the teams and rankings can be setup.")
@@ -142,10 +148,15 @@ class CompetitionConfigurator:
             group = groups_with_name[0]
 
         # check if team exists
-        team_created = [c for c in current_teams if c.parent_team.oid == team_configuration.team.oid]
+        team_created = [c for c in competition.teams if c.parent_team.oid == team_configuration.team.oid]
         if team_created is None or len(team_created) == 0:
             team = CompetitionTeam(competition, team_configuration.team)
-            current_teams.append(team)
+            if team_configuration.group_configuration.sub_competition_configuration.sub_competition_type == SubCompetitionConfiguration.TABLE_TYPE:
+                table_comp = [sc for sc in competition.sub_competitions if sc.name == team_configuration.group_configuration.sub_competition_configuration.name][0]
+                table_comp.records.append(
+                    TableRecord(table_comp, -1, team, competition.year, 0, 0, 0, 0, 0, team.skill)
+                )
+            competition.teams.append(team)
         elif len(team_created) > 1:
             raise DomainError(f'Team {team_configuration.team.name} has too many {len(team_created)} teams created.')
         else:

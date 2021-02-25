@@ -87,13 +87,19 @@ class CompetitionGroup:
         return [r.rank for r in self.rankings if r.team.oid == team.oid][0]
 
     def get_team_by_rank(self, rank):
-        return [t for t in self.rankings if t.rank == rank][0]
+        return [t for t in self.rankings if t.rank == rank][0].team
+
+    def get_ranking_for_team(self, team):
+        return [r for r in self.rankings if r.team.oid == team.oid][0]
 
     # assume 1 is the first
     def get_team_by_order(self, order, reverse=False):
         self.rankings.sort(key=lambda team_rank: team_rank.rank)
 
         return self.rankings[order - 1]
+
+    def set_rank(self, team, rank):
+        self.get_ranking_for_team(team).rank = rank
 
 
 class RankingGroup(CompetitionGroup):

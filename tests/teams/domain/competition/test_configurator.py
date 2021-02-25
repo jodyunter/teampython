@@ -70,7 +70,7 @@ class TestCompConfigurator(BaseTeamTestCase):
 class TestCompConfigurationCompetition(BaseTeamTestCase):
 
     def test_should_create_competition_no_sub_comps(self):
-        competition_config = CompetitionConfiguration("Comp Name", [], 5, 5, None)
+        competition_config = CompetitionConfiguration("Comp Name", [], [], 5, 5, None)
         competition = CompetitionConfigurator.create_competition(competition_config, 5)
 
         self.assertEqual("Comp Name", competition.name)
@@ -122,7 +122,7 @@ class TestCompConfiguratorSubCompetition(BaseTeamTestCase):
         self.assertIsNotNone(sub_comp.competition)
 
     def test_create_table_sub_comp(self):
-        sub_competition_config = SubCompetitionConfiguration("Table Sub", None, None, None, 3,
+        sub_competition_config = SubCompetitionConfiguration("Table Sub", None, [], [], 3,
                                                              SubCompetitionConfiguration.TABLE_TYPE, 1, None)
 
         competition = self.create_default_competition_for_testing("My Comp", 5)
@@ -164,7 +164,7 @@ class TestCompConfiguratorPlayoffSubComp(BaseTeamTestCase):
 class TestCompConfiguratorTableSubComp(BaseTeamTestCase):
 
     def test_create_table_sub_com(self):
-        sub_competition_config = TableSubCompetitionConfiguration("Table Sub", None, None, None, 3, 1, None)
+        sub_competition_config = TableSubCompetitionConfiguration("Table Sub", None, [], [], 3, 1, None)
 
         competition = self.create_default_competition_for_testing("My Comp", 5)
 
@@ -400,12 +400,12 @@ class TestCompConfiguratorTeams(BaseTeamTestCase):
 
     def test_should_fail_competition_no_created(self):
         with pytest.raises(DomainError, match="Competition has to exist before the teams and rankings can be setup."):
-            CompetitionConfigurator.process_competition_team_configuration(None, None, None)
+            CompetitionConfigurator.process_competition_team_configuration(None, None)
 
     def test_should_fail_no_team_configuration(self):
         with pytest.raises(DomainError, match="No team configuration given."):
             competition = self.create_default_competition_for_testing("My Comp")
-            CompetitionConfigurator.process_competition_team_configuration(None, [], competition)
+            CompetitionConfigurator.process_competition_team_configuration(None, competition)
 
     def test_should_fail_group_not_created(self):
         with pytest.raises(DomainError, match="Group Team Group 1 has not been created yet."):
@@ -415,8 +415,7 @@ class TestCompConfiguratorTeams(BaseTeamTestCase):
                                                               CompetitionGroupConfiguration.RANKING_TYPE, 1, None)
             team = Team("My Team", 5, True)
             competition_team_configuration = CompetitionTeamConfiguration(team, None, comp_group_config, 1, None)
-            CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration, [],
-                                                                           competition)
+            CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration, competition)
 
     def test_should_fail_too_many_groups(self):
         with pytest.raises(DomainError, match="Group Team Group 1 has multiple groups 2."):
@@ -430,8 +429,7 @@ class TestCompConfiguratorTeams(BaseTeamTestCase):
             sub_comp.groups.append(comp_group)
             team = Team("My Team", 5, True)
             competition_team_configuration = CompetitionTeamConfiguration(team, None, comp_group_config, 1, None)
-            CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration, [],
-                                                                           competition)
+            CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration, competition)
 
     def test_should_fail_too_many_teams(self):
         with pytest.raises(DomainError, match=r"Team My Team has too many 2 teams created."):
@@ -445,9 +443,8 @@ class TestCompConfiguratorTeams(BaseTeamTestCase):
             team = Team("My Team", 5, True)
             competition_team_configuration = CompetitionTeamConfiguration(team, None, comp_group_config, 1, None)
             comp_team = CompetitionTeam(competition, team)
-            current_teams = [comp_team, comp_team]
-            CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration,
-                                                                           current_teams, competition)
+            competition.teams = [comp_team, comp_team]
+            CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration, competition)
 
     def test_should_add_team_team_does_not_exist(self):
         competition = self.create_default_competition_for_testing("My Comp")
@@ -459,11 +456,9 @@ class TestCompConfiguratorTeams(BaseTeamTestCase):
         comp_group = CompetitionConfigurator.create_competition_group(comp_group_config, competition)
         team = Team("My Team", 5, True)
         competition_team_configuration = CompetitionTeamConfiguration(team, sub_comp, comp_group_config, 1, None)
-        current_teams = []
-        CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration,
-                                                                       current_teams, competition)
+        CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration, competition)
 
-        self.assertEqual(1, len(current_teams))
+        self.assertEqual(1, len(competition.teams))
         self.assertEqual(1, len(comp_group.rankings))
         self.assertEqual(team.oid, comp_group.rankings[0].team.parent_team.oid)
 
@@ -478,11 +473,10 @@ class TestCompConfiguratorTeams(BaseTeamTestCase):
         team = Team("My Team", 5, True)
         competition_team_configuration = CompetitionTeamConfiguration(team, None, comp_group_config, 1, None)
         comp_team = CompetitionTeam(competition, team)
-        current_teams = [comp_team]
-        CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration,
-                                                                       current_teams, competition)
+        competition.teams = [comp_team]
+        CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration, competition)
 
-        self.assertEqual(1, len(current_teams))
+        self.assertEqual(1, len(competition.teams))
         self.assertEqual(1, len(comp_group.rankings))
         self.assertEqual(comp_team.oid, comp_group.rankings[0].team.oid)
 
@@ -500,11 +494,10 @@ class TestCompConfiguratorTeams(BaseTeamTestCase):
         team = Team("My Team", 5, True)
         competition_team_configuration = CompetitionTeamConfiguration(team, None, comp_group_config, 1, None)
         comp_team = CompetitionTeam(competition, team)
-        current_teams = [comp_team]
-        CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration,
-                                                                       current_teams, competition)
+        competition.teams = [comp_team]
+        CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration, competition)
 
-        self.assertEqual(1, len(current_teams))
+        self.assertEqual(1, len(competition.teams))
         self.assertEqual(1, len(comp_group.rankings))
         self.assertEqual(1, len(comp_group.parent_group.rankings))
         self.assertEqual(comp_team.oid, comp_group.rankings[0].team.oid)
@@ -525,19 +518,17 @@ class TestCompConfiguratorTeams(BaseTeamTestCase):
         competition_team_configuration = CompetitionTeamConfiguration(team, None, comp_group_config, 1, None)
         competition_team_configuration2 = CompetitionTeamConfiguration(team2, None, comp_group_config, 1, None)
         comp_team = CompetitionTeam(competition, team)
-        current_teams = [comp_team]
-        CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration,
-                                                                       current_teams, competition)
-        CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration2,
-                                                                       current_teams, competition)
+        competition.teams = [comp_team]
+        CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration, competition)
+        CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration2, competition)
 
-        self.assertEqual(2, len(current_teams))
+        self.assertEqual(2, len(competition.teams))
         self.assertEqual(2, len(comp_group.rankings))
         self.assertEqual(2, len(comp_group.parent_group.rankings))
         self.assertEqual(comp_team.oid, comp_group.rankings[0].team.oid)
         self.assertEqual(comp_team.oid, comp_group.parent_group.rankings[0].team.oid)
-        self.assertEqual(current_teams[1].oid, comp_group.rankings[1].team.oid)
-        self.assertEqual(current_teams[1].oid, comp_group.parent_group.rankings[1].team.oid)
+        self.assertEqual(competition.teams[1].oid, comp_group.rankings[1].team.oid)
+        self.assertEqual(competition.teams[1].oid, comp_group.parent_group.rankings[1].team.oid)
 
 
 class TestCompConfiguratorTableGames(BaseTeamTestCase):

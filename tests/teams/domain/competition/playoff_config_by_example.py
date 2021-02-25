@@ -4,7 +4,7 @@ from teams.ConsoleUI.views.playoff_views import SeriesView
 from teams.domain.comp_configorator import CompetitionConfigurator
 from teams.domain.competition import CompetitionTeam
 from teams.domain.competition_configuration import CompetitionConfiguration, RankingGroupConfiguration, \
-    SubCompetitionConfiguration, SeriesConfiguration, PlayoffSubCompetitionConfiguration
+    SubCompetitionConfiguration, SeriesConfiguration, PlayoffSubCompetitionConfiguration, CompetitionTeamConfiguration
 from teams.domain.game import GameRules
 from teams.domain.scheduler import Scheduler
 from teams.domain.series import SeriesByGoals, SeriesByWins
@@ -13,60 +13,20 @@ from teams.domain.team import Team
 from teams.services.game_service import GameService
 from teams.services.view_models.playoff_view_models import SeriesViewModel
 from teams.services.view_models.team_view_models import TeamViewModel
+from tests.teams.domain.competition.testing_sample_data import western_teams, eastern_teams, pacific_teams, teams, \
+    central_teams, atlantic_teams, north_teams
 
-
-def add_teams_to_group(team_list, competition_teams, group, ranks):
-    teams_to_add = []
-    for t in team_list:
-        possible_teams = [ft for ft in competition_teams if ft.name == t.name]
-        if possible_teams is not None and len(possible_teams) == 1:
-            teams_to_add.append(possible_teams[0])
-
-    for t in teams_to_add:
-        group.add_team_to_group(t, ranks[t.name])
-
-
-toronto = Team("Toronto", 5, True)
-montreal = Team("Montreal", 5, True)
-ottawa = Team("Ottawa", 5, True)
-quebec_city = Team("Quebec City", 5, True)
-calgary = Team("Calgary", 5, True)
-edmonton = Team("Edmonton", 5, True)
-vancouver = Team("Vancouver", 5, True)
-winnipeg = Team("Winnipeg", 5, True)
-victoria = Team("Victoria", 5, True)
-saskatoon = Team("Saskatoon", 5, True)
-hamilton = Team("Hamilton", 5, True)
-halifax = Team("Halifax", 5, True)
-boston = Team("Boston", 5, True)
-new_york = Team("New York", 5, True)
-detroit = Team("Detroit", 5, True)
-chicago = Team("Chicago", 5, True)
-seattle = Team("Seattle", 5, True)
-minnesota = Team("Minnesota", 5, True)
-colorado = Team("Colorado", 5, True)
-san_jose = Team("San Jose", 5, True)
-los_angelas = Team("Los Angelas", 5, True)
-pittsburgh = Team("Pittsburgh", 5, True)
-
-teams = [toronto, montreal, ottawa, quebec_city, calgary, edmonton, vancouver, winnipeg, victoria, saskatoon,
-         hamilton, halifax, boston, new_york, detroit, chicago, seattle, minnesota, colorado, san_jose, los_angelas, pittsburgh]
-western_teams = [calgary, edmonton, vancouver, winnipeg, victoria, saskatoon, seattle, minnesota, colorado, san_jose, los_angelas]
-eastern_teams = [toronto, montreal, ottawa, quebec_city, hamilton, halifax, boston, new_york, detroit, chicago, pittsburgh]
-pacific_teams = [vancouver, victoria, seattle, san_jose, colorado, los_angelas]
-central_teams = [edmonton, calgary, winnipeg, saskatoon, minnesota]
-atlantic_teams = [montreal, quebec_city, halifax, boston, new_york, pittsburgh]
-north_teams = [toronto, ottawa, hamilton, detroit, chicago]
 
 playoff_game_rules = GameRules("Playoff Rules", False)
 series_rules = SeriesByWinsRules("Best of 7", 4, playoff_game_rules, [0, 0, 1, 1, 0, 1, 0])
 series_rules_3 = SeriesByWinsRules("Best of 3", 2, playoff_game_rules, [0, 0, 1])
 
-competition_config = CompetitionConfiguration("Playoff Test", [], 1, 1, None)
+competition_config = CompetitionConfiguration("Playoff Test", [], [], 1, 1, None)
 
-playoff_config = PlayoffSubCompetitionConfiguration("Playoff", competition_config, [], [], 1, SubCompetitionConfiguration.PLAYOFF_TYPE, 1, None)
+playoff_config = PlayoffSubCompetitionConfiguration("Playoff", competition_config, [], [], [], 1, 1, None)
 competition_config.sub_competitions.append(playoff_config)
 
+team_configs = []
 # seeding group
 league_config = RankingGroupConfiguration("League", playoff_config, None, 1, 1, None)
 western_config = RankingGroupConfiguration("Western", playoff_config, None, 1, 1, None)
@@ -75,6 +35,22 @@ pacific_config = RankingGroupConfiguration("Pacific", playoff_config, None, 1, 1
 central_config = RankingGroupConfiguration("Central", playoff_config, None, 1, 1, None)
 atlantic_config = RankingGroupConfiguration("Atlantic", playoff_config, None, 1, 1, None)
 north_config = RankingGroupConfiguration("North", playoff_config, None, 1, 1, None)
+for t in teams:
+    team_configs.append(CompetitionTeamConfiguration(t, competition_config, league_config, 1, None))
+for t in western_teams:
+    team_configs.append(CompetitionTeamConfiguration(t, competition_config, western_config, 1, None))
+for t in eastern_teams:
+    team_configs.append(CompetitionTeamConfiguration(t, competition_config, eastern_config, 1, None))
+for t in pacific_teams:
+    team_configs.append(CompetitionTeamConfiguration(t, competition_config, pacific_config, 1, None))
+for t in central_teams:
+    team_configs.append(CompetitionTeamConfiguration(t, competition_config, central_config, 1, None))
+for t in atlantic_teams:
+    team_configs.append(CompetitionTeamConfiguration(t, competition_config, atlantic_config, 1, None))
+for t in north_teams:
+    team_configs.append(CompetitionTeamConfiguration(t, competition_config, north_config, 1, None))
+
+competition_config.teams = team_configs
 
 # playoff groups
 west_q1_winners = RankingGroupConfiguration("West Q1 Winners", playoff_config, None, 1, 1, None)
@@ -134,22 +110,12 @@ north = competition.get_group_by_name(north_config.name)
 
 r = random
 
-comp_teams = [CompetitionTeam(competition, t) for t in teams]
-
-r.shuffle(teams)
+r.shuffle(competition.teams)
 ranks = {}
 count = 1
 for t in teams:
     ranks[t.name] = count
     count += 1
-
-add_teams_to_group(teams, comp_teams, league, ranks)
-add_teams_to_group(western_teams, comp_teams, western, ranks)
-add_teams_to_group(eastern_teams, comp_teams, eastern, ranks)
-add_teams_to_group(central_teams, comp_teams, central, ranks)
-add_teams_to_group(pacific_teams, comp_teams, pacific, ranks)
-add_teams_to_group(north_teams, comp_teams, north, ranks)
-add_teams_to_group(atlantic_teams, comp_teams, atlantic, ranks)
 
 for league_rank in league.rankings:
     print(f'{league_rank.rank}. {league_rank.team.name}')

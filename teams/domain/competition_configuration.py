@@ -4,10 +4,11 @@ from teams.domain.utility.utility_classes import YearRestricted, IDHelper
 
 class CompetitionConfiguration(YearRestricted):
 
-    def __init__(self, name, sub_competition_configs, order, first_year, last_year, oid=None):
+    def __init__(self, name, sub_competition_configs, team_configs, order, first_year, last_year, oid=None):
         self.name = name
         self.order = order
         self.sub_competitions = sub_competition_configs
+        self.teams = team_configs
         self.oid = IDHelper.get_id(oid)
 
         YearRestricted.__init__(self, first_year, last_year)
@@ -44,7 +45,7 @@ class TableSubCompetitionConfiguration(SubCompetitionConfiguration):
                  first_year, last_year, oid=None):
 
         SubCompetitionConfiguration.__init__(self, name, competition_configuration, competition_group_configs, competition_team_configs, order,
-                                             SubCompetitionConfiguration.PLAYOFF_TYPE, first_year, last_year, oid)
+                                             SubCompetitionConfiguration.TABLE_TYPE, first_year, last_year, oid)
 
 
 class CompetitionGroupConfiguration(YearRestricted):
