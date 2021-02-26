@@ -70,8 +70,6 @@ class CompetitionGame(Game):
                       oid)
 
 
-# TODO: need to put the level in here!
-# TODO: need to not worry about type and create subclasses
 class CompetitionGroup:
 
     def __init__(self, name, parent_group, sub_competition, level, rankings, group_type, oid=None):

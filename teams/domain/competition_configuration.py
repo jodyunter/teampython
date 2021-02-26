@@ -48,6 +48,7 @@ class TableSubCompetitionConfiguration(SubCompetitionConfiguration):
                                              SubCompetitionConfiguration.TABLE_TYPE, first_year, last_year, oid)
 
 
+# todo: do we need regional groups if they are just the same thing?
 class CompetitionGroupConfiguration(YearRestricted):
     REGIONAL_TYPE = "Regional"
     RANKING_TYPE = "Ranking"

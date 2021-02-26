@@ -35,6 +35,13 @@ class SubCompetition(ABC):
     def get_groups_by_level(self, level):
         return [g for g in self.groups if g.level == level]
 
+    def get_group_by_name(self, name):
+        groups = [g for g in self.groups if g.name == name]
+        if groups is None or len(groups) == 0:
+            return []
+        else:
+            return groups[0]
+
 
 class TableSubCompetition(SubCompetition):
 
