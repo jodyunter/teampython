@@ -86,7 +86,7 @@ for d in days.keys():
     day = days[d]
     for g in day:
         g.play(r)
-        table.process_game(g)
+        competition.process_game(g)
     game_day_view_model = GameService.games_to_game_day_view(day)
     print(GameDayView.get_view(game_day_view_model))
 

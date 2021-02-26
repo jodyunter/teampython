@@ -205,6 +205,7 @@ class CompetitionConfigurator:
 
         new_series = method_map[series_configuration.series_rules.series_type](series_configuration, sub_competition)
         sub_competition.series.append(new_series)
+        new_series.sub_competition = sub_competition
 
     @staticmethod
     def get_group_from_list(group_config, group_list):

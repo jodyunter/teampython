@@ -136,7 +136,7 @@ while not playoff.is_complete():
         for g in days[current_day]:
             g.play(r)
             model = GameService.game_to_vm(g)
-            playoff.process_game(g)
+            competition.process_game(g)
             # print(GameView.get_basic_view(model))
         game_day_view_model = GameService.games_to_game_day_view(days[current_day])
         #print(GameDayView.get_view(game_day_view_model))

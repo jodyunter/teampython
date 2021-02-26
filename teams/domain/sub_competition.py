@@ -131,6 +131,9 @@ class PlayoffSubCompetition(SubCompetition):
             new_games.extend(series.get_new_games(game_status_map["Complete Games"][series.oid],
                                                   game_status_map["Incomplete Games"][series.oid]))
 
+        for g in new_games:
+            g.sub_competition = self
+
         return new_games
 
     def is_complete(self):

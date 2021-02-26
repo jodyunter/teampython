@@ -21,8 +21,7 @@ class Competition:
 
     @staticmethod
     def process_game(game):
-        sub_comp = game.sub_competition.process_game(game)
-        sub_comp.process_game(game)
+        game.sub_competition.process_game(game)
 
     def get_group_by_name(self, name):
         for s in self.sub_competitions:
