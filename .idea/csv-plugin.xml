@@ -66,6 +66,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\tests\teams\domain\competition\comp_table_playoff_example.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\tests\teams\domain\competition\playoff_by_example.py">
           <value>
             <Attribute>

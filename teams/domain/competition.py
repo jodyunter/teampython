@@ -39,6 +39,11 @@ class Competition:
 
         return current_groups
 
+    def get_sub_competition(self, name):
+        for s in self.sub_competitions:
+            if s.name == name:
+                return s
+
 
 class CompetitionTeam(Team):
 
