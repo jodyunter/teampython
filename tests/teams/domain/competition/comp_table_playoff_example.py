@@ -57,6 +57,7 @@ winnipeg = Team("Winnipeg", rand.randint(min_skill, max_skill), True)
 
 boston = Team("Boston", rand.randint(min_skill, max_skill), True)
 detroit = Team("Detroit", rand.randint(min_skill, max_skill), True)
+new_york = Team("New York", rand.randint(min_skill, max_skill), True)
 
 season_game_rules = GameRules("Season Rules", True)
 playoff_game_rules = GameRules("Playoff Rules", False)
@@ -75,10 +76,10 @@ eastern_config = RankingGroupConfiguration("Eastern", table_config, None, 2, 1, 
 canadian_config = RankingGroupConfiguration("Canadian", table_config, None, 30, 1, None)
 american_config = RankingGroupConfiguration("American", table_config, None, 2, 1, None)
 
-all_teams = [calgary, edmonton, toronto, montreal, ottawa, vancouver, quebec_city, winnipeg, boston, detroit]
+all_teams = [calgary, edmonton, toronto, montreal, ottawa, vancouver, quebec_city, winnipeg, boston, detroit, new_york]
 western_teams = [calgary, edmonton, vancouver, winnipeg]
 eastern_teams = [toronto, montreal, ottawa, quebec_city]
-american_teams = [boston, detroit]
+american_teams = [boston, detroit, new_york]
 canadian_teams = [calgary, edmonton, toronto, montreal, ottawa, vancouver, quebec_city, winnipeg]
 
 team_group_map = {
@@ -147,9 +148,9 @@ days = {}
 level_1_rounds = 1
 level_2_rounds = 5
 
-# create_games([table.get_group_by_name("Canadian")], level_1_rounds, season_game_rules, table.create_game, days)
+create_games([table.get_group_by_name("Canadian")], level_1_rounds, season_game_rules, table.create_game, days)
 create_games([table.get_group_by_name("American")], 10, season_game_rules, table.create_game, days)
-create_games(table.get_groups_by_level(1), level_1_rounds, season_game_rules, table.create_game, days)
+#create_games(table.get_groups_by_level(1), level_1_rounds, season_game_rules, table.create_game, days)
 create_games(table.get_groups_by_level(2), level_2_rounds, season_game_rules, table.create_game, days)
 
 for d in days.keys():
