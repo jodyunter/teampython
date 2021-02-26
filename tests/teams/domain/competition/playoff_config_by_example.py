@@ -57,37 +57,43 @@ west_q1_winners = RankingGroupConfiguration("West Q1 Winners", playoff_config, N
 east_q1_winners = RankingGroupConfiguration("East Q1 Winners", playoff_config, None, 1, 1, None)
 r1_winners = RankingGroupConfiguration("R1 Winners", playoff_config, None, 1, 1, None)
 west_r1_winners = RankingGroupConfiguration("West R1 Winners", playoff_config, None, 1, 1, None)
+pacific_q1_winners = RankingGroupConfiguration("Pacific Q1 Winners", playoff_config, None, 1, 1, None)
+central_q1_winners = RankingGroupConfiguration("Central Q1 Winners", playoff_config, None, 1, 1, None)
 east_r1_winners = RankingGroupConfiguration("East R1 Winners", playoff_config, None, 1, 1, None)
 r2_winners = RankingGroupConfiguration("R2 Winners", playoff_config, None, 1, 1, None)
 west_r2_winners = RankingGroupConfiguration("West R2 Winners", playoff_config, None, 1, 1, None)
+pacific_r1_winners = RankingGroupConfiguration("Pacific R1 Winners", playoff_config, None, 1, 1, None)
+central_r1_winners = RankingGroupConfiguration("Central R1 Winners", playoff_config, None, 1, 1, None)
+pacific_r2_winners = RankingGroupConfiguration("Pacific R2 Winners", playoff_config, None, 1, 1, None)
+central_r2_winners = RankingGroupConfiguration("Central R2 Winners", playoff_config, None, 1, 1, None)
 east_r2_winners = RankingGroupConfiguration("East R2 Winners", playoff_config, None, 1, 1, None)
 r3_winners = RankingGroupConfiguration("R3 Winners", playoff_config, None, 1, 1, None)
 champion = RankingGroupConfiguration("Champion", playoff_config, None, 1, 1, None)
 runner_up = RankingGroupConfiguration("Runner Up", playoff_config, None, 1, 1, None)
 
 playoff_config.competition_groups = [league_config, western_config, eastern_config, pacific_config, central_config, north_config, atlantic_config,
-                                     west_q1_winners, east_q1_winners,
-                                     r1_winners, west_r1_winners, east_r1_winners,
+                                     west_q1_winners, east_q1_winners, pacific_q1_winners, central_q1_winners,
+                                     r1_winners, west_r1_winners, east_r1_winners, pacific_r1_winners, central_r1_winners,
                                      west_r2_winners, east_r2_winners, r2_winners,
                                      r3_winners,
                                      champion, runner_up]
 # qualifying
-rqs1 = SeriesConfiguration("RQS1", 1, playoff_config, pacific_config, 4, pacific_config, 5, series_rules_3, west_q1_winners, league_config, None, None, 1, None)
-rqs2 = SeriesConfiguration("RQS2", 1, playoff_config, central_config, 4, central_config, 5, series_rules_3, west_q1_winners, league_config, None, None, 1, None)
+rqs1 = SeriesConfiguration("RQS1", 1, playoff_config, pacific_config, 4, pacific_config, 5, series_rules_3, pacific_q1_winners, league_config, None, None, 1, None)
+rqs2 = SeriesConfiguration("RQS2", 1, playoff_config, central_config, 4, central_config, 5, series_rules_3, central_q1_winners, league_config, None, None, 1, None)
 rqs3 = SeriesConfiguration("RQS3", 1, playoff_config, atlantic_config, 4, atlantic_config, 5, series_rules_3, east_q1_winners, league_config, None, None, 1, None)
 rqs4 = SeriesConfiguration("RQS4", 1, playoff_config, north_config, 4, north_config, 5, series_rules_3, east_q1_winners, league_config, None, None, 1, None)
 # round 1
-r1s1 = SeriesConfiguration("R1S1", 2, playoff_config, western_config, 1, west_q1_winners, 2, series_rules, west_r1_winners, league_config, None, None, 1, None)
-r1s2 = SeriesConfiguration("R1S2", 2, playoff_config, western_config, 2, west_q1_winners, 1, series_rules, west_r1_winners, league_config, None, None, 1, None)
-r1s3 = SeriesConfiguration("R1S3", 2, playoff_config, western_config, 3, western_config, 6, series_rules, west_r1_winners, league_config, None, None, 1, None)
-r1s4 = SeriesConfiguration("R1S4", 2, playoff_config, western_config, 4, western_config, 5, series_rules, west_r1_winners, league_config, None, None, 1, None)
+r1s1 = SeriesConfiguration("R1S1", 2, playoff_config, pacific_config, 1, pacific_q1_winners, 1, series_rules, pacific_r1_winners, league_config, None, None, 1, None)
+r1s2 = SeriesConfiguration("R1S2", 2, playoff_config, pacific_config, 2, pacific_config, 3, series_rules, pacific_r1_winners, league_config, None, None, 1, None)
+r1s3 = SeriesConfiguration("R1S3", 2, playoff_config, central_config, 1, central_q1_winners, 1, series_rules, central_r1_winners, league_config, None, None, 1, None)
+r1s4 = SeriesConfiguration("R1S4", 2, playoff_config, central_config, 2, central_config, 3, series_rules, central_r1_winners, league_config, None, None, 1, None)
 r1s5 = SeriesConfiguration("R1S5", 2, playoff_config, eastern_config, 1, east_q1_winners, 2, series_rules, east_r1_winners, league_config, None, None, 1, None)
 r1s6 = SeriesConfiguration("R1S6", 2, playoff_config, eastern_config, 2, east_q1_winners, 1, series_rules, east_r1_winners, league_config, None, None, 1, None)
 r1s7 = SeriesConfiguration("R1S7", 2, playoff_config, eastern_config, 3, eastern_config, 6, series_rules, east_r1_winners, league_config, None, None, 1, None)
 r1s8 = SeriesConfiguration("R1S8", 2, playoff_config, eastern_config, 4, eastern_config, 5, series_rules, east_r1_winners, league_config, None, None, 1, None)
 # round 2
-r2s1 = SeriesConfiguration("R2S1", 3, playoff_config, west_r1_winners, 1, west_r1_winners, 4, series_rules, west_r2_winners, league_config, None, None, 1, None)
-r2s2 = SeriesConfiguration("R2S2", 3, playoff_config, west_r1_winners, 2, west_r1_winners, 3, series_rules, west_r2_winners, league_config, None, None, 1, None)
+r2s1 = SeriesConfiguration("R2S1", 3, playoff_config, pacific_r1_winners, 1, pacific_r1_winners, 2, series_rules, west_r2_winners, league_config, None, None, 1, None)
+r2s2 = SeriesConfiguration("R2S2", 3, playoff_config, central_r1_winners, 1, central_r1_winners, 2, series_rules, west_r2_winners, league_config, None, None, 1, None)
 r2s3 = SeriesConfiguration("R2S3", 3, playoff_config, east_r1_winners, 1, east_r1_winners, 3, series_rules, east_r2_winners, league_config, None, None, 1, None)
 r2s4 = SeriesConfiguration("R2S4", 3, playoff_config, east_r1_winners, 2, east_r1_winners, 4, series_rules, east_r2_winners, league_config, None, None, 1, None)
 # round 3
