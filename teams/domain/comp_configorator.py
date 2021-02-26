@@ -120,6 +120,7 @@ class CompetitionConfigurator:
 
             new_group = CompetitionGroup(competition_group_config.name,
                                          parent_group, sub_competition,
+                                         competition_group_config.group_level,
                                          [], competition_group_config.group_type)
 
             sub_competition.groups.append(new_group)

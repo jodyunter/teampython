@@ -23,6 +23,10 @@ class Competition:
     def process_game(game):
         game.sub_competition.process_game(game)
 
+    def get_groups_by_level_and_comp(self, level, comp_name):
+        sc = self.get_sub_competition(comp_name)
+        return sc.get_groups_by_level(level)
+
     def get_group_by_name(self, name):
         for s in self.sub_competitions:
             for g in s.groups:
@@ -70,11 +74,12 @@ class CompetitionGame(Game):
 # TODO: need to not worry about type and create subclasses
 class CompetitionGroup:
 
-    def __init__(self, name, parent_group, sub_competition, rankings, group_type, oid=None):
+    def __init__(self, name, parent_group, sub_competition, level, rankings, group_type, oid=None):
         self.name = name
         self.parent_group = parent_group
         self.sub_competition = sub_competition
         self.group_type = group_type
+        self.level = level
         self.rankings = rankings
         self.oid = IDHelper.get_id(oid)
 
@@ -108,8 +113,8 @@ class CompetitionGroup:
 
 class RankingGroup(CompetitionGroup):
 
-    def __init__(self, name, parent_group, sub_competition, rankings, oid=None):
-        CompetitionGroup.__init__(self, name, parent_group, sub_competition, rankings, CompetitionGroupConfiguration.RANKING_TYPE, oid)
+    def __init__(self, name, parent_group, sub_competition, level, rankings, oid=None):
+        CompetitionGroup.__init__(self, name, parent_group, sub_competition, level, rankings, CompetitionGroupConfiguration.RANKING_TYPE, oid)
 
 
 class CompetitionRanking:

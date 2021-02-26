@@ -32,6 +32,9 @@ class SubCompetition(ABC):
     def is_complete(self, **kwargs):
         pass
 
+    def get_groups_by_level(self, level):
+        return [g for g in self.groups if g.level == level]
+
 
 class TableSubCompetition(SubCompetition):
 

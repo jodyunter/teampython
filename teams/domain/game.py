@@ -36,7 +36,7 @@ class Game:
     ]
 
     def get_score(self, skill_diff, random):
-        if skill_diff < -20 or skill_diff > 10:
+        if skill_diff < -10 or skill_diff > 10:
             raise ValueError(str(skill_diff) + " is not a valid skill difference.")
 
         min_value = 0

@@ -1,4 +1,4 @@
-from teams.domain.competition import CompetitionTeam, TableRecord
+from teams.domain.competition import CompetitionTeam, TableRecord, Competition
 from teams.domain.team import Team
 
 
@@ -24,3 +24,14 @@ def new_table_record(competition, name, skill):
                        new_comp_team_from_team(competition,
                                                new_team(name, skill)),
                        year, 0, 0, 0, 0, 0, skill)
+
+
+def create_default_competition_for_testing(name, year=1, sub_comp=None, teams=None):
+    if sub_comp is None:
+        sub_comp = []
+
+    if teams is None:
+        teams = []
+
+    new_comp = Competition(name, year, sub_comp, teams, False, False, False, False)
+    return new_comp
