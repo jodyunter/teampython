@@ -82,6 +82,13 @@ class TableSubCompetition(SubCompetition):
 
         return team_record_dict
 
+    def sort_table_rankings(self):
+        rankings = []
+        for group in self.groups:
+            rankings.extend(group.rankings)
+
+        self.sort_rankings(rankings, self.records)
+
     @staticmethod
     # one day we need to be able to apply ranking rules, like top in each division or something like that
     def sort_rankings(team_rankings, records):

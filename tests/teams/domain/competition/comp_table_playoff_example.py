@@ -41,7 +41,7 @@ def print_group(group_name, table_to_print, description):
         print(RecordView.get_table_row(RecordService.get_view_from_model(r)))
 
 
-def setup_config(rand, canadian_league_name, playoff_name, season_game_rules, playoff_game_rules):
+def setup_config(rand, canadian_league_name, american_league_name, playoff_name, season_game_rules, playoff_game_rules):
     min_skill = 0
     max_skill = 10
     toronto = Team("Toronto", rand.randint(min_skill, max_skill), True)
@@ -64,14 +64,17 @@ def setup_config(rand, canadian_league_name, playoff_name, season_game_rules, pl
     competition_config = CompetitionConfiguration("Test", [], [], 1, 1, None)
 
     # table config
-    table_config = TableSubCompetitionConfiguration(canadian_league_name, competition_config, [], [], 1, 1, None)
-    competition_config.sub_competitions.append(table_config)
+    canadian_table_config = TableSubCompetitionConfiguration(canadian_league_name, competition_config, [], [], 1, 1, None)
+    american_table_config = TableSubCompetitionConfiguration(american_league_name, competition_config, [], [], 1, 1,
+                                                             None)
+    competition_config.sub_competitions.append(canadian_table_config)
+    competition_config.sub_competitions.append(american_table_config)
 
-    league_config = RankingGroupConfiguration("League", table_config, None, 1, 1, None)
-    western_config = RankingGroupConfiguration("Western", table_config, None, 2, 1, None)
-    eastern_config = RankingGroupConfiguration("Eastern", table_config, None, 2, 1, None)
-    canadian_config = RankingGroupConfiguration("Canadian", table_config, None, 30, 1, None)
-    american_config = RankingGroupConfiguration("American", table_config, None, 5, 1, None)
+    canadian_config = RankingGroupConfiguration("Canadian", canadian_table_config, None, 1, 1, None)
+    western_config = RankingGroupConfiguration("Western", canadian_table_config, canadian_config, 2, 1, None)
+    eastern_config = RankingGroupConfiguration("Eastern", canadian_table_config, canadian_config, 2, 1, None)
+
+    american_config = RankingGroupConfiguration("American", american_table_config, None, 1, 1, None)
 
     all_teams = [calgary, edmonton, toronto, montreal, ottawa, vancouver, quebec_city, winnipeg, boston, detroit, new_york]
     western_teams = [calgary, edmonton, vancouver, winnipeg]
@@ -80,74 +83,76 @@ def setup_config(rand, canadian_league_name, playoff_name, season_game_rules, pl
     canadian_teams = [calgary, edmonton, toronto, montreal, ottawa, vancouver, quebec_city, winnipeg]
 
     team_group_map = {
-        league_config.name: {"config": league_config, "teams": all_teams},
-        western_config.name: {"config": western_config, "teams": western_teams},
-        eastern_config.name: {"config": eastern_config, "teams": eastern_teams},
-        american_config.name: {"config": american_config, "teams": american_teams},
-        canadian_config.name: {"config": canadian_config, "teams": canadian_teams},
+        western_config.name: {"config": western_config, "teams": western_teams, "sub_comp": canadian_table_config},
+        eastern_config.name: {"config": eastern_config, "teams": eastern_teams, "sub_comp": canadian_table_config},
+        american_config.name: {"config": american_config, "teams": american_teams, "sub_comp": american_table_config},
+        canadian_config.name: {"config": canadian_config, "teams": canadian_teams, "sub_comp": canadian_table_config}
     }
 
     team_configs = []
-    table_groups_configs = []
+
     for key in team_group_map.keys():
         config = team_group_map[key]["config"]
         teams = team_group_map[key]["teams"]
+        sub_comp = team_group_map[key]["sub_comp"]
         for t in teams:
             team_configs.append(CompetitionTeamConfiguration(t, competition_config, config, 1, None))
 
-        table_groups_configs.append(config)
+        sub_comp.competition_groups.append(config)
 
     competition_config.teams = team_configs
-    table_config.competition_groups = table_groups_configs
 
     # playoff config
     playoff_config = PlayoffSubCompetitionConfiguration(playoff_name, competition_config, [], [], [], 1, 1, None)
     competition_config.sub_competitions.append(playoff_config)
 
     r1_winners = RankingGroupConfiguration("R1 Winners", playoff_config, None, 1, 1, None)
+    american_rep = RankingGroupConfiguration("American Champion", playoff_config, None, 1, 1, None)
     champion = RankingGroupConfiguration("Champion", playoff_config, None, 1, 1, None)
     runner_up = RankingGroupConfiguration("Runner Up", playoff_config, None, 1, 1, None)
     can_am_winners = RankingGroupConfiguration("CanAm Challenge Winners", playoff_config, None, 1, 1, None)
 
-    playoff_config.competition_groups = [r1_winners, champion, runner_up]
+    playoff_config.competition_groups = [r1_winners, champion, runner_up, american_rep]
 
     # round 1
     r1s1 = SeriesConfiguration("R1S1", 1, playoff_config, western_config, 1, eastern_config, 2, series_rules, r1_winners,
-                               league_config, None, None, 1, None)
+                               canadian_config, None, None, 1, None)
     r1s2 = SeriesConfiguration("R1S2", 1, playoff_config, eastern_config, 1, western_config, 2, series_rules, r1_winners,
-                               league_config, None, None, 1, None)
+                               canadian_config, None, None, 1, None)
 
+    r1s3 = SeriesConfiguration("AMF", 1, playoff_config, american_config, 1, american_config, 2, series_rules, american_rep,
+                               american_config, None, None, 1, None)
     # Final
     final = SeriesConfiguration("Final", 2, playoff_config, r1_winners, 1, r1_winners, 2, series_rules, champion,
-                                league_config, runner_up, league_config, 1, None)
+                                canadian_config, runner_up, canadian_config, 1, None)
 
     # misc
-    can_am = SeriesConfiguration("CanAm Challenge", 3, playoff_config, canadian_config, 8, american_config, 1, series_rules_2,
-                                 can_am_winners,                           league_config, None, None, 1, None)
+    can_am = SeriesConfiguration("CanAm", 3, playoff_config, canadian_config, 8, american_rep, 1,
+                                 series_rules_2, can_am_winners, None, None, None, 1, None)
 
-    series_config = [r1s1, r1s2, final, can_am]
+    series_config = [r1s1, r1s2, r1s3, final, can_am]
 
     playoff_config.series = series_config
     # configuration done
 
     return competition_config
 
+
 season_game_rules = GameRules("Season Rules", True)
 playoff_game_rules = GameRules("Playoff Rules", False)
 
 rand = random
-canadian_league_name = "My League"
+canadian_league_name = "Canadian League"
+american_league_name = "American League"
 playoff_name = "Playoff"
 
-competition_config = setup_config(rand, canadian_league_name, playoff_name, season_game_rules, playoff_game_rules)
+competition_config = setup_config(rand, canadian_league_name, american_league_name, playoff_name, season_game_rules, playoff_game_rules)
 
 competition = CompetitionConfigurator.create_competition(competition_config, 1)
-table = competition.get_sub_competition(canadian_league_name)
-playoff = competition.get_sub_competition(playoff_name)
+canadian_table = competition.get_sub_competition(canadian_league_name)
+american_table = competition.get_sub_competition(american_league_name)
 
-rankings = []
-for g in table.groups:
-    rankings.extend(g.rankings)
+playoff = competition.get_sub_competition(playoff_name)
 
 #  schedule the games, need to move this to the configuration when the season is setup
 scheduler = Scheduler()
@@ -156,10 +161,10 @@ days = {}
 level_1_rounds = 1
 level_2_rounds = 5
 
-create_games([table.get_group_by_name("Canadian")], level_1_rounds, season_game_rules, table.create_game, days)
-create_games([table.get_group_by_name("American")], 11, season_game_rules, table.create_game, days)
-#create_games(table.get_groups_by_level(1), level_1_rounds, season_game_rules, table.create_game, days)
-create_games(table.get_groups_by_level(2), level_2_rounds, season_game_rules, table.create_game, days)
+
+create_games(canadian_table.get_groups_by_level(1), 2, season_game_rules, canadian_table.create_game, days)
+create_games(american_table.get_groups_by_level(1), 6, season_game_rules, american_table.create_game, days)
+create_games(canadian_table.get_groups_by_level(2), 4, season_game_rules, canadian_table.create_game, days)
 
 for d in days.keys():
     day = days[d]
@@ -169,13 +174,14 @@ for d in days.keys():
     game_day_view_model = GameService.games_to_game_day_view(day)
     print(GameDayView.get_view(game_day_view_model))
 
+canadian_table.sort_table_rankings()
+american_table.sort_table_rankings()
 
-table.sort_rankings(rankings, table.records)
-print_group("League", table, "League")
+print_group("Canadian", canadian_table, "League")
 for g in competition.get_groups_by_level_and_comp(2, canadian_league_name):
-    print_group(g.name, table, g.name)
+    print_group(g.name, canadian_table, g.name)
 
-print_group("American", table, "American")
+print_group("American", american_table, "American")
 
 current_day = d + 1
 days = {}
