@@ -48,6 +48,14 @@ class Competition:
             if s.name == name:
                 return s
 
+    # todo:  we need to figure out which sub comps are currently running, which need to be post processed, which need to be setup and which need to be started
+
+
+    def process_end_of_day(self):
+        for s in self.sub_competitions:
+            s.process_end_of_day()
+
+
 
 class CompetitionTeam(Team):
 

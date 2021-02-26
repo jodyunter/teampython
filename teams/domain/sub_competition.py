@@ -32,6 +32,10 @@ class SubCompetition(ABC):
     def is_complete(self, **kwargs):
         pass
 
+    @abstractmethod
+    def process_end_of_day(self):
+        pass
+
     def get_groups_by_level(self, level):
         return [g for g in self.groups if g.level == level]
 
@@ -51,6 +55,9 @@ class TableSubCompetition(SubCompetition):
         SubCompetition.__init__(self, name, SubCompetitionConfiguration.TABLE_TYPE, competition, groups, order, setup, started,
                                 finished, post_processed,
                                 oid)
+
+    def process_end_of_day(self):
+        pass
 
     def create_game(self, home, away, rules, year, day):
         return CompetitionGame(self.competition, self, day, home, away, 0, 0, False, False, rules)
@@ -238,3 +245,10 @@ class PlayoffSubCompetition(SubCompetition):
 
     def get_series_for_round(self, round_number):
         return [s for s in self.series if s.series_round == round_number]
+
+    def process_end_of_day(self):
+        if self.is_round_complete(self.current_round):
+            self.post_process_round(self.current_round)
+            self.current_round += 1
+            if not self.is_round_setup(self.current_round):
+                self.setup_round(self.current_round)
