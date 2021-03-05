@@ -33,6 +33,10 @@ class SubCompetition(ABC):
         pass
 
     @abstractmethod
+    def post_process(self, **kwargs):
+        pass
+
+    @abstractmethod
     def process_end_of_day(self):
         pass
 
@@ -48,6 +52,11 @@ class SubCompetition(ABC):
 
 
 class TableSubCompetition(SubCompetition):
+
+    def post_process(self, **kwargs):
+        # do a final sort
+        self.sort_table_rankings()
+        # add users to any special groups (champion, division champions, or whatever)
 
     def __init__(self, name, records, competition, groups, order, setup, started, finished, post_processed, oid=None):
         self.records = records
@@ -133,6 +142,10 @@ class TableSubCompetition(SubCompetition):
 
 
 class PlayoffSubCompetition(SubCompetition):
+
+    def post_process(self, **kwargs):
+        # at this point all rounds have been processed and teams assigned to groups.
+        pass
 
     def __init__(self, name, series, competition, groups, order, current_round, setup, started, finished, post_processed,
                  oid=None):

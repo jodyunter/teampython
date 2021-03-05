@@ -49,12 +49,29 @@ class Competition:
                 return s
 
     # todo:  we need to figure out which sub comps are currently running, which need to be post processed, which need to be setup and which need to be started
+    #  not setup means something went wrong.  All sub comps should be setup at the start
+    #  started means we've created our initial games and schedule
+    #  finished means all comes are done, or all series are done.
+    #  post processed means we've added teams to the appropriate groups
 
+    def get_started_but_not_finished_comps(self):
+        return [s for s in self.sub_competitions if not s.finished and s.started]
 
-    def process_end_of_day(self):
-        for s in self.sub_competitions:
+    def get_finished_but_not_processed_sub_comps(self):
+        return [s for s in self.sub_competitions if not s.post_processed and s.finished]
+
+    #  { sub_comp_oid : count_of_incomplete_games }
+    def process_end_of_day(self, incomplete_games_by_sub_comp):
+        #  get all start sub comps that are not finished
+        for s in self.get_started_but_not_finished_comps():
             s.process_end_of_day()
+            if s.is_complete(incomplete_games=incomplete_games_by_sub_comp[s.oid]):
+                s.finished = True
 
+        for s in self.get_finished_but_not_processed_sub_comps():
+            # post process
+            s.post_process()
+            s.post_processed = True
 
 
 class CompetitionTeam(Team):
