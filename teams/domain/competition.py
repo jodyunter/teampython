@@ -8,7 +8,7 @@ from teams.domain.utility.utility_classes import IDHelper
 
 class Competition:
 
-    def __init__(self, name, year, sub_competitions, teams, setup, started, finished, post_processed, oid=None):
+    def __init__(self, name, year, sub_competitions, teams, current_round, setup, started, finished, post_processed, oid=None):
         self.name = name
         self.year = year
         self.setup = setup
@@ -18,6 +18,7 @@ class Competition:
         self.finished = finished
         self.post_processed = post_processed
         self.oid = IDHelper.get_id(oid)
+        self.current_round = current_round
 
     @staticmethod
     def process_game(game):
@@ -48,30 +49,38 @@ class Competition:
             if s.name == name:
                 return s
 
+    def is_round_complete(self, round_number):
+        in_complete_sub_comps = [s for s in self.sub_competitions if s.order == round_number and (not s.started or not s.setup or not s.finished or not s.post_processed)]
+        return in_complete_sub_comps is None or len(in_complete_sub_comps) == 0
+
     # todo:  we need to figure out which sub comps are currently running, which need to be post processed, which need to be setup and which need to be started
     #  not setup means something went wrong.  All sub comps should be setup at the start
     #  started means we've created our initial games and schedule
     #  finished means all comes are done, or all series are done.
     #  post processed means we've added teams to the appropriate groups
 
-    def get_started_but_not_finished_comps(self):
-        return [s for s in self.sub_competitions if not s.finished and s.started]
+    def get_started_but_not_finished_comps(self, round_number):
+        return [s for s in self.sub_competitions if not s.finished and s.started and s.order == round_number]
 
-    def get_finished_but_not_processed_sub_comps(self):
-        return [s for s in self.sub_competitions if not s.post_processed and s.finished]
+    def get_finished_but_not_processed_sub_comps(self, round_number):
+        return [s for s in self.sub_competitions if not s.post_processed and s.finished and s.order == round_number]
 
     #  { sub_comp_oid : count_of_incomplete_games }
     def process_end_of_day(self, incomplete_games_by_sub_comp):
         #  get all start sub comps that are not finished
-        for s in self.get_started_but_not_finished_comps():
+        for s in self.get_started_but_not_finished_comps(self.current_round):
             s.process_end_of_day()
             if s.is_complete(incomplete_games=incomplete_games_by_sub_comp[s.oid]):
                 s.finished = True
 
-        for s in self.get_finished_but_not_processed_sub_comps():
+        for s in self.get_finished_but_not_processed_sub_comps(self.current_round):
             # post process
             s.post_process()
             s.post_processed = True
+
+        if self.is_round_complete(self.current_round):
+            self.current_round += 1
+            self.start_round(self.current_round)
 
 
 class CompetitionTeam(Team):
