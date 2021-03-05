@@ -1,0 +1,39 @@
+Get the current year.
+Get all competitions for the current year.
+Are all competitions for the current year finished?
+  If yes, display results
+Are all competitions in the current round finished?
+  are any not post_processed? If so post_process them
+  go to the next round.
+Are all competitions for the current round setup?
+  If not finish setup for the current round
+Are each sub competition for the competitions in the current round setup?
+  If not finish setup for the sub competitions for the competitions in the current round
+Are each sub competition for the competitions in the competition's current round started?
+  If not start each sub competition
+  Schedule any missing games.
+
+ Get the current day.
+ Are all games on the current day done?
+   If not, play any remaining games
+ Are all games on the current day processed?
+   if not, process the remaining games.
+
+Some of this should move to the above
+ If the current day games are all done and all processed
+    for each competition in the current round
+       for each sub competition in the competition's current round that is started but not finished
+          process the end of day
+          add any news to be scheduled
+       for each sub competition in the competition's current round that is finished but not post processed
+          post process the sub competition
+       if the competition's current round is complete
+          increment the competitions current round
+       if the current competition is finished but not post_processed
+          post process the competition
+    if all competitions in the current round are complete
+       increment the round
+
+    schedule the games
+    increment the current day
+
