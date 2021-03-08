@@ -1,4 +1,5 @@
 Get the current year.
+Get the current day.
 Get all competitions for the current year.
 Are all competitions for the current year finished?
   If yes, display results

@@ -1,0 +1,15 @@
+Play Games for day:
+    Get current year
+    Get current day
+    Get incomplete games for day
+      Play incomplete games for day
+
+Process Day:
+    Get current year
+    Get current day
+    Get unprocessed games for day and process them
+    if day is complete
+        For each
+
+
+
