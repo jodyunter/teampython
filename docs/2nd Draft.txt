@@ -9,7 +9,9 @@ Process Day:
     Get current day
     Get unprocessed games for day and process them
     if day is complete
-        For each
+        Check each competition and see which sub comps are completed and post process them.  Schedule any new games.
+        Check each competition and see if their current round is done and start next round if needed.  Schedule any new games.
+
 
 
 

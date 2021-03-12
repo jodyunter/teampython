@@ -49,7 +49,7 @@ competition_config.teams = team_configs
 
 table_config.competition_groups = [league_config, western_config, eastern_config, pacific_config, central_config, north_config, atlantic_config]
 
-competition = CompetitionConfigurator.create_competition(competition_config, 1)
+competition = CompetitionConfigurator.setup_competition(competition_config, 1)
 table = competition.sub_competitions[0]
 
 r = random

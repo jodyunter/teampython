@@ -19,14 +19,17 @@ from teams.services.view_models.playoff_view_models import SeriesViewModel
 from teams.services.view_models.team_view_models import TeamViewModel
 
 
-def create_games(groups, rounds, rules, create_game_method, day_dict):
+def create_games(groups, rounds, rules, create_game_method, day_dict, scheduler):
+    games = []
     for cg in groups:
         cg_teams = [r.team for r in cg.rankings]
         for i in range(rounds):
             next_games = scheduler.schedule_games(cg_teams, rules, 1, 1, True, create_game_method)
+            games.extend(next_games)
             new_days = Scheduler.organize_games_into_days(next_games)
             for new_day in new_days.keys():
                 Scheduler.add_day_to_scheduler(new_days[new_day], day_dict, 1)
+    return games
 
 
 def print_group(group_name, table_to_print, description):
@@ -103,7 +106,7 @@ def setup_config(rand, canadian_league_name, american_league_name, playoff_name,
     competition_config.teams = team_configs
 
     # playoff config
-    playoff_config = PlayoffSubCompetitionConfiguration(playoff_name, competition_config, [], [], [], 1, 1, None)
+    playoff_config = PlayoffSubCompetitionConfiguration(playoff_name, competition_config, [], [], [], 2, 1, None)
     competition_config.sub_competitions.append(playoff_config)
 
     r1_winners = RankingGroupConfiguration("R1 Winners", playoff_config, None, 1, 1, None)
@@ -148,25 +151,36 @@ playoff_name = "Playoff"
 
 competition_config = setup_config(rand, canadian_league_name, american_league_name, playoff_name, season_game_rules, playoff_game_rules)
 
+
+# start year
+# get initial games
+# schedule games
+# play day
+# process day
+# process end of day
+# get next games
+
+# start year
 competition = CompetitionConfigurator.setup_competition(competition_config, 1)
+
+# get initial games.  For tables we can't really do this yet.
+days = {}  # this is inplace of the database for now
+scheduler = Scheduler()
+
 canadian_table = competition.get_sub_competition(canadian_league_name)
 american_table = competition.get_sub_competition(american_league_name)
 
-playoff = competition.get_sub_competition(playoff_name)
+games = []
 
-#  schedule the games, need to move this to the configuration when the season is setup
-scheduler = Scheduler()
-days = {}
-
-level_1_rounds = 1
-level_2_rounds = 5
+games.extend(create_games(canadian_table.get_groups_by_level(1), 2, season_game_rules, canadian_table.create_game, days, scheduler))
+games.extend(create_games(american_table.get_groups_by_level(1), 6, season_game_rules, american_table.create_game, days, scheduler))
+games.extend(create_games(canadian_table.get_groups_by_level(2), 4, season_game_rules, canadian_table.create_game, days, scheduler))
 
 
-create_games(canadian_table.get_groups_by_level(1), 2, season_game_rules, canadian_table.create_game, days)
-create_games(american_table.get_groups_by_level(1), 6, season_game_rules, american_table.create_game, days)
-create_games(canadian_table.get_groups_by_level(2), 4, season_game_rules, canadian_table.create_game, days)
+competition.start_competition()
 
-last_day = -1
+last_day = 1
+current_day = 1
 
 for d in days.keys():
     day = days[d]
@@ -174,6 +188,9 @@ for d in days.keys():
         g.play(rand)
         competition.process_game(g)
     competition.process_end_of_day(competition.sort_day_dictionary_to_incomplete_games_dictionary(days))
+    new_games = competition.create_new_games(current_games=games)
+    Scheduler.add_games_to_schedule(new_games, days, rand, current_day)
+    games.extend(new_games)
     game_day_view_model = GameService.games_to_game_day_view(day)
     print(GameDayView.get_view(game_day_view_model))
     last_day = d
@@ -186,49 +203,6 @@ for g in competition.get_groups_by_level_and_comp(2, canadian_league_name):
     print_group(g.name, canadian_table, g.name)
 
 print_group("American", american_table, "American")
-
-current_day = last_day + 1
-days = {}
-games = []
-#  setup first round of playoff
-while not playoff.is_complete():
-    print(f'Current Round: {playoff.current_round}')
-    while not playoff.is_round_complete(playoff.current_round):
-        if not playoff.is_round_setup(playoff.current_round):
-            playoff.setup_round(playoff.current_round)
-        # print(loop)
-        new_games = playoff.create_new_games(games)
-        Scheduler.add_games_to_schedule(new_games, days, rand, current_day)
-        games.extend(new_games)
-        for g in days[current_day]:
-            g.play(rand)
-            model = GameService.game_to_vm(g)
-            competition.process_game(g)
-            # print(GameView.get_basic_view(model))
-        game_day_view_model = GameService.games_to_game_day_view(days[current_day])
-        # print(GameDayView.get_view(game_day_view_model))
-        current_day += 1
-
-    for s in [ps for ps in playoff.series if ps.series_round == playoff.current_round]:
-        home_value = -1
-        away_value = -1
-        if isinstance(s, SeriesByGoals):
-            home_value = s.home_goals
-            away_value = s.away_goals
-        elif isinstance(s, SeriesByWins):
-            home_value = s.home_wins
-            away_value = s.away_wins
-
-        view_model = SeriesViewModel(s.name, s.sub_competition.competition.year, s.series_round, None,
-                                     TeamViewModel(s.home_team.oid, s.home_team.name, s.home_team.skill, True),
-                                     home_value,
-                                     TeamViewModel(s.away_team.oid, s.away_team.name, s.away_team.skill, True),
-                                     away_value,
-                                     "Done")
-        print(SeriesView.get_basic_series_view(view_model))
-    # post process round and series
-    playoff.post_process_round(playoff.current_round)
-    playoff.current_round += 1
 
 champion = competition.get_group_by_name("Champion")
 runner_up = competition.get_group_by_name("Runner Up")

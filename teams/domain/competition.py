@@ -20,6 +20,14 @@ class Competition:
         self.oid = IDHelper.get_id(oid)
         self.current_round = current_round
 
+    def create_new_games(self, **kwargs):
+        games = []
+        for sub in self.get_started_but_not_finished_comps(self.current_round):
+            result = sub.create_new_games(**kwargs)
+            if result is not None:
+                games.extend(result)
+        return games
+
     @staticmethod
     def process_game(game):
         game.sub_competition.process_game(game)
@@ -59,6 +67,9 @@ class Competition:
     #  finished means all comes are done, or all series are done.
     #  post processed means we've added teams to the appropriate groups
 
+    def get_sub_competitions_by_round(self, round_number):
+        return [s for s in self.sub_competitions if s.order == round_number]
+
     def get_started_but_not_finished_comps(self, round_number):
         return [s for s in self.sub_competitions if not s.finished and s.started and s.order == round_number]
 
@@ -70,7 +81,11 @@ class Competition:
         #  get all start sub comps that are not finished
         for s in self.get_started_but_not_finished_comps(self.current_round):
             s.process_end_of_day()
-            if s.is_complete(incomplete_games=incomplete_games_by_sub_comp[s.oid]):
+            incomplete_games = None
+            if s.oid in incomplete_games_by_sub_comp:
+                incomplete_games = incomplete_games_by_sub_comp[s.oid]
+
+            if s.is_complete(incomplete_games=incomplete_games):
                 s.finished = True
 
         for s in self.get_finished_but_not_processed_sub_comps(self.current_round):
@@ -81,6 +96,29 @@ class Competition:
         if self.is_round_complete(self.current_round):
             self.current_round += 1
             self.start_round(self.current_round)
+
+    # this is to accommodate the table sub comp's way of saying it's complete
+    # todo: this isn't great to do it this way
+    def sort_day_dictionary_to_incomplete_games_dictionary(self, day_dictionary):
+        incomplete_dictionary = {}
+        for d in day_dictionary.keys():
+            for game in day_dictionary[d]:
+                sub_comp_id = game.sub_competition.oid
+                if sub_comp_id not in incomplete_dictionary:
+                    incomplete_dictionary[sub_comp_id] = []
+                if not game.complete or not game.processed:
+                    incomplete_dictionary[sub_comp_id].append(game)
+        return incomplete_dictionary
+
+    def start_competition(self):
+        self.current_round = 1
+        self.start_round(self.current_round)
+
+    def start_round(self, round_number):
+        subs = self.get_sub_competitions_by_round(round_number);
+        for sub in subs:
+            #sub.start()
+            sub.started = True
 
 
 class CompetitionTeam(Team):

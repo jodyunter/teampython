@@ -104,7 +104,7 @@ r4s1 = SeriesConfiguration("R4S1", 5, playoff_config, r3_winners, 1, r3_winners,
 
 playoff_config.series = [r1s1, r1s2, r1s3, r1s4, r1s5, r1s6, r1s7, r1s8, r2s1, r2s2, r2s3, r2s4, r3s1, r3s2, r4s1, rqs1, rqs2, rqs3, rqs4]
 
-competition = CompetitionConfigurator.create_competition(competition_config, 1)
+competition = CompetitionConfigurator.setup_competition(competition_config, 1)
 playoff = competition.sub_competitions[0]
 league = competition.get_group_by_name(league_config.name)
 western = competition.get_group_by_name(western_config.name)

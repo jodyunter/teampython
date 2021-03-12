@@ -62,7 +62,7 @@ class TestCompConfigurationCompetition(BaseTeamTestCase):
 
     def test_should_create_competition_no_sub_comps(self):
         competition_config = CompetitionConfiguration("Comp Name", [], [], 5, 5, None)
-        competition = CompetitionConfigurator.create_competition(competition_config, 5)
+        competition = CompetitionConfigurator.setup_competition(competition_config, 5)
 
         self.assertEqual("Comp Name", competition.name)
         self.assertEqual(5, competition.year)

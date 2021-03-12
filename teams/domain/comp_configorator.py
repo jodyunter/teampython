@@ -14,8 +14,8 @@ from teams.domain.sub_competition import PlayoffSubCompetition, TableSubCompetit
 class CompetitionConfigurator:
 
     @staticmethod
-    def create_competition(competition_config, year):
-        competition = Competition(competition_config.name, year, [], [], False, False, False, False)
+    def setup_competition(competition_config, year):
+        competition = Competition(competition_config.name, year, [], [], False, False, False, False, False)
 
         competition_config.sub_competitions.sort(key=lambda sc: sc.order)
 
@@ -27,6 +27,8 @@ class CompetitionConfigurator:
             CompetitionConfigurator.process_competition_team_configuration(team_config, competition)
 
         # setup initial games
+
+        competition.setup = True
 
         return competition
 

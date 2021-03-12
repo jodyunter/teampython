@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 from teams.domain.competition import TableRecord, CompetitionRanking, CompetitionGame
 from teams.domain.competition_configuration import SubCompetitionConfiguration
+from teams.domain.series import SeriesGame
 from teams.domain.utility.utility_classes import IDHelper
 
 
@@ -82,9 +83,11 @@ class TableSubCompetition(SubCompetition):
     # TODO:  this will need the configuration.
     # We should only create new games when previous round of sub comps is done.  This way the previous comps populate groups that we'll use to create games
     def create_new_games(self, **kwargs):
-        pass
+        return None
 
-    def is_complete(self, incomplete_games):
+    def is_complete(self, **kwargs):
+        incomplete_games = kwargs.get("incomplete_games", None)
+
         if incomplete_games is None or len(incomplete_games) == 0:
             return True
         else:
@@ -161,7 +164,8 @@ class PlayoffSubCompetition(SubCompetition):
             series.process_game(game)
 
     # dictionaries of the series id and how many complete and incomplete games there are
-    def create_new_games(self, current_games):
+    def create_new_games(self, **kwargs):
+        current_games = kwargs["current_games"]
         game_status_map = self.create_series_map(current_games)
         new_games = []
         for series in [s for s in self.series if s.series_round == self.current_round]:
@@ -173,7 +177,7 @@ class PlayoffSubCompetition(SubCompetition):
 
         return new_games
 
-    def is_complete(self):
+    def is_complete(self, **kwargs):
         incomplete_series = [s for s in self.series if not s.is_complete()]
         if incomplete_series is None or len(incomplete_series) == 0:
             return True
@@ -189,7 +193,7 @@ class PlayoffSubCompetition(SubCompetition):
             incomplete_string: {}
         }
         for s in self.series:
-            series_games = [g for g in games if g.series.oid == s.oid]
+            series_games = [g for g in games if isinstance(g, SeriesGame) and g.series.oid == s.oid]
             game_status_map[complete_string][s.oid] = len([g for g in series_games if g.complete and g.processed])
             game_status_map[incomplete_string][s.oid] = len(
                 [g for g in series_games if not (g.complete and g.processed)])
