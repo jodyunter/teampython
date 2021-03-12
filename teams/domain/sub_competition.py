@@ -22,6 +22,10 @@ class SubCompetition(ABC):
         self.oid = IDHelper.get_id(oid)
 
     @abstractmethod
+    def start(self):
+        pass
+
+    @abstractmethod
     def process_game(self, game):
         pass
 
@@ -54,6 +58,9 @@ class SubCompetition(ABC):
 
 class TableSubCompetition(SubCompetition):
 
+    def start(self):
+        pass
+
     def post_process(self, **kwargs):
         # do a final sort
         self.sort_table_rankings()
@@ -80,6 +87,8 @@ class TableSubCompetition(SubCompetition):
 
             home_record.process_game(game.home_score, game.away_score)
             away_record.process_game(game.away_score, game.home_score)
+
+            game.processed = True
 
     # TODO:  this will need the configuration.
     # We should only create new games when previous round of sub comps is done.  This way the previous comps populate groups that we'll use to create games
@@ -147,6 +156,11 @@ class TableSubCompetition(SubCompetition):
 
 class PlayoffSubCompetition(SubCompetition):
 
+    def start(self):
+        self.current_round = 1
+        if not self.is_round_setup(self.current_round):
+            self.setup_round(self.current_round)
+
     def post_process(self, **kwargs):
         # at this point all rounds have been processed and teams assigned to groups.
         pass
@@ -163,6 +177,7 @@ class PlayoffSubCompetition(SubCompetition):
         if game.complete and not game.processed:
             series = game.series
             series.process_game(game)
+            game.processed = True
 
     # dictionaries of the series id and how many complete and incomplete games there are
     def create_new_games(self, **kwargs):

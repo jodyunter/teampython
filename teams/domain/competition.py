@@ -117,7 +117,7 @@ class Competition:
     def start_round(self, round_number):
         subs = self.get_sub_competitions_by_round(round_number);
         for sub in subs:
-            #sub.start()
+            sub.start()
             sub.started = True
 
 

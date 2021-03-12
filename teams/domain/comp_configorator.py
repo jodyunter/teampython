@@ -22,6 +22,7 @@ class CompetitionConfigurator:
         for sub in competition_config.sub_competitions:
             CompetitionConfigurator.create_sub_competition(sub, competition)
 
+
         # create teams
         for team_config in competition_config.teams:
             CompetitionConfigurator.process_competition_team_configuration(team_config, competition)
@@ -29,6 +30,9 @@ class CompetitionConfigurator:
         # setup initial games
 
         competition.setup = True
+        #todo more checks!
+        for s in competition.sub_competitions:
+            s.setup = True
 
         return competition
 

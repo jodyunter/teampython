@@ -185,7 +185,10 @@ current_day = 1
 
 while not competition.finished:
     print("Current Comp Round: " + str(competition.current_round))
-    day = days[current_day]
+    if current_day in days:
+        day = days[current_day]
+    else:
+        day = []
     for g in day:
         g.play(rand)
         competition.process_game(g)
