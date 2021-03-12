@@ -185,19 +185,19 @@ current_day = 1
 
 while not competition.finished:
     print("Current Comp Round: " + str(competition.current_round))
-    if current_day in days:
-        day = days[current_day]
-    else:
-        day = []
-    for g in day:
-        g.play(rand)
-        competition.process_game(g)
-    competition.process_end_of_day(competition.sort_day_dictionary_to_incomplete_games_dictionary(days))
     new_games = competition.create_new_games(current_games=games)
     Scheduler.add_games_to_schedule(new_games, days, rand, current_day)
     games.extend(new_games)
-    game_day_view_model = GameService.games_to_game_day_view(day)
-    print(GameDayView.get_view(game_day_view_model))
+    if current_day in days:
+        day = days[current_day]
+        for g in day:
+            g.play(rand)
+            competition.process_game(g)
+        competition.process_end_of_day(competition.sort_day_dictionary_to_incomplete_games_dictionary(days))
+        game_day_view_model = GameService.games_to_game_day_view(day)
+        print(GameDayView.get_view(game_day_view_model))
+    else:
+        day = []
     last_day = current_day
     current_day += 1
 
@@ -209,6 +209,28 @@ for g in competition.get_groups_by_level_and_comp(2, canadian_league_name):
     print_group(g.name, canadian_table, g.name)
 
 print_group("American", american_table, "American")
+
+playoff = competition.get_sub_competition(playoff_name)
+
+for i in range(playoff.current_round):
+    series_list = playoff.get_series_for_round(i + 1)
+    for s in series_list:
+        home_value = -1
+        away_value = -1
+        if isinstance(s, SeriesByGoals):
+            home_value = s.home_goals
+            away_value = s.away_goals
+        elif isinstance(s, SeriesByWins):
+            home_value = s.home_wins
+            away_value = s.away_wins
+
+        view_model = SeriesViewModel(s.name, s.sub_competition.competition.year, s.series_round, None,
+                                     TeamViewModel(s.home_team.oid, s.home_team.name, s.home_team.skill, True),
+                                     home_value,
+                                     TeamViewModel(s.away_team.oid, s.away_team.name, s.away_team.skill, True),
+                                     away_value,
+                                     "Done")
+        print(SeriesView.get_basic_series_view(view_model))
 
 champion = competition.get_group_by_name("Champion")
 runner_up = competition.get_group_by_name("Runner Up")

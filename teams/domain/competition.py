@@ -97,6 +97,15 @@ class Competition:
             self.current_round += 1
             self.start_round(self.current_round)
 
+        self.check_complete()
+
+    def check_complete(self):
+        subs = self.get_sub_competitions_by_round(self.current_round)
+        if len(subs) == 0:
+            self.finished = True
+
+        return self.finished
+
     # this is to accommodate the table sub comp's way of saying it's complete
     # todo: this isn't great to do it this way
     def sort_day_dictionary_to_incomplete_games_dictionary(self, day_dictionary):
