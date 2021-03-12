@@ -58,6 +58,7 @@ class TableSubCompetition(SubCompetition):
         # do a final sort
         self.sort_table_rankings()
         # add users to any special groups (champion, division champions, or whatever)
+        self.post_processed = True
 
     def __init__(self, name, records, competition, groups, order, setup, started, finished, post_processed, oid=None):
         self.records = records
