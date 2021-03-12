@@ -182,8 +182,10 @@ competition.start_competition()
 last_day = 1
 current_day = 1
 
-for d in days.keys():
-    day = days[d]
+
+while not competition.finished:
+    print("Current Comp Round: " + str(competition.current_round))
+    day = days[current_day]
     for g in day:
         g.play(rand)
         competition.process_game(g)
@@ -193,7 +195,8 @@ for d in days.keys():
     games.extend(new_games)
     game_day_view_model = GameService.games_to_game_day_view(day)
     print(GameDayView.get_view(game_day_view_model))
-    last_day = d
+    last_day = current_day
+    current_day += 1
 
 canadian_table.sort_table_rankings()
 american_table.sort_table_rankings()
