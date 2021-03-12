@@ -60,6 +60,7 @@ def setup_config(rand, canadian_league_name, american_league_name, playoff_name,
     boston = Team("Boston", rand.randint(min_skill, max_skill), True)
     detroit = Team("Detroit", rand.randint(min_skill, max_skill), True)
     new_york = Team("New York", rand.randint(min_skill, max_skill), True)
+    chicago = Team("Chicago", rand.randint(min_skill, max_skill), True)
 
     series_rules = SeriesByWinsRules("Best of 7", 4, playoff_game_rules, [0, 0, 1, 1, 0, 1, 0])
     series_rules_2 = SeriesByWinsRules("Best of 3", 2, playoff_game_rules, [1, 0, 0])
@@ -73,16 +74,16 @@ def setup_config(rand, canadian_league_name, american_league_name, playoff_name,
     competition_config.sub_competitions.append(canadian_table_config)
     competition_config.sub_competitions.append(american_table_config)
 
-    canadian_config = RankingGroupConfiguration("Canadian", canadian_table_config, None, 1, 1, None)
-    western_config = RankingGroupConfiguration("Western", canadian_table_config, canadian_config, 2, 1, None)
-    eastern_config = RankingGroupConfiguration("Eastern", canadian_table_config, canadian_config, 2, 1, None)
+    canadian_config = RankingGroupConfiguration("Premier", canadian_table_config, None, 1, 1, None)
+    western_config = RankingGroupConfiguration("Div A", canadian_table_config, canadian_config, 2, 1, None)
+    eastern_config = RankingGroupConfiguration("Div B", canadian_table_config, canadian_config, 2, 1, None)
 
-    american_config = RankingGroupConfiguration("American", american_table_config, None, 1, 1, None)
+    american_config = RankingGroupConfiguration("Second Division", american_table_config, None, 1, 1, None)
 
-    all_teams = [calgary, edmonton, toronto, montreal, ottawa, vancouver, quebec_city, winnipeg, boston, detroit, new_york]
+    all_teams = [calgary, edmonton, toronto, montreal, ottawa, vancouver, quebec_city, winnipeg, boston, detroit, new_york, chicago]
     western_teams = [calgary, edmonton, vancouver, winnipeg]
     eastern_teams = [toronto, montreal, ottawa, quebec_city]
-    american_teams = [boston, detroit, new_york]
+    american_teams = [boston, detroit, new_york, chicago]
     canadian_teams = [calgary, edmonton, toronto, montreal, ottawa, vancouver, quebec_city, winnipeg]
 
     team_group_map = {
@@ -204,11 +205,11 @@ while not competition.finished:
 canadian_table.sort_table_rankings()
 american_table.sort_table_rankings()
 
-print_group("Canadian", canadian_table, "League")
+print_group("Premier", canadian_table, "Premier")
 for g in competition.get_groups_by_level_and_comp(2, canadian_league_name):
     print_group(g.name, canadian_table, g.name)
 
-print_group("American", american_table, "American")
+print_group("Second Division", american_table, "Second Division")
 
 playoff = competition.get_sub_competition(playoff_name)
 
