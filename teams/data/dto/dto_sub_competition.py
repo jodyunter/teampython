@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 
 from teams.data.dto.dto_base import Base
 from teams.domain.competition import CompetitionGroup, RankingGroup
-from teams.domain.sub_competition import SubCompetition
+from teams.domain.sub_competition import SubCompetition, TableSubCompetition
 
 
 class SubCompetitionDTO(ABC, Base, SubCompetition):
@@ -22,7 +22,6 @@ class SubCompetitionDTO(ABC, Base, SubCompetition):
     post_processed = Column(Boolean)
 
     def __init__(self, sub_competition):
-
         SubCompetition.__init__(self,
                                 sub_competition.name,
                                 sub_competition.sub_competition_type,
@@ -35,6 +34,7 @@ class SubCompetitionDTO(ABC, Base, SubCompetition):
                                 sub_competition.post_processed,
                                 sub_competition.oid)
 
+class TableSubCompetitionDTO(SubCompetitionDTO, TableSubCompetition)
 
 class CompetitionGroupDTO(Base, CompetitionGroup):
     __tablename__ = "competitiongroup"
@@ -72,9 +72,9 @@ class RankingGroupDTO(CompetitionGroupDTO, RankingGroup):
 
     def __init__(self, competition_group):
         RankingGroup.__init__(self,
-                                  competition_group.name,
-                                  competition_group.parent_group,
-                                  competition_group.sub_competition,
-                                  competition_group.level,
-                                  competition_group.rankings,
-                                  competition_group.oid)
+                              competition_group.name,
+                              competition_group.parent_group,
+                              competition_group.sub_competition,
+                              competition_group.level,
+                              competition_group.rankings,
+                              competition_group.oid)
