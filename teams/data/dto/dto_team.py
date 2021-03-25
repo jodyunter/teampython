@@ -26,7 +26,7 @@ class TeamDTO(Base, Team):
         return team_dto
 
 
-class CompetitionTeamDTO(Base, TeamDTO, CompetitionTeam):
+class CompetitionTeamDTO(TeamDTO, CompetitionTeam):
 
     def __init__(self, competition_team):
 

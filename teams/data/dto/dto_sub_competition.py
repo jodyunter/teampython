@@ -5,6 +5,7 @@ from teams.domain.sub_competition import SubCompetition
 
 
 class SubCompetitionDTO(ABC, Base, SubCompetition):
+    __tablename__ = "subcompetitions"
 
     def __init__(self, sub_competition):
 

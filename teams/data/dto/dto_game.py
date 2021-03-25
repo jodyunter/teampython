@@ -35,7 +35,7 @@ class GameDTO(Base, Game):
                       game_rules_dto, game.oid)
 
 
-class CompetitionGameDTO(Base, GameDTO, CompetitionGame):
+class CompetitionGameDTO(GameDTO, CompetitionGame):
 
     def __init__(self, competition_game):
 
