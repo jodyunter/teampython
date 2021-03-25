@@ -1,6 +1,7 @@
 from sqlalchemy import String, Integer, Column, Boolean
 
 from teams.data.dto.dto_base import Base
+from teams.domain.competition import CompetitionTeam
 from teams.domain.team import Team
 
 
@@ -24,3 +25,9 @@ class TeamDTO(Base, Team):
 
         return team_dto
 
+
+class CompetitionTeamDTO(Base, TeamDTO, CompetitionTeam):
+
+    def __init__(self, competition_team):
+
+        CompetitionTeam.__init__(self, competition_team.competition, competition_team.parent_team, competition_team.oid)
