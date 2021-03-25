@@ -1,3 +1,5 @@
+import numpy as np
+
 from teams.domain.utility.utility_classes import IDHelper
 
 
@@ -35,32 +37,48 @@ class Game:
         [10, 17950, 17975],
     ]
 
-    def get_score(self, skill_diff, random):
-        if skill_diff < -10 or skill_diff > 10:
-            raise ValueError(str(skill_diff) + " is not a valid skill difference.")
+    def get_score(self, skill_diff):
+        total_diff = skill_diff * 0.03
+        if total_diff < 0:
+            total_diff = 0
+        elif total_diff >= 1:
+            total_diff = 0.999
 
-        min_value = 0
-        max_value = 17975 - 1
-        modifier = skill_diff * 1000
+        n, p = 12, .25 + total_diff  # mean and standard deviation
+        score = int(np.round(np.random.binomial(n, p, 1)))
 
-        value = random.randint(min_value + modifier, max_value)
-        #print(str(skill_diff) + " : " + str(modifier) + " : " + str(value))
-        if value < 0:
+        if score < 0:
             return 0
+        else:
+            return score
 
-        for a in self.score_matrix:
-            possible_score = a[0]
-            if a[1] <= value < a[2]:
-                return possible_score
+#    def get_score(self, skill_diff, random):
+#        if skill_diff < -10 or skill_diff > 10:
+#            raise ValueError(str(skill_diff) + " is not a valid skill difference.")
+
+#        min_value = 0
+#        max_value = 17975 - 1
+#        modifier = skill_diff * 1000
+
+#        value = random.randint(min_value + modifier, max_value)
+#        #print(str(skill_diff) + " : " + str(modifier) + " : " + str(value))
+#        if value < 0:
+#            return 0
+
+#        for a in self.score_matrix:
+#            possible_score = a[0]
+#            if a[1] <= value < a[2]:
+#                return possible_score
 
         raise ValueError("Matrix didn't have a value.")
 
+    #todo: random is not needed anymore
     def play(self, random):
         if not self.complete:
             skill_diff = self.home_team.skill - self.away_team.skill
 
-            self.home_score = self.get_score(skill_diff, random)
-            self.away_score = self.get_score(skill_diff * -1, random)
+            self.home_score = self.get_score(skill_diff)
+            self.away_score = self.get_score(skill_diff * -1)
             while self.home_score == self.away_score and not self.rules.can_tie:
                 a = random.randint(-6, 6)
                 if a < 0:
