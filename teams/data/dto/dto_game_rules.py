@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, Boolean
+from sqlalchemy import Column, String, Boolean
 
 from teams.data.dto.dto_base import Base
 from teams.domain.game import GameRules
