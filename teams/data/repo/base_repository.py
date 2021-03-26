@@ -4,9 +4,10 @@ from teams.data.database import Database
 
 
 class BaseRepository:
-    @abstractmethod
+
     def add(self, new_object, session):
-        pass
+        dto = self.get_type()(new_object)
+        session.add(dto)
 
     @abstractmethod
     def get_type(self):

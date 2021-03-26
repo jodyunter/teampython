@@ -12,8 +12,4 @@ class TeamRepository(BaseRepository):
     def get_by_active_status(self, active, session):
         return session.query(self.get_type()).filter_by(active=active)
 
-    @staticmethod
-    def add(team, session):
-        team_dto = TeamDTO(team)
-        session.add(team_dto)
 
