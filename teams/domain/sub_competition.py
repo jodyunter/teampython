@@ -6,6 +6,7 @@ from teams.domain.series import SeriesGame
 from teams.domain.utility.utility_classes import IDHelper
 
 
+# mapped
 class SubCompetition(ABC):
 
     def __init__(self, name, sub_competition_type, competition, groups, order, setup, started, finished, post_processed,
@@ -56,6 +57,7 @@ class SubCompetition(ABC):
             return groups[0]
 
 
+# mapped
 class TableSubCompetition(SubCompetition):
 
     def start(self):
@@ -154,6 +156,7 @@ class TableSubCompetition(SubCompetition):
         return result
 
 
+# mapped
 class PlayoffSubCompetition(SubCompetition):
 
     def start(self):

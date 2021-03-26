@@ -1,6 +1,7 @@
 from teams.domain.utility.utility_classes import IDHelper
 
 
+# todo: mapping
 class SeriesRules:
     WINS_TYPE = "ByWins"
     GOALS_TYPE = "ByGoals"
@@ -13,6 +14,7 @@ class SeriesRules:
         self.oid = IDHelper.get_id(oid)
 
 
+# todo: mapping
 class SeriesByWinsRules(SeriesRules):
 
     def __init__(self, name, required_wins, game_rules, home_pattern, oid=None):
@@ -21,6 +23,7 @@ class SeriesByWinsRules(SeriesRules):
         SeriesRules.__init__(self, name, game_rules, SeriesRules.WINS_TYPE, home_pattern, oid)
 
 
+# todo: mapping
 class SeriesByGoalsRules(SeriesRules):
 
     # TODO: add home team pattern here too

@@ -1,6 +1,6 @@
 from teams.domain.utility.utility_classes import IDHelper
 
-
+# mapped
 class Record:
 
     def __init__(self, rank, team, year, wins, loses, ties, goals_for, goals_against, skill, oid=None):

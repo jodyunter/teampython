@@ -5,10 +5,10 @@ from sqlalchemy.orm import relationship
 
 from teams.data.dto.dto_base import Base
 from teams.domain.competition import CompetitionGroup, RankingGroup
-from teams.domain.sub_competition import SubCompetition, TableSubCompetition
+from teams.domain.sub_competition import SubCompetition, TableSubCompetition, PlayoffSubCompetition
 
 
-class SubCompetitionDTO(Base, SubCompetition, ABC):
+class SubCompetitionDTO(Base, SubCompetition):
     __tablename__ = "subcompetitions"
 
     oid = Column(String, primary_key=True)
@@ -58,6 +58,25 @@ class TableSubCompetitionDTO(SubCompetitionDTO, TableSubCompetition):
                                      table_sub_competition.finished,
                                      table_sub_competition.post_processed,
                                      table_sub_competition.oid)
+
+
+class PlayoffSubCompetitionDTO(SubCompetitionDTO, PlayoffSubCompetition):
+    __mapper_args__ = {
+        'polymorphic_identity': 'playoff_sub_competition'
+    }
+
+    def __init__(self, playoff_sub_competition):
+        PlayoffSubCompetition.__init__(self,
+                                       playoff_sub_competition.name,
+                                       playoff_sub_competition.records,
+                                       playoff_sub_competition.competition,
+                                       playoff_sub_competition.groups,
+                                       playoff_sub_competition.order,
+                                       playoff_sub_competition.setup,
+                                       playoff_sub_competition.started,
+                                       playoff_sub_competition.finished,
+                                       playoff_sub_competition.post_processed,
+                                       playoff_sub_competition.oid)
 
 
 class CompetitionGroupDTO(Base, CompetitionGroup):

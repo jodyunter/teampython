@@ -1,7 +1,7 @@
 from teams.domain.errors import DomainError
 from teams.domain.utility.utility_classes import YearRestricted, IDHelper
 
-
+# todo: mapping
 class CompetitionConfiguration(YearRestricted):
 
     def __init__(self, name, sub_competition_configs, team_configs, order, first_year, last_year, oid=None):
@@ -14,6 +14,7 @@ class CompetitionConfiguration(YearRestricted):
         YearRestricted.__init__(self, first_year, last_year)
 
 
+# todo: mapping
 class SubCompetitionConfiguration(YearRestricted):
     PLAYOFF_TYPE = "Playoff"
     TABLE_TYPE = "Table"
@@ -30,6 +31,7 @@ class SubCompetitionConfiguration(YearRestricted):
         YearRestricted.__init__(self, first_year, last_year)
 
 
+# todo: mapping
 class PlayoffSubCompetitionConfiguration(SubCompetitionConfiguration):
 
     def __init__(self, name, competition_configuration, competition_group_configs, competition_team_configs, series_configs, order,
@@ -40,6 +42,7 @@ class PlayoffSubCompetitionConfiguration(SubCompetitionConfiguration):
                                              SubCompetitionConfiguration.PLAYOFF_TYPE, first_year, last_year, oid)
 
 
+# todo: mapping
 class TableSubCompetitionConfiguration(SubCompetitionConfiguration):
     def __init__(self, name, competition_configuration, competition_group_configs, competition_team_configs, order,
                  first_year, last_year, oid=None):
@@ -48,6 +51,7 @@ class TableSubCompetitionConfiguration(SubCompetitionConfiguration):
                                              SubCompetitionConfiguration.TABLE_TYPE, first_year, last_year, oid)
 
 
+# todo: mapping
 # todo: do we need regional groups if they are just the same thing?
 class CompetitionGroupConfiguration(YearRestricted):
     REGIONAL_TYPE = "Regional"
@@ -67,6 +71,7 @@ class CompetitionGroupConfiguration(YearRestricted):
         YearRestricted.__init__(self, first_year, last_year)
 
 
+# todo: mapping
 class RankingGroupConfiguration(CompetitionGroupConfiguration):
 
     def __init__(self, name, sub_competition_configuration, parent_group_configuration, group_level,
@@ -76,6 +81,7 @@ class RankingGroupConfiguration(CompetitionGroupConfiguration):
                                                CompetitionGroupConfiguration.RANKING_TYPE, first_year, last_year, oid)
 
 
+# todo: mapping
 class CompetitionTeamConfiguration(YearRestricted):
 
     def __init__(self, team, competition_configuration, group_configuration, first_year, last_year, oid=None):
@@ -87,6 +93,7 @@ class CompetitionTeamConfiguration(YearRestricted):
         YearRestricted.__init__(self, first_year, last_year)
 
 
+# todo: mapping
 class SeriesConfiguration(YearRestricted):
 
     def __init__(self, name, series_round, sub_competition_configuration,
@@ -115,6 +122,7 @@ class SeriesConfiguration(YearRestricted):
         YearRestricted.__init__(self, first_year, last_year)
 
 
+# todo: mapping
 class TableGameConfiguration(YearRestricted):
     GROUP_TYPE = "Group"
     TEAM_TYPE = "Team"

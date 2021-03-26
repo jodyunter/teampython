@@ -130,6 +130,7 @@ class Competition:
             sub.started = True
 
 
+# mapped
 class CompetitionTeam(Team):
 
     def __init__(self, competition, parent_team, oid=None):
@@ -138,7 +139,7 @@ class CompetitionTeam(Team):
 
         Team.__init__(self, parent_team.name, parent_team.skill, True, oid)
 
-
+# mapped
 class CompetitionGame(Game):
 
     def __init__(self, competition, sub_competition, day, home_team, away_team, home_score, away_score, complete,
@@ -150,7 +151,7 @@ class CompetitionGame(Game):
                       game_processed, rules,
                       oid)
 
-
+# mapped
 class CompetitionGroup:
 
     def __init__(self, name, parent_group, sub_competition, level, rankings, group_type, oid=None):
@@ -190,12 +191,14 @@ class CompetitionGroup:
         self.get_ranking_for_team(team).rank = rank
 
 
+# mapped
 class RankingGroup(CompetitionGroup):
 
     def __init__(self, name, parent_group, sub_competition, level, rankings, oid=None):
         CompetitionGroup.__init__(self, name, parent_group, sub_competition, level, rankings, CompetitionGroupConfiguration.RANKING_TYPE, oid)
 
 
+# mapped
 class CompetitionRanking:
 
     def __init__(self, competition_group, competition_team, rank, oid=None):
@@ -217,6 +220,7 @@ class CompetitionRanking:
         return ranking_group_dict
 
 
+# mapped
 class TableRecord(Record):
 
     def __init__(self, sub_competition, rank, team, year, wins, loses, ties, goals_for, goals_against, skill, oid=None):

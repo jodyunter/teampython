@@ -1,3 +1,4 @@
+# mapped
 class GameData:
 
     def __init__(self, name, current_year, current_day, is_year_setup, is_year_finished):

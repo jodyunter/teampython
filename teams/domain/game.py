@@ -2,14 +2,14 @@ import numpy as np
 
 from teams.domain.utility.utility_classes import IDHelper
 
-
+# mapped
 class GameRules:
     def __init__(self, name, can_tie, oid=None):
         self.oid = IDHelper.get_id(oid)
         self.name = name
         self.can_tie = can_tie
 
-
+# mapped
 class Game:
     def __init__(self, year, day, home_team, away_team, home_score, away_score, complete, processed, rules, oid=None):
         self.year = year

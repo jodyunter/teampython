@@ -5,6 +5,7 @@ from teams.domain.series_rules import SeriesRules
 from teams.domain.utility.utility_classes import IDHelper
 
 
+# todo: mapping
 class Series(ABC):
 
     def __init__(self, sub_competition, name, series_round, home_team, away_team, series_type, series_rules,
@@ -90,6 +91,7 @@ class Series(ABC):
             return self.home_team
 
 
+# todo: mapping
 # TODO: Implement the home pattern.
 class SeriesByWins(Series):
 
@@ -168,6 +170,7 @@ class SeriesByWins(Series):
         return new_games
 
 
+# todo: mapping
 class SeriesByGoals(Series):
 
     def __init__(self, sub_competition, name, series_round, home_team, away_team, home_goals, away_goals, games_played,
@@ -247,6 +250,7 @@ class SeriesByGoals(Series):
                           0, 0, False, False, game_rules)
 
 
+# todo: mapping
 class SeriesGame(CompetitionGame):
 
     def __init__(self, series, game_number, competition, sub_competition, day, home_team, away_team, home_score,

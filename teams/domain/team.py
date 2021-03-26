@@ -1,6 +1,6 @@
 from teams.domain.utility.utility_classes import IDHelper
 
-
+# mapped
 class Team:
 
     def __init__(self, name, skill, active, oid=None):
