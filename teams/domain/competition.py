@@ -139,6 +139,7 @@ class CompetitionTeam(Team):
 
         Team.__init__(self, parent_team.name, parent_team.skill, True, oid)
 
+
 # mapped
 class CompetitionGame(Game):
 
@@ -150,6 +151,7 @@ class CompetitionGame(Game):
         Game.__init__(self, competition.year, day, home_team, away_team, home_score, away_score, complete,
                       game_processed, rules,
                       oid)
+
 
 # mapped
 class CompetitionGroup:
