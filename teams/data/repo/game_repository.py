@@ -10,7 +10,6 @@ class GameRepository(BaseRepository):
     def add(game, session):
         game_dto = GameDTO(game)
         session.add(game_dto)
-        pass
 
     def get_by_unprocessed_and_complete(self, year, first_day, last_day, session):
         my_type = self.get_type()

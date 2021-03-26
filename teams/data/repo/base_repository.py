@@ -5,6 +5,10 @@ from teams.data.database import Database
 
 class BaseRepository:
     @abstractmethod
+    def add(self, new_object, session):
+        pass
+
+    @abstractmethod
     def get_type(self):
         raise NotImplementedError
 

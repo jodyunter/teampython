@@ -3,11 +3,12 @@ from sqlalchemy import Column, String, Integer, Boolean
 from teams.data.dto.dto_base import Base
 from teams.domain.competition import Competition
 
-# todo: create repo
+
 class CompetitionDTO(Base, Competition):
     __tablename__ = "competitions"
 
     oid = Column(String, primary_key=True)
+    name = Column(String)
     year = Column(Integer)
     current_round = Column(Integer)
     setup = Column(Boolean)

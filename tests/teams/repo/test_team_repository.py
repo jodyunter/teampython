@@ -1,4 +1,3 @@
-import uuid
 from unittest import TestCase
 
 from teams.data.dto.dto_team import TeamDTO

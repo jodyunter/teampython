@@ -17,6 +17,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\teams\data\repo\game_data_repository.py">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\teams\data\repo\team_repository.py">
           <value>
             <Attribute>
@@ -165,6 +172,13 @@
           </value>
         </entry>
         <entry key="\tests\teams\domain\test_scheduler.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\tests\teams\repo\test_competition_repository.py">
           <value>
             <Attribute>
               <option name="separator" value="," />
