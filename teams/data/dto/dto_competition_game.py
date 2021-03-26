@@ -1,8 +1,15 @@
+from sqlalchemy import Column, String, ForeignKey
+from sqlalchemy.orm import relationship
+
 from teams.data.dto.dto_game import GameDTO
 from teams.domain.competition import CompetitionGame
 
 
 class CompetitionGameDTO(GameDTO, CompetitionGame):
+    sub_competition_id = Column(String, ForeignKey('competitions.oid'))
+    su_competition = relationship("CompetitionDTO", foreign_keys=[sub_competition_id])
+    competition_id = Column(String, ForeignKey('competitions.oid'))
+    competition = relationship("CompetitionDTO", foreign_keys=[competition_id])
 
     def __init__(self, competition_game):
 

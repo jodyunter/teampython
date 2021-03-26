@@ -1,6 +1,7 @@
 from teams.domain.errors import DomainError
 from teams.domain.utility.utility_classes import YearRestricted, IDHelper
 
+
 # todo: mapping
 class CompetitionConfiguration(YearRestricted):
 

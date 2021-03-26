@@ -72,7 +72,6 @@ class Game:
 
         raise ValueError("Matrix didn't have a value.")
 
-    #todo: random is not needed anymore
     def play(self):
         if not self.complete:
             skill_diff = self.home_team.skill - self.away_team.skill
