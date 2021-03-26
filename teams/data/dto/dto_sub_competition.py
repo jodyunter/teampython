@@ -8,7 +8,7 @@ from teams.domain.competition import CompetitionGroup, RankingGroup
 from teams.domain.sub_competition import SubCompetition, TableSubCompetition
 
 
-class SubCompetitionDTO(ABC, Base, SubCompetition):
+class SubCompetitionDTO(Base, SubCompetition, ABC):
     __tablename__ = "subcompetitions"
 
     oid = Column(String, primary_key=True)
@@ -20,6 +20,12 @@ class SubCompetitionDTO(ABC, Base, SubCompetition):
     started = Column(Boolean)
     finished = Column(Boolean)
     post_processed = Column(Boolean)
+    type = Column(String)
+
+    __mapper_args__ = {
+        'polymorphic_on': type,
+        'polymorphic_identity': 'sub_competition'
+    }
 
     def __init__(self, sub_competition):
         SubCompetition.__init__(self,
@@ -34,7 +40,25 @@ class SubCompetitionDTO(ABC, Base, SubCompetition):
                                 sub_competition.post_processed,
                                 sub_competition.oid)
 
-class TableSubCompetitionDTO(SubCompetitionDTO, TableSubCompetition)
+
+class TableSubCompetitionDTO(SubCompetitionDTO, TableSubCompetition):
+    __mapper_args__ = {
+        'polymorphic_identity': 'table_sub_competition'
+    }
+
+    def __init__(self, table_sub_competition):
+        TableSubCompetition.__init__(self,
+                                     table_sub_competition.name,
+                                     table_sub_competition.records,
+                                     table_sub_competition.competition,
+                                     table_sub_competition.groups,
+                                     table_sub_competition.order,
+                                     table_sub_competition.setup,
+                                     table_sub_competition.started,
+                                     table_sub_competition.finished,
+                                     table_sub_competition.post_processed,
+                                     table_sub_competition.oid)
+
 
 class CompetitionGroupDTO(Base, CompetitionGroup):
     __tablename__ = "competitiongroup"

@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 
 from teams.data.dto.dto_base import Base
 from teams.data.dto.dto_team import TeamDTO
-from teams.data.dto.dto_sub_competition import SubCompetitionDTO
+from teams.data.dto.dto_sub_competition import TableSubCompetitionDTO
 from teams.domain.competition import TableRecord
 from teams.domain.record import Record
 
@@ -44,7 +44,7 @@ class RecordDTO(Base, Record):
 
 class TableRecordDTO(RecordDTO, TableRecord):
     sub_competition_id = Column(String, ForeignKey('subcompetitions.oid'))
-    sub_competition = relationship("SubCompetitionDTO", foreign_keys=[sub_competition_id])
+    sub_competition = relationship("TableSubCompetitionDTO", foreign_keys=[sub_competition_id])
 
     __mapper_args__ = {
         'polymorphic_identity': 'table_record'
