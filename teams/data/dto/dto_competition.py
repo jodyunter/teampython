@@ -3,7 +3,7 @@ from sqlalchemy import Column, String, Integer, Boolean
 from teams.data.dto.dto_base import Base
 from teams.domain.competition import Competition
 
-
+# todo: create repo
 class CompetitionDTO(Base, Competition):
     __tablename__ = "competitions"
 

@@ -5,6 +5,7 @@ from teams.data.dto.dto_record import RecordDTO
 from teams.domain.competition import TableRecord
 
 
+# todo: create repo
 class TableRecordDTO(RecordDTO, TableRecord):
     sub_competition_id = Column(String, ForeignKey('subcompetitions.oid'))
     sub_competition = relationship("TableSubCompetitionDTO", foreign_keys=[sub_competition_id])
