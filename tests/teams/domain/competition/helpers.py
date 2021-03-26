@@ -33,5 +33,5 @@ def create_default_competition_for_testing(name, year=1, sub_comp=None, teams=No
     if teams is None:
         teams = []
 
-    new_comp = Competition(name, year, sub_comp, teams, False, False, False, False)
+    new_comp = Competition(name, year, sub_comp, teams, 1, False, False, False, False)
     return new_comp

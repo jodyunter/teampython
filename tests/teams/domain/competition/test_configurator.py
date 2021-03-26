@@ -66,7 +66,7 @@ class TestCompConfigurationCompetition(BaseTeamTestCase):
 
         self.assertEqual("Comp Name", competition.name)
         self.assertEqual(5, competition.year)
-        self.assertFalse(competition.setup)
+        self.assertTrue(competition.setup)
         self.assertFalse(competition.started)
         self.assertEqual(0, len(competition.sub_competitions))
         self.assertFalse(competition.finished)

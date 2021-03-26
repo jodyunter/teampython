@@ -10,6 +10,7 @@ from teams.domain.series import SeriesByGoals, SeriesGame, SeriesByWins
 from teams.domain.series_rules import SeriesByGoalsRules, SeriesByWinsRules
 from teams.domain.sub_competition import PlayoffSubCompetition
 from tests.teams.domain.competition import helpers
+from tests.teams.domain.competition.helpers import create_default_competition_for_testing
 from tests.teams.domain.competition.test_configurator import TestCompConfigurator, BaseTeamTestCase
 
 
@@ -19,7 +20,7 @@ class TestPlayoffSubCompetition(BaseTeamTestCase):
     @staticmethod
     def play_current_round(playoff, games, r, process_round=False):
         while not playoff.is_round_complete(playoff.current_round):
-            new_games = playoff.create_new_games([])
+            new_games = playoff.create_new_games(current_games=[])
             games.extend(new_games)
 
             for g in new_games:
@@ -31,16 +32,16 @@ class TestPlayoffSubCompetition(BaseTeamTestCase):
 
     @staticmethod
     def create_default_playoff(groups):
-        competition = TestPlayoffSubCompetition.create_default_competition_for_testing("My Comp")
+        competition = create_default_competition_for_testing("My Comp")
         playoff = PlayoffSubCompetition("Playoff", [], competition, None, 1, 1, False, False, False, False)
         competition.sub_competitions.append(playoff)
 
-        league = CompetitionGroup("League", None, None, [], CompetitionGroupConfiguration.RANKING_TYPE)
-        r1_winners_group = CompetitionGroup("R1 Winners", None, playoff, [], CompetitionGroupConfiguration.RANKING_TYPE)
-        r1_losers_group = CompetitionGroup("R1 Losers", None, playoff, [], CompetitionGroupConfiguration.RANKING_TYPE)
-        r2_winners_group = CompetitionGroup("R2 Winners", None, playoff, [], CompetitionGroupConfiguration.RANKING_TYPE)
-        r2_losers_group = CompetitionGroup("R2 Losers", None, playoff, [], CompetitionGroupConfiguration.RANKING_TYPE)
-        eliminated = CompetitionGroup("Eliminated Group", None, playoff, [], CompetitionGroupConfiguration.RANKING_TYPE)
+        league = CompetitionGroup("League", None, None, 1, [], CompetitionGroupConfiguration.RANKING_TYPE)
+        r1_winners_group = CompetitionGroup("R1 Winners", None, 1, playoff, [], CompetitionGroupConfiguration.RANKING_TYPE)
+        r1_losers_group = CompetitionGroup("R1 Losers", None, 1, playoff, [], CompetitionGroupConfiguration.RANKING_TYPE)
+        r2_winners_group = CompetitionGroup("R2 Winners", None, 1, playoff, [], CompetitionGroupConfiguration.RANKING_TYPE)
+        r2_losers_group = CompetitionGroup("R2 Losers", None, 1, playoff, [], CompetitionGroupConfiguration.RANKING_TYPE)
+        eliminated = CompetitionGroup("Eliminated Group", None, 1, playoff, [], CompetitionGroupConfiguration.RANKING_TYPE)
 
         league.rankings = [
             CompetitionRanking(league, helpers.new_comp_team(competition, "Team 1", 5), 1),
@@ -118,7 +119,7 @@ class TestPlayoffSubCompetition(BaseTeamTestCase):
         playoff = TestPlayoffSubCompetition.create_default_playoff(groups)
 
         playoff.setup_round(1)
-        new_games = playoff.create_new_games([])
+        new_games = playoff.create_new_games(current_games=[])
 
         for s in [s for s in playoff.series if s.series_round == 1]:
             games = [g for g in new_games if g.series.oid == s.oid]
@@ -143,7 +144,7 @@ class TestPlayoffSubCompetition(BaseTeamTestCase):
         playoff = TestPlayoffSubCompetition.create_default_playoff(groups)
 
         playoff.setup_round(1)
-        new_games = playoff.create_new_games([])
+        new_games = playoff.create_new_games(current_games=[])
 
         series1_games = [g for g in new_games if g.series.name == "Series 1"]
         series2_games = [g for g in new_games if g.series.name == "Series 2"]

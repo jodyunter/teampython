@@ -6,6 +6,7 @@ from teams.domain.competition import TableRecord, Competition, CompetitionGroup
 from teams.domain.competition_configuration import CompetitionGroupConfiguration
 from teams.domain.sub_competition import TableSubCompetition
 from tests.teams.domain.competition import helpers
+from tests.teams.domain.competition.helpers import create_default_competition_for_testing
 from tests.teams.domain.competition.test_configurator import TestCompConfigurator
 
 
@@ -27,7 +28,7 @@ class TestTableSubCompetition(TestCase):
         self.assertTrue(comp_records[0].team.oid in team_map)
 
     def test_sort_rankings(self):
-        competition = TestCompConfigurator.create_default_competition_for_testing("My Comp")
+        competition = create_default_competition_for_testing("My Comp")
         table = TableSubCompetition("My Table", [], None, None, 1, False, False, False, False)
         competition.sub_competitions.append(table)
 
@@ -55,9 +56,9 @@ class TestTableSubCompetition(TestCase):
 
         table.records = records
 
-        group1 = CompetitionGroup("League", None, table, [], CompetitionGroupConfiguration.RANKING_TYPE)
-        group2 = CompetitionGroup("East", None, table, [], CompetitionGroupConfiguration.RANKING_TYPE)
-        group3 = CompetitionGroup("West", None, table, [], CompetitionGroupConfiguration.RANKING_TYPE)
+        group1 = CompetitionGroup("League", None, table, 1, [], CompetitionGroupConfiguration.RANKING_TYPE)
+        group2 = CompetitionGroup("East", None, table, 1, [], CompetitionGroupConfiguration.RANKING_TYPE)
+        group3 = CompetitionGroup("West", None, table, 1, [], CompetitionGroupConfiguration.RANKING_TYPE)
 
         [group1.add_team_to_group(t) for t in teams]
         for i in range(len(records)):
@@ -86,20 +87,20 @@ class TestTableSubCompetition(TestCase):
         self.assertEqual("Team 6", records[6].team.name)
         self.assertEqual("Team 8", records[7].team.name)
 
-        self.assertEqual("Team 1", group1.get_team_by_rank(1).team.name)
-        self.assertEqual("Team 2", group1.get_team_by_rank(2).team.name)
-        self.assertEqual("Team 4", group1.get_team_by_rank(3).team.name)
-        self.assertEqual("Team 3", group1.get_team_by_rank(4).team.name)
-        self.assertEqual("Team 7", group1.get_team_by_rank(5).team.name)
-        self.assertEqual("Team 5", group1.get_team_by_rank(6).team.name)
-        self.assertEqual("Team 6", group1.get_team_by_rank(7).team.name)
-        self.assertEqual("Team 8", group1.get_team_by_rank(8).team.name)
+        self.assertEqual("Team 1", group1.get_team_by_rank(1).name)
+        self.assertEqual("Team 2", group1.get_team_by_rank(2).name)
+        self.assertEqual("Team 4", group1.get_team_by_rank(3).name)
+        self.assertEqual("Team 3", group1.get_team_by_rank(4).name)
+        self.assertEqual("Team 7", group1.get_team_by_rank(5).name)
+        self.assertEqual("Team 5", group1.get_team_by_rank(6).name)
+        self.assertEqual("Team 6", group1.get_team_by_rank(7).name)
+        self.assertEqual("Team 8", group1.get_team_by_rank(8).name)
 
-        self.assertEqual("Team 1", group2.get_team_by_rank(1).team.name)
-        self.assertEqual("Team 3", group2.get_team_by_rank(2).team.name)
-        self.assertEqual("Team 7", group2.get_team_by_rank(3).team.name)
-        self.assertEqual("Team 5", group2.get_team_by_rank(4).team.name)
-        self.assertEqual("Team 2", group3.get_team_by_rank(1).team.name)
-        self.assertEqual("Team 4", group3.get_team_by_rank(2).team.name)
-        self.assertEqual("Team 6", group3.get_team_by_rank(3).team.name)
-        self.assertEqual("Team 8", group3.get_team_by_rank(4).team.name)
+        self.assertEqual("Team 1", group2.get_team_by_rank(1).name)
+        self.assertEqual("Team 3", group2.get_team_by_rank(2).name)
+        self.assertEqual("Team 7", group2.get_team_by_rank(3).name)
+        self.assertEqual("Team 5", group2.get_team_by_rank(4).name)
+        self.assertEqual("Team 2", group3.get_team_by_rank(1).name)
+        self.assertEqual("Team 4", group3.get_team_by_rank(2).name)
+        self.assertEqual("Team 6", group3.get_team_by_rank(3).name)
+        self.assertEqual("Team 8", group3.get_team_by_rank(4).name)
