@@ -45,6 +45,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\teams\domain\game.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\teams\domain\scheduler.py">
           <value>
             <Attribute>
@@ -144,6 +151,13 @@
           </value>
         </entry>
         <entry key="\tests\teams\domain\competition\test_table_sub_competition.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\tests\teams\domain\test_game.py">
           <value>
             <Attribute>
               <option name="separator" value="," />

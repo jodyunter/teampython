@@ -1,6 +1,8 @@
 import random
 from unittest import TestCase
 
+import numpy as np
+
 from teams.ConsoleUI.views.record_view import RecordView
 from teams.domain.game import Game, GameRules
 from teams.domain.record import Record
@@ -13,10 +15,8 @@ class TestGame(TestCase):
     def test_play(self):
         game = Game(5, 25, Team("T1", 5, True, "1"), Team("T1", 4, True, "2"), 0, 0, False, False, GameRules("Rules", True, ""), "")
 
-        r = random
-        r.seed(1235)
-
-        game.play(r)
+        np.random.seed = 1235
+        game.play()
 
         self.assertTrue(game.complete)
 
@@ -31,11 +31,9 @@ class TestGame(TestCase):
 
         rules = GameRules("Rules", True, "4")
 
-        r = random
-
         for i in range(1000):
             game = Game(1, 1, team1, team2, 0, 0, False, False, rules, str(i))
-            game.play(r)
+            game.play()
             record1.process_game(game.home_score, game.away_score)
             record2.process_game(game.away_score, game.home_score)
 

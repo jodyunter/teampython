@@ -1,6 +1,7 @@
 import random
 from unittest import TestCase
 
+import numpy as np
 from pytest import mark
 
 from teams.domain.competition import Competition, CompetitionGroup, CompetitionRanking
@@ -18,13 +19,13 @@ class TestPlayoffSubCompetition(BaseTeamTestCase):
     SEED = 1234
 
     @staticmethod
-    def play_current_round(playoff, games, r, process_round=False):
+    def play_current_round(playoff, games, process_round=False):
         while not playoff.is_round_complete(playoff.current_round):
             new_games = playoff.create_new_games(current_games=[])
             games.extend(new_games)
 
             for g in new_games:
-                g.play(r)
+                g.play()
                 playoff.process_game(g)
 
         if process_round:
@@ -213,11 +214,10 @@ class TestPlayoffSubCompetition(BaseTeamTestCase):
 
         self.assertFalse(playoff.is_round_complete(1))
 
-        r = random
-        r.seed(TestPlayoffSubCompetition.SEED)
+        np.random.seed =  TestPlayoffSubCompetition.SEED
 
         games = []
-        TestPlayoffSubCompetition.play_current_round(playoff, games, r)
+        TestPlayoffSubCompetition.play_current_round(playoff, games)
         self.assertTrue(playoff.is_round_complete(1))
         self.assertFalse(playoff.is_round_post_processed(1))
         playoff.post_process_round(1)
@@ -241,11 +241,10 @@ class TestPlayoffSubCompetition(BaseTeamTestCase):
         self.assertEqual(0, len(groups[1].rankings))
         self.assertEqual(0, len(groups[2].rankings))
 
-        r = random
-        r.seed(TestPlayoffSubCompetition.SEED)
+        np.random.seed = TestPlayoffSubCompetition.SEED
 
         games = []
-        TestPlayoffSubCompetition.play_current_round(playoff, games, r)
+        TestPlayoffSubCompetition.play_current_round(playoff, games)
 
         playoff.post_process_round(playoff.current_round)
 

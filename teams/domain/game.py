@@ -73,14 +73,14 @@ class Game:
         raise ValueError("Matrix didn't have a value.")
 
     #todo: random is not needed anymore
-    def play(self, random):
+    def play(self):
         if not self.complete:
             skill_diff = self.home_team.skill - self.away_team.skill
 
             self.home_score = self.get_score(skill_diff)
             self.away_score = self.get_score(skill_diff * -1)
             while self.home_score == self.away_score and not self.rules.can_tie:
-                a = random.randint(-6, 6)
+                a = np.random.randint(-6, 6)
                 if a < 0:
                     self.away_score += 1
                 elif a > 0:
