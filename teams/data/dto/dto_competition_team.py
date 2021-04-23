@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 from teams.data.dto.dto_team import TeamDTO
 from teams.domain.competition import CompetitionTeam
 
+
 # todo: create repo
 class CompetitionTeamDTO(TeamDTO, CompetitionTeam):
     competition_id = Column(String, ForeignKey('competitions.oid'))

@@ -3,6 +3,11 @@ import random
 from teams.ConsoleUI.views.game_view import GameDayView
 from teams.ConsoleUI.views.playoff_views import SeriesView
 from teams.ConsoleUI.views.record_view import RecordView
+from teams.data.database import Database
+from teams.data.dto.dto_competition import CompetitionDTO
+from teams.data.dto.dto_game import GameDTO
+from teams.data.dto.dto_ranking_group import RankingGroupDTO
+from teams.data.repo.repository import Repository
 from teams.domain.comp_configorator import CompetitionConfigurator
 from teams.domain.competition_configuration import RankingGroupConfiguration, CompetitionConfiguration, \
     TableSubCompetitionConfiguration, CompetitionTeamConfiguration, PlayoffSubCompetitionConfiguration, \
@@ -171,7 +176,7 @@ last_day = -1
 for d in days.keys():
     day = days[d]
     for g in day:
-        g.play(rand)
+        g.play()
         competition.process_game(g)
     competition.process_end_of_day(competition.sort_day_dictionary_to_incomplete_games_dictionary(days))
     game_day_view_model = GameService.games_to_game_day_view(day)
@@ -197,11 +202,11 @@ while not playoff.is_complete():
         if not playoff.is_round_setup(playoff.current_round):
             playoff.setup_round(playoff.current_round)
         # print(loop)
-        new_games = playoff.create_new_games(games)
+        new_games = playoff.create_new_games(current_games=games)
         Scheduler.add_games_to_schedule(new_games, days, rand, current_day)
         games.extend(new_games)
         for g in days[current_day]:
-            g.play(rand)
+            g.play()
             model = GameService.game_to_vm(g)
             competition.process_game(g)
             # print(GameView.get_basic_view(model))
@@ -234,3 +239,5 @@ champion = competition.get_group_by_name("Champion")
 runner_up = competition.get_group_by_name("Runner Up")
 print("")
 print(f"Champion: {champion.rankings[0].team.name:15} Runner Up: {runner_up.rankings[0].team.name:15}")
+
+
