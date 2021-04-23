@@ -1,3 +1,5 @@
+from teams.data.dto.dto_record import RecordDTO
+from teams.data.dto.dto_team import TeamDTO
 from teams.data.repo.record_repository import RecordRepository
 from teams.data.repo.team_repository import TeamRepository
 from teams.domain.record import Record
@@ -10,11 +12,9 @@ class RecordService(BaseService):
     def add(self, team_view_list, year, session=None):
         commit = session is None
         session = self.get_session(session)
-        repo = RecordRepository()
-        team_repo = TeamRepository()
-        team_list = [team_repo.get_by_oid(t.oid, session) for t in team_view_list]
+        team_list = [TeamRepository.get_by_oid(t.oid, TeamDTO, session) for t in team_view_list]
         record_list = [Record(-1, t, year, 0, 0, 0, 0, 0, t.skill, self.get_new_id()) for t in team_list]
-        [repo.add(r, session) for r in record_list]
+        [RecordRepository.add(r, RecordDTO, session) for r in record_list]
         self.commit(session, commit)
 
     def update_records(self, updated_records, session=None):

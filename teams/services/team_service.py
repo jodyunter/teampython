@@ -1,3 +1,4 @@
+from teams.data.dto.dto_team import TeamDTO
 from teams.data.repo.team_repository import TeamRepository
 from teams.domain.team import Team
 from teams.services.base_service import BaseService
@@ -5,7 +6,6 @@ from teams.services.view_models.team_view_models import TeamViewModel
 
 
 class TeamService(BaseService):
-    repo = TeamRepository()
 
     @staticmethod
     def team_to_vm(team):
@@ -16,7 +16,7 @@ class TeamService(BaseService):
         session = self.get_session(session)
 
         dto = Team(name, skill, active, self.get_new_id())
-        self.repo.add(dto, session)
+        TeamRepository.add(dto, TeamDTO, session)
 
         self.commit(session, commit)
 
@@ -24,7 +24,7 @@ class TeamService(BaseService):
         commit = session is None
         session = self.get_session(session)
 
-        team = self.repo.get_by_oid(oid, session)
+        team = TeamRepository.get_by_oid(oid, TeamDTO, session)
         team.name = name
         team.skill = skill
         team.active = active
@@ -39,7 +39,7 @@ class TeamService(BaseService):
         commit = session is None
         session = self.get_session(session)
 
-        teams = self.repo.get_all(session)
+        teams = TeamRepository.get_all(TeamDTO, session)
 
         skill_change = {
             "0": [5, -200],
@@ -91,19 +91,19 @@ class TeamService(BaseService):
     def get_all(self, session=None):
         session = self.get_session(session)
 
-        team_list = self.repo.get_all(session)
+        team_list = TeamRepository.get_all(TeamDTO, session)
         return [TeamService.team_to_vm(t) for t in team_list]
 
     def get_active_teams(self, session=None):
         session = self.get_session(session)
 
-        team_list = self.repo.get_by_active_status(True, session)
+        team_list = TeamRepository.get_by_active_status(True, session)
 
         return [TeamService.team_to_vm(t) for t in team_list]
 
     def get_team_by_name(self, name, session=None):
         session = self.get_session(session)
-        team = self.repo.get_by_name(name, session)
+        team = TeamRepository.get_by_name(name, session)
         if team is None:
             return None
         else:
@@ -111,7 +111,7 @@ class TeamService(BaseService):
 
     def get_by_id(self, oid, session=None):
         session = self.get_session(session)
-        team = self.repo.get_by_oid(oid, session)
+        team = TeamRepository.get_by_oid(oid, TeamDTO, session)
         if team is None:
             return None
         else:

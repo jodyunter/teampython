@@ -1,3 +1,4 @@
+from teams.data.dto.dto_game_data import GameDataDTO
 from teams.data.repo.game_data_repository import GameDataRepository
 from teams.domain.gamedata import GameData
 from teams.services.base_service import BaseService
@@ -22,9 +23,8 @@ class AppService(BaseService):
     def setup_data(self, year, day, setup, finished, session=None):
         commit = session is None
         session = self.get_session(session)
-        repo = GameDataRepository()
         game_data = GameData("game_data", year, day, setup, finished)
-        repo.add(game_data, session)
+        GameDataRepository.add(game_data, GameDataDTO, session)
         self.commit(session, commit)
 
     def change_day(self, new_day, session=None):

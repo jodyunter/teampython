@@ -1,16 +1,18 @@
 from unittest import TestCase
 
 from teams.data.database import Database
+from teams.data.dto.dto_record import RecordDTO
+from teams.data.dto.dto_team import TeamDTO
+from teams.data.repo.repository import Repository
 from teams.data.repo.record_repository import RecordRepository
 from teams.data.repo.team_repository import TeamRepository
 from teams.domain.record import Record
 from teams.domain.team import Team
 from teams.domain.utility.utility_classes import IDHelper
-from tests.teams.repo.test_base_repository import TestBaseRepository
+from tests.teams.repo.test_repository import TestBaseRepository
 
 
 class TestRecordRepository(TestBaseRepository, TestCase):
-    repo = RecordRepository()
 
     def test_add_new_team(self):
         session = self.setup_basic_test()
@@ -19,11 +21,11 @@ class TestRecordRepository(TestBaseRepository, TestCase):
 
         record = Record(1, team, 1, 2, 3, 4, 5, 6, 7, IDHelper.get_new_id())
 
-        self.repo.add(record, session)
+        RecordRepository.add(record, RecordDTO, session)
 
         session.commit()
 
-        result = self.repo.get_by_oid(record.oid, session)
+        result = RecordRepository.get_by_oid(record.oid, RecordDTO, session)
         self.assertEqual(result.oid, record.oid)
         self.assertEqual(result.team.oid, record.team.oid)
 
@@ -31,33 +33,32 @@ class TestRecordRepository(TestBaseRepository, TestCase):
         session = self.setup_basic_test()
         team_id = IDHelper.get_new_id()
         team = Team("Record Add Existing Team", 5, True, team_id)
-        team_repo = TeamRepository()
-        team_repo.add(team, session)
+        TeamRepository.add(team, TeamDTO, session)
         session.commit()
 
-        team = team_repo.get_by_oid(team.oid, session)
+        team = TeamRepository.get_by_oid(team.oid, TeamDTO, session)
         record = Record(1, team, 1, 2, 3, 4, 5, 6, 7, IDHelper.get_new_id())
 
-        self.repo.add(record, session)
+        RecordRepository.add(record, RecordDTO, session)
 
         session.commit()
 
-        result = self.repo.get_by_oid(record.oid, session)
+        result = RecordRepository.get_by_oid(record.oid, RecordDTO, session)
         self.assertEqual(result.oid, record.oid)
         self.assertEqual(result.team.oid, record.team.oid)
 
     def test_get_all(self):
         session = self.setup_basic_test()
         team_names = ["Team A1", "Team A2", "Team A5"]
-        team_repo = TeamRepository()
-        [team_repo.add(Team(t, 0, True, IDHelper.get_new_id()), session) for t in team_names]
+
+        [TeamRepository.add(Team(t, 0, True, IDHelper.get_new_id()), TeamDTO, session) for t in team_names]
         session.commit()
 
-        [self.repo.add(Record(1, team, 1, 2, 3, 4, 5, 6, 7, IDHelper.get_new_id()), session)
-         for team in team_repo.get_all(session)]
+        [RecordRepository.add(Record(1, team, 1, 2, 3, 4, 5, 6, 7, IDHelper.get_new_id()), RecordDTO, session)
+         for team in TeamRepository.get_all(TeamDTO, session)]
         session.commit()
 
-        self.assertEqual(3, len(self.repo.get_all(session)))
+        self.assertEqual(3, len(RecordRepository.get_all(RecordDTO, session)))
 
 
 
@@ -67,47 +68,45 @@ class TestRecordRepository(TestBaseRepository, TestCase):
 
     def test_get_by_year(self):
         session = self.setup_basic_test()
-        repo = RecordRepository()
-        team_repo = TeamRepository()
-        self.setup_record_query_data(session, repo, team_repo)
+        self.setup_record_query_data(session)
 
-        self.assertEqual(0, len(list(self.repo.get_by_year(325, session))))
-        self.assertEqual(3, len(list(self.repo.get_by_year(30, session))))
-        self.assertEqual(5, len(list(self.repo.get_by_year(31, session))))
-        self.assertEqual(2, len(list(self.repo.get_by_year(32, session))))
-        self.assertEqual(1, len(list(self.repo.get_by_year(33, session))))
+        self.assertEqual(0, len(list(RecordRepository.get_by_year(325, session))))
+        self.assertEqual(3, len(list(RecordRepository.get_by_year(30, session))))
+        self.assertEqual(5, len(list(RecordRepository.get_by_year(31, session))))
+        self.assertEqual(2, len(list(RecordRepository.get_by_year(32, session))))
+        self.assertEqual(1, len(list(RecordRepository.get_by_year(33, session))))
 
-    def setup_record_query_data(self, session, repo, team_repo):
+    def setup_record_query_data(self, session):
         team_list = []
         for i in range(10):
             new_id = IDHelper.get_new_id()
             team_list.append(Team("GBYN " + str(i), i, True, new_id))
 
-        [team_repo.add(t, session) for t in team_list]
+        [Repository.add(t, TeamDTO, session) for t in team_list]
         # need them to be DTOs!
-        team_list = team_repo.get_all(session)
+        team_list = Repository.get_all(TeamDTO, session)
 
         record_year_30 = [
-            repo.add(Record(1, team_list[0], 30, 0, 0, 0, 0, 0, 0, self.create_id()), session),
-            repo.add(Record(2, team_list[1], 30, 0, 0, 0, 0, 0, 0, self.create_id()), session),
-            repo.add(Record(3, team_list[2], 30, 0, 0, 0, 0, 0, 0, self.create_id()), session),
+            Repository.add(Record(1, team_list[0], 30, 0, 0, 0, 0, 0, 0, self.create_id()), RecordDTO, session),
+            Repository.add(Record(2, team_list[1], 30, 0, 0, 0, 0, 0, 0, self.create_id()), RecordDTO, session),
+            Repository.add(Record(3, team_list[2], 30, 0, 0, 0, 0, 0, 0, self.create_id()), RecordDTO, session),
         ]
 
         record_year_31 = [
-            repo.add(Record(1, team_list[2], 31, 0, 0, 0, 0, 0, 0, self.create_id()), session),
-            repo.add(Record(1, team_list[4], 31, 0, 0, 0, 0, 0, 0, self.create_id()), session),
-            repo.add(Record(1, team_list[6], 31, 0, 0, 0, 0, 0, 0, self.create_id()), session),
-            repo.add(Record(1, team_list[8], 31, 0, 0, 0, 0, 0, 0, self.create_id()), session),
-            repo.add(Record(1, team_list[9], 31, 0, 0, 0, 0, 0, 0, self.create_id()), session),
+            Repository.add(Record(1, team_list[2], 31, 0, 0, 0, 0, 0, 0, self.create_id()), RecordDTO, session),
+            Repository.add(Record(1, team_list[4], 31, 0, 0, 0, 0, 0, 0, self.create_id()), RecordDTO, session),
+            Repository.add(Record(1, team_list[6], 31, 0, 0, 0, 0, 0, 0, self.create_id()), RecordDTO, session),
+            Repository.add(Record(1, team_list[8], 31, 0, 0, 0, 0, 0, 0, self.create_id()), RecordDTO, session),
+            Repository.add(Record(1, team_list[9], 31, 0, 0, 0, 0, 0, 0, self.create_id()), RecordDTO, session),
         ]
 
         record_year_32 = [
-            repo.add(Record(1, team_list[5], 32, 0, 0, 0, 0, 0, 0, self.create_id()), session),
-            repo.add(Record(1, team_list[3], 32, 0, 0, 0, 0, 0, 0, self.create_id()), session),
+            Repository.add(Record(1, team_list[5], 32, 0, 0, 0, 0, 0, 0, self.create_id()), RecordDTO, session),
+            Repository.add(Record(1, team_list[3], 32, 0, 0, 0, 0, 0, 0, self.create_id()), RecordDTO, session),
         ]
 
         record_year_33 = [
-            repo.add(Record(1, team_list[1], 33, 0, 0, 0, 0, 0, 0, self.create_id()), session),
+            Repository.add(Record(1, team_list[1], 33, 0, 0, 0, 0, 0, 0, self.create_id()), RecordDTO, session),
         ]
 
         session.commit()
@@ -116,27 +115,23 @@ class TestRecordRepository(TestBaseRepository, TestCase):
         session = self.setup_basic_test()
         Database.clean_up_database(session)
 
-        repo = RecordRepository()
-        team_repo = TeamRepository()
-        self.setup_record_query_data(session, repo, team_repo)
+        self.setup_record_query_data(session)
 
-        team = team_repo.get_by_name("GBYN 1", session)
+        team = TeamRepository.get_by_name("GBYN 1", session)
 
-        result = repo.get_by_team_and_year(team.oid, 30, session)
+        result = RecordRepository.get_by_team_and_year(team.oid, 30, session)
         self.assertEqual(result.team.oid, team.oid)
         self.assertEqual(result.year, 30)
 
-        result = repo.get_by_team_and_year(team.oid, 33, session)
+        result = RecordRepository.get_by_team_and_year(team.oid, 33, session)
         self.assertEqual(result.team.oid, team.oid)
         self.assertEqual(result.year, 33)
 
     def test_get_season_list(self):
         session = self.setup_basic_test()
-        repo = RecordRepository()
-        team_repo = TeamRepository()
-        self.setup_record_query_data(session, repo, team_repo)
+        self.setup_record_query_data(session)
 
-        count = [a.year for a in repo.get_list_of_seasons(session)]
+        count = [a.year for a in RecordRepository.get_list_of_seasons(session)]
         self.assertEqual(4, len(count))
         self.assertEqual(count[0], 30)
         self.assertEqual(count[1], 31)

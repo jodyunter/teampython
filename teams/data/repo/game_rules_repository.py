@@ -1,10 +1,9 @@
 from teams.data.dto.dto_game_rules import GameRulesDTO
-from teams.data.repo.base_repository import BaseRepository
+from teams.data.repo.repository import Repository
 
 
-class GameRulesRepository(BaseRepository):
-    def get_type(self):
-        return GameRulesDTO
+class GameRulesRepository(Repository):
 
-    def get_by_name(self, name, session):
-        return session.query(self.get_type()).filter_by(name=name).first()
+    @staticmethod
+    def get_by_name(name, session):
+        return session.query(GameRulesDTO).filter_by(name=name).first()

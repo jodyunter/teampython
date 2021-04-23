@@ -17,6 +17,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\teams\data\repo\base_repository.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\teams\data\repo\game_data_repository.py">
           <value>
             <Attribute>
@@ -67,6 +74,13 @@
           </value>
         </entry>
         <entry key="\teams\domain\sub_competition.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\teams\services\record_service.py">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -179,6 +193,41 @@
           </value>
         </entry>
         <entry key="\tests\teams\repo\test_competition_repository.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\tests\teams\repo\test_game_data_repository.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\tests\teams\repo\test_game_repository.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\tests\teams\repo\test_game_rules_repository.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\tests\teams\repo\test_record_repository.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\tests\teams\repo\test_team_repository.py">
           <value>
             <Attribute>
               <option name="separator" value="," />

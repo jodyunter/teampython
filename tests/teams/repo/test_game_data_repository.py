@@ -2,11 +2,10 @@ from unittest import TestCase
 
 from teams.data.repo.game_data_repository import GameDataDTO, GameDataRepository
 from teams.domain.gamedata import GameData
-from tests.teams.repo.test_base_repository import TestBaseRepository
+from tests.teams.repo.test_repository import TestBaseRepository
 
 
 class TestGameDataRepository(TestBaseRepository, TestCase):
-    repo = GameDataRepository()
 
     def test_get(self):
         session = self.setup_basic_test()
@@ -14,7 +13,7 @@ class TestGameDataRepository(TestBaseRepository, TestCase):
         session.add(game_data)
         session.commit()
 
-        new_gd = self.repo.get_current_data(session)
+        new_gd = GameDataRepository.get_current_data(session)
 
         self.assertEqual(game_data.current_year, new_gd.current_year, "check year")
         self.assertEqual(game_data.current_day, new_gd.current_day, "check day")
