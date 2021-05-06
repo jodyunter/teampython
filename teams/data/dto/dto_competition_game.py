@@ -7,10 +7,10 @@ from teams.domain.competition import CompetitionGame
 
 # todo: create repo
 class CompetitionGameDTO(GameDTO, CompetitionGame):
-    sub_competition_id = Column(String, ForeignKey('competitions.oid'))
-    su_competition = relationship("CompetitionDTO", foreign_keys=[sub_competition_id])
+    sub_competition_id = Column(String, ForeignKey('subcompetitions.oid'))
+    sub_competition = relationship("SubCompetitionDTO", back_populates="games", foreign_keys=[sub_competition_id])
     competition_id = Column(String, ForeignKey('competitions.oid'))
-    competition = relationship("CompetitionDTO", foreign_keys=[competition_id])
+    competition = relationship("CompetitionDTO", back_populates="games", foreign_keys=[competition_id])
 
     def __init__(self, competition_game):
 

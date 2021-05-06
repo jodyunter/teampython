@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from teams.data.dto.dto_competition import CompetitionDTO
 from teams.data.repo.repository import Repository
-from teams.domain.competition import Competition
+from teams.domain.competition import Competition, CompetitionGame
 from tests.teams.repo.test_repository import TestBaseRepository
 
 
@@ -11,7 +11,6 @@ class TestCompetitionRepository(TestBaseRepository, TestCase):
     def test_add(self):
         session = self.setup_basic_test()
         comp = Competition("Test", 1, None, None, 25, False, True, False, True)
-
         Repository.add(comp, CompetitionDTO, session)
         session.commit()
 

@@ -1,7 +1,9 @@
 from sqlalchemy import Column, String, Integer, Boolean
+from sqlalchemy.orm import relationship
 
 from teams.data.dto.dto_base import Base
 from teams.domain.competition import Competition
+from teams.data.dto.dto_competition_game import CompetitionGameDTO
 
 
 class CompetitionDTO(Base, Competition):
@@ -15,6 +17,7 @@ class CompetitionDTO(Base, Competition):
     started = Column(Boolean)
     finished = Column(Boolean)
     post_processed = Column(Boolean)
+    games = relationship("CompetitionGameDTO", back_populates="competition")
 
     def __init__(self, competition):
 

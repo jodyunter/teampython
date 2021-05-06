@@ -1,3 +1,5 @@
+from abc import ABC
+
 from sqlalchemy import Column, String, Integer, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
@@ -19,6 +21,7 @@ class SubCompetitionDTO(Base, SubCompetition):
     finished = Column(Boolean)
     post_processed = Column(Boolean)
     type = Column(String)
+    games = relationship("CompetitionGameDTO", back_populates="sub_competition")
 
     __mapper_args__ = {
         'polymorphic_on': type,
