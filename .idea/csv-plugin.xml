@@ -269,6 +269,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\tests\teams\repo\test_sub_competition_repository.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\tests\teams\repo\test_team_repository.py">
           <value>
             <Attribute>
