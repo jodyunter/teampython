@@ -255,6 +255,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\tests\teams\repo\test_playoff_sub_competition_repository.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\tests\teams\repo\test_record_repository.py">
           <value>
             <Attribute>
@@ -270,6 +277,13 @@
           </value>
         </entry>
         <entry key="\tests\teams\repo\test_sub_competition_repository.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\tests\teams\repo\test_table_competition_repository.py">
           <value>
             <Attribute>
               <option name="separator" value="," />

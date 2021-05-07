@@ -1,9 +1,7 @@
 from sqlalchemy import Column, String, Integer, Boolean
-from sqlalchemy.orm import relationship
 
 from teams.data.dto.dto_base import Base
 from teams.domain.competition import Competition
-from teams.data.dto.dto_competition_game import CompetitionGameDTO
 
 
 class CompetitionDTO(Base, Competition):

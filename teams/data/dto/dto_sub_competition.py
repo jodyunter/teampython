@@ -12,6 +12,7 @@ class SubCompetitionDTO(Base, SubCompetition):
     __tablename__ = "subcompetitions"
 
     oid = Column(String, primary_key=True)
+    name = Column(String)
     sub_competition_type = Column(String)
     competition_id = Column(String, ForeignKey('competitions.oid'))
     competition = relationship("CompetitionDTO", foreign_keys=[competition_id])
@@ -39,7 +40,6 @@ class SubCompetitionDTO(Base, SubCompetition):
                                 sub_competition.finished,
                                 sub_competition.post_processed,
                                 sub_competition.oid)
-
 
     def __eq__(self, other):
         return self.oid == other.oid and \
