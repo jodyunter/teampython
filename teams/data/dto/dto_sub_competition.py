@@ -21,7 +21,6 @@ class SubCompetitionDTO(Base, SubCompetition):
     finished = Column(Boolean)
     post_processed = Column(Boolean)
     type = Column(String)
-    games = relationship("CompetitionGameDTO", back_populates="sub_competition")
 
     __mapper_args__ = {
         'polymorphic_on': type,

@@ -17,7 +17,6 @@ class CompetitionDTO(Base, Competition):
     started = Column(Boolean)
     finished = Column(Boolean)
     post_processed = Column(Boolean)
-    games = relationship("CompetitionGameDTO", back_populates="competition")
 
     def __init__(self, competition):
 
@@ -31,3 +30,13 @@ class CompetitionDTO(Base, Competition):
                              competition.finished,
                              competition.post_processed,
                              competition.oid)
+
+    def __eq__(self, other):
+        return self.oid == other.oid and \
+            self.name == other.name and \
+            self.current_round == other.current_round and \
+            self.setup == other.setup and \
+            self.started == other.started and \
+            self.finished == other.finished and \
+            self.post_processed == other.post_processed
+

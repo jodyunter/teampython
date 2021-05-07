@@ -1,27 +1,25 @@
 from unittest import TestCase
 
 from teams.data.dto.dto_competition import CompetitionDTO
-from teams.data.repo.repository import Repository
-from teams.domain.competition import Competition, CompetitionGame
+from teams.domain.competition import Competition
 from tests.teams.repo.test_repository import TestBaseRepository
 
 
 class TestCompetitionRepository(TestBaseRepository, TestCase):
 
-    def test_add(self):
-        session = self.setup_basic_test()
-        comp = Competition("Test", 1, None, None, 25, False, True, False, True)
-        Repository.add(comp, CompetitionDTO, session)
-        session.commit()
+    def get_add_record(self):
+        return CompetitionDTO(Competition("Comp Name", 1, None, None, 2, False, True, False, True))
 
-        my_comps = Repository.get_all(CompetitionDTO, session)
+    def get_updated_record(self, original_record):
+        original_record.name = "New Comp Name"
+        original_record.year = 10
+        original_record.sub_competitions = None
+        original_record.teams = None
+        original_record.current_round = 3
+        original_record.setup = True
+        original_record.finished = False
+        original_record.processed = True
+        original_record.post_processed = False
 
-        new_comp = my_comps[0]
-        self.assertEqual(1, len(my_comps))
-        self.assertEqual("Test", new_comp.name)
-        self.assertEqual(1, new_comp.year)
-        self.assertEqual(25, new_comp.current_round)
-        self.assertFalse(new_comp.setup)
-        self.assertTrue(new_comp.started)
-        self.assertFalse(new_comp.finished)
-        self.assertTrue(new_comp.post_processed)
+        return original_record
+

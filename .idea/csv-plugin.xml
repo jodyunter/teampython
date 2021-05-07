@@ -38,6 +38,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\teams\data\dto\dto_team.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\teams\data\repo\base_repository.py">
           <value>
             <Attribute>
