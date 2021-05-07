@@ -29,3 +29,9 @@ class TeamDTO(Base, Team):
             team_dto = team
 
         return team_dto
+
+    def __eq__(self, other):
+        return self.name == other.name and \
+               self.active == other.active and \
+               self.skill == other.skill and \
+               self.oid == other.oid

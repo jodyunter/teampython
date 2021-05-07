@@ -14,5 +14,14 @@ class GameDataDTO(Base, GameData):
     is_year_finished = Column(Boolean)
 
     def __init__(self, game_data):
+        self.oid = None
         GameData.__init__(self, game_data.name, game_data.current_day, game_data.current_year,
                           game_data.is_year_setup, game_data.is_year_finished)
+
+    def __eq__(self, other):
+        return self.name == other.name and \
+            self.current_day == other.current_day and \
+            self.current_year == other.current_year and \
+            self.is_year_setup == other.is_year_setup and \
+            self.is_year_finished == other.is_year_finished
+

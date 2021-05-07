@@ -17,6 +17,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\teams\data\dto\dto_game.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\teams\data\dto\dto_record.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\teams\data\dto\dto_sub_competition.py">
           <value>
             <Attribute>
@@ -84,6 +98,13 @@
           <value>
             <Attribute>
               <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\teams\services\base_service.py">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
             </Attribute>
           </value>
         </entry>
@@ -234,7 +255,21 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\tests\teams\repo\test_repository.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\tests\teams\repo\test_team_repository.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\tests\teams\services\test_team_service.py">
           <value>
             <Attribute>
               <option name="separator" value="," />

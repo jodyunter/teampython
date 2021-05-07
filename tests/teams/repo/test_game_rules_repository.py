@@ -8,6 +8,14 @@ from tests.teams.repo.test_repository import TestBaseRepository
 
 class TestGameRulesRepository(TestBaseRepository, TestCase):
 
+    def get_add_record(self):
+        return GameRulesDTO(GameRules("Rules Name", False))
+
+    def get_updated_record(self, original_record):
+        original_record.name = "New Name"
+        original_record.can_tie = True
+        return original_record
+
     def test_add(self):
         session = self.setup_basic_test()
         GameRulesRepository.add(GameRules("My Name", False, self.get_id()), GameRulesDTO, session)

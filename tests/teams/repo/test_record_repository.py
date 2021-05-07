@@ -14,6 +14,28 @@ from tests.teams.repo.test_repository import TestBaseRepository
 
 class TestRecordRepository(TestBaseRepository, TestCase):
 
+    def test_add_record(self):
+        TestBaseRepository.test_add_record(self)
+
+    def test_updated_record(self):
+        TestBaseRepository.test_update_record(self)
+
+    def get_add_record(self):
+        return RecordDTO(Record(5, TeamDTO(Team("Team Name", 5, True)), 25, 10, 20, 30, 40, 50, 200))
+
+    def get_updated_record(self, original_record):
+        original_record.rank = 3
+        original_record.year = 15
+        original_record.wins = 1
+        original_record.loses = 2
+        original_record.ties = 3
+        original_record.goals_for = 4
+        original_record.goals_against = 5
+        original_record.skill = 20
+        original_record.team = TeamDTO(Team("New Team Name", 12, False))
+
+        return original_record
+
     def test_add_new_team(self):
         session = self.setup_basic_test()
         team_id = IDHelper.get_new_id()
@@ -60,12 +82,6 @@ class TestRecordRepository(TestBaseRepository, TestCase):
 
         self.assertEqual(3, len(RecordRepository.get_all(RecordDTO, session)))
 
-
-
-    @staticmethod
-    def create_id():
-        return IDHelper.get_new_id()
-
     def test_get_by_year(self):
         session = self.setup_basic_test()
         self.setup_record_query_data(session)
@@ -87,26 +103,26 @@ class TestRecordRepository(TestBaseRepository, TestCase):
         team_list = Repository.get_all(TeamDTO, session)
 
         record_year_30 = [
-            Repository.add(Record(1, team_list[0], 30, 0, 0, 0, 0, 0, 0, self.create_id()), RecordDTO, session),
-            Repository.add(Record(2, team_list[1], 30, 0, 0, 0, 0, 0, 0, self.create_id()), RecordDTO, session),
-            Repository.add(Record(3, team_list[2], 30, 0, 0, 0, 0, 0, 0, self.create_id()), RecordDTO, session),
+            Repository.add(Record(1, team_list[0], 30, 0, 0, 0, 0, 0, 0, self.get_id()), RecordDTO, session),
+            Repository.add(Record(2, team_list[1], 30, 0, 0, 0, 0, 0, 0, self.get_id()), RecordDTO, session),
+            Repository.add(Record(3, team_list[2], 30, 0, 0, 0, 0, 0, 0, self.get_id()), RecordDTO, session),
         ]
 
         record_year_31 = [
-            Repository.add(Record(1, team_list[2], 31, 0, 0, 0, 0, 0, 0, self.create_id()), RecordDTO, session),
-            Repository.add(Record(1, team_list[4], 31, 0, 0, 0, 0, 0, 0, self.create_id()), RecordDTO, session),
-            Repository.add(Record(1, team_list[6], 31, 0, 0, 0, 0, 0, 0, self.create_id()), RecordDTO, session),
-            Repository.add(Record(1, team_list[8], 31, 0, 0, 0, 0, 0, 0, self.create_id()), RecordDTO, session),
-            Repository.add(Record(1, team_list[9], 31, 0, 0, 0, 0, 0, 0, self.create_id()), RecordDTO, session),
+            Repository.add(Record(1, team_list[2], 31, 0, 0, 0, 0, 0, 0, self.get_id()), RecordDTO, session),
+            Repository.add(Record(1, team_list[4], 31, 0, 0, 0, 0, 0, 0, self.get_id()), RecordDTO, session),
+            Repository.add(Record(1, team_list[6], 31, 0, 0, 0, 0, 0, 0, self.get_id()), RecordDTO, session),
+            Repository.add(Record(1, team_list[8], 31, 0, 0, 0, 0, 0, 0, self.get_id()), RecordDTO, session),
+            Repository.add(Record(1, team_list[9], 31, 0, 0, 0, 0, 0, 0, self.get_id()), RecordDTO, session),
         ]
 
         record_year_32 = [
-            Repository.add(Record(1, team_list[5], 32, 0, 0, 0, 0, 0, 0, self.create_id()), RecordDTO, session),
-            Repository.add(Record(1, team_list[3], 32, 0, 0, 0, 0, 0, 0, self.create_id()), RecordDTO, session),
+            Repository.add(Record(1, team_list[5], 32, 0, 0, 0, 0, 0, 0, self.get_id()), RecordDTO, session),
+            Repository.add(Record(1, team_list[3], 32, 0, 0, 0, 0, 0, 0, self.get_id()), RecordDTO, session),
         ]
 
         record_year_33 = [
-            Repository.add(Record(1, team_list[1], 33, 0, 0, 0, 0, 0, 0, self.create_id()), RecordDTO, session),
+            Repository.add(Record(1, team_list[1], 33, 0, 0, 0, 0, 0, 0, self.get_id()), RecordDTO, session),
         ]
 
         session.commit()

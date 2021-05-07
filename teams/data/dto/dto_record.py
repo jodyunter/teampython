@@ -39,4 +39,19 @@ class RecordDTO(Base, Record):
         else:
             return RecordDTO(record)
 
+    def __eq__(self, o):
+        return self.rank == o.rank and \
+               self.team == o.team and \
+               self.year == o.year and \
+               self.wins == o.wins and \
+               self.loses == o.loses and \
+               self.ties == o.ties and \
+               self.goals_for == o.goals_for and \
+               self.goals_against == o.goals_against and \
+               self.skill == o.skill and \
+               self.oid == o.oid
+
+
+
+
 

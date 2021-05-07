@@ -7,6 +7,22 @@ from tests.teams.repo.test_repository import TestBaseRepository
 
 class TestGameDataRepository(TestBaseRepository, TestCase):
 
+    def test_add_record(self):
+        pass
+
+    def test_update_record(self):
+        pass
+
+    def get_add_record(self):
+        return GameDataDTO(GameData("My Name", 5, 12, True, False))
+
+    def get_updated_record(self, original_record):
+        original_record.name = "New Name"
+        original_record.current_year = 50
+        original_record.current_day = 120
+        original_record.is_year_setup = False
+        original_record.is_year_finished = True
+
     def test_get(self):
         session = self.setup_basic_test()
         game_data = GameDataDTO(GameData("game_data", 35, 1234, True, False))

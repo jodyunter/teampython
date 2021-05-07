@@ -8,17 +8,29 @@ from tests.teams.repo.test_repository import TestBaseRepository
 
 
 class TestTeamRepository(TestBaseRepository, TestCase):
+
+    def test_update_record(self):
+        TestBaseRepository.test_update_record(self)
+
+    def get_add_record(self):
+        return TeamDTO(Team("team 1", 12, True))
+
+    def get_updated_record(self, original_record):
+        original_record.name = "Updated Name"
+        original_record.skill = "55"
+        original_record.active = False
+        return original_record
+
     def test_get_by_name(self):
-        name = "team 1 by name"
         session = self.setup_basic_test()
-        session.add(TeamDTO(Team(name, 12, True)))
+        team = self.get_add_record()
+        team.name = "test Name"
+        TeamRepository.add(team, TeamDTO, session)
         session.commit()
 
-        dto = TeamRepository.get_by_name(name, session)
+        dto = TeamRepository.get_by_name("test Name", session)
 
-        self.assertEqual(name, dto.name)
-        self.assertIsNotNone(dto.oid)
-        self.assertEqual(12, dto.skill)
+        self.assertEqual(team, dto)
 
     def test_get_all(self):
         session = self.setup_basic_test()

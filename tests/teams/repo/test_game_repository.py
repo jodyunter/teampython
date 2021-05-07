@@ -13,6 +13,28 @@ from tests.teams.repo.test_repository import TestBaseRepository
 
 
 class TestGameRepository(TestBaseRepository, TestCase):
+
+    def test_add_record(self):
+        return TestBaseRepository.test_add_record(self)
+
+    def get_add_record(self):
+        return GameDTO(Game(1, 2,
+                            TeamDTO(Team("Home team", 250, True)),
+                            TeamDTO(Team("Away Team", 251, False)),
+                            3, 4, False, True, GameRulesDTO(GameRules("Rules Name", False))))
+
+    def get_updated_record(self, original_record):
+        original_record.day = 10
+        original_record.year = 20
+        original_record.home_team = TeamDTO(Team("New Home TEam", 249, False))
+        original_record.away_team = TeamDTO(Team("New Away TEam", 244, True))
+        original_record.home_score = 30
+        original_record.away_score = 30
+        original_record.complete = True
+        original_record.processed = False
+        original_record.rules = GameRulesDTO(GameRules("Rules Name 2", False))
+        return original_record
+
     def test_add_existing_teams(self):
         session = self.setup_basic_test()
 

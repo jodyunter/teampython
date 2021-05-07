@@ -32,3 +32,16 @@ class GameDTO(Base, Game):
         Game.__init__(self, game.year, game.day, home_team_dto, away_team_dto,
                       game.home_score, game.away_score, game.complete, game.processed,
                       game_rules_dto, game.oid)
+
+    def __eq__(self, other):
+        return self.oid == other.oid and \
+               self.year == other.year and \
+               self.day == other.day and \
+               self.home_team == other.home_team and \
+               self.away_team == other.away_team and \
+               self.home_score == other.home_score and \
+               self.away_score == other.away_score and \
+               self.complete == other.complete and \
+               self.processed == other.processed and \
+               self.rules == other.rules
+
