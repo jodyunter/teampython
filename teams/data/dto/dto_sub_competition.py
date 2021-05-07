@@ -41,3 +41,13 @@ class SubCompetitionDTO(Base, SubCompetition):
                                 sub_competition.oid)
 
 
+    def __eq__(self, other):
+        return self.oid == other.oid and \
+            self.name == other.name and \
+            self.sub_competition_type == other.sub_competition_type and \
+            self.competition == other.competition and \
+            self.order == other.order and \
+            self.setup == other.setup and \
+            self.started == other.started and \
+            self.finished == other.finished and \
+            self.post_processed == other.post_processed
