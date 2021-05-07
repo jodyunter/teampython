@@ -192,7 +192,7 @@ while not competition.finished:
     if current_day in days:
         day = days[current_day]
         for g in day:
-            g.play(rand)
+            g.play()
             competition.process_game(g)
         competition.process_end_of_day(competition.sort_day_dictionary_to_incomplete_games_dictionary(days))
         game_day_view_model = GameService.games_to_game_day_view(day)
