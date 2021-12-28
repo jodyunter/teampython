@@ -132,3 +132,36 @@ class GameRepoTests(BaseRepoTests, TestCase):
 
         result = list(GameRepository.get_by_unprocessed_and_complete(2, 1, 25, session))
         self.assertEqual(1, len(result))
+
+    def test_get_first_day_for_game(self):
+        session = self.setup_basic_test()
+        Database.clean_up_database(session)
+
+        team1 = Team("t1", 5, True, "A")
+        team2 = Team("t2", 5, True, "B")
+        team3 = Team("t3", 5, True, "C")
+        team4 = Team("t4", 5, True, "D")
+
+        new_teams = [team1, team2, team3, team4]
+        [TeamRepository.add(team, TeamDTO, session) for team in new_teams]
+
+        new_gr = GameRules("Rules 12", True, "T")
+        GameRulesRepository.add(new_gr, GameRulesDTO, session)
+        session.commit()
+
+        gr = GameRulesRepository.get_by_name("Rules 12", session)
+
+        teams = TeamRepository.get_all(TeamDTO, session)
+
+        game1 = Game(1, 5, teams[0], teams[1], 0, 1, True, True, gr, "K")
+
+        games = [game1]
+
+        [GameRepository.add(game, GameDTO, session) for game in games]
+
+        session.commit()
+        # first test, should be none because teams[0] plays on day 5
+        game2 = GameDTO(Game(1, -1, teams[0], teams[2], 0, 1, True, True, gr, "K"))
+        result = GameRepository.get_first_day_for_game(1, 5, game2, session).scalar()
+
+        pass

@@ -4,6 +4,7 @@ from teams.data.repo.repository import Repository
 
 class TeamRepository(Repository):
 
+
     @staticmethod
     def get_by_name(name, session):
         return session.query(TeamDTO).filter_by(name=name).first()

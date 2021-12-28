@@ -1,3 +1,5 @@
+from sqlalchemy import func
+
 from teams.data.dto.dto_game import GameDTO
 from teams.data.repo.repository import Repository
 
@@ -37,10 +39,17 @@ class GameRepository(Repository):
                                              GameDTO.year == year).count()
 
     @staticmethod
-    def get_available_day_for_game(year, starting_day, game, session):
+    def get_first_day_for_game(year, starting_day, game, session):
         home_id = game.home_team.oid
         away_id = game.away_team.oid
 
-        session.query(GameDTO).filter(GameDTO.year == year, GameDTO.day >= starting_day,
-                                      )
+        result = session.query(func.min(GameDTO.day))\
+            .filter(GameDTO.year == year,
+                    GameDTO.day >= starting_day,
+                    GameDTO.home_team_id != home_id,
+                    GameDTO.home_team_id != away_id,
+                    GameDTO.away_team_id != home_id,
+                    GameDTO.away_team_id != away_id).scalar()
+
+        return result
 

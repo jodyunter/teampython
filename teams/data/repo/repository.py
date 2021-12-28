@@ -1,7 +1,9 @@
+from abc import ABC, abstractmethod
+
 from teams.data.database import Database
 
 
-class Repository:
+class Repository(ABC):
 
     @staticmethod
     def add(new_object, object_type, session):
