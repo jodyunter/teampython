@@ -1,5 +1,3 @@
-from abc import abstractmethod
-
 from teams.data.database import Database
 
 

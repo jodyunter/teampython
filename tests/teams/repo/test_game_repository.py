@@ -9,13 +9,13 @@ from teams.data.repo.game_rules_repository import GameRulesRepository
 from teams.data.repo.team_repository import TeamRepository
 from teams.domain.game import Game, GameRules
 from teams.domain.team import Team
-from tests.teams.repo.test_repository import TestBaseRepository
+from tests.teams.repo.test_repository import BaseRepoTests
 
 
-class TestGameRepository(TestBaseRepository, TestCase):
+class GameRepoTests(BaseRepoTests, TestCase):
 
     def test_add_record(self):
-        return TestBaseRepository.test_add_record(self)
+        return BaseRepoTests.test_add_record(self)
 
     def get_add_record(self):
         return GameDTO(Game(1, 2,

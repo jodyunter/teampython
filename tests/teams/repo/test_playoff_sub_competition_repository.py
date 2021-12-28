@@ -4,12 +4,12 @@ from teams.data.dto.dto_competition import CompetitionDTO
 from teams.data.dto.dto_playoff_sub_competition import PlayoffSubCompetitionDTO
 from teams.domain.competition import Competition
 from teams.domain.sub_competition import PlayoffSubCompetition
-from tests.teams.repo.test_repository import TestBaseRepository
+from tests.teams.repo.test_repository import BaseRepoTests
 
 
-class TestPlayoffSubCompetitionRepository(TestBaseRepository, TestCase):
+class PlayoffSubCompetitionRepoTests(BaseRepoTests, TestCase):
     def test_add_record(self):
-        TestBaseRepository.test_add_record(self)
+        BaseRepoTests.test_add_record(self)
 
     def get_add_record(self):
         return PlayoffSubCompetitionDTO(PlayoffSubCompetition("Table Comp", None,

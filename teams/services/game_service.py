@@ -1,3 +1,6 @@
+from teams.data.dto.dto_game import GameDTO
+from teams.data.dto.dto_game_rules import GameRulesDTO
+from teams.data.dto.dto_team import TeamDTO
 from teams.data.repo.game_repository import GameRepository
 from teams.data.repo.game_rules_repository import GameRulesRepository
 from teams.data.repo.record_repository import RecordRepository
@@ -16,7 +19,7 @@ class GameRulesService(BaseService):
     def create(self, name, can_tie, session=None):
         if session is None:
             session = self.repo.get_session()
-        self.repo.add(GameRules(name, can_tie, self.get_new_id()), session)
+        self.repo.add(GameRules(name, can_tie, self.get_new_id()), GameRulesDTO, session)
         session.commit()
 
     def get_by_name(self, name, session=None):
@@ -41,9 +44,9 @@ class GameService(BaseService):
             session = self.repo.get_session()
             commit = True
 
-        team_a = self.team_repo.get_by_oid(schedule_game.home_team, session)
-        team_b = self.team_repo.get_by_oid(schedule_game.home_team, session)
-        rules = self.game_rules_repo.get_by_oid(schedule_game.rules, session)
+        team_a = self.team_repo.get_by_oid(schedule_game.home_team, TeamDTO, session)
+        team_b = self.team_repo.get_by_oid(schedule_game.home_team, TeamDTO, session)
+        rules = self.game_rules_repo.get_by_oid(schedule_game.rules, GameRulesDTO, session)
 
         if team_a is None:
             raise AttributeError("Team A cannot be none.")
@@ -72,7 +75,7 @@ class GameService(BaseService):
             start_day += 1
 
         new_games = [self.create_game_from_schedule_game(sg, session) for sg in schedule_games]
-        [self.repo.add(g, session) for g in new_games]
+        [self.repo.add(g, GameDTO, session) for g in new_games]
 
         session.commit()
 
@@ -96,8 +99,8 @@ class GameService(BaseService):
         session = self.get_session(session)
 
         for g in game_list:
-            game = self.repo.get_by_oid(g.oid, session)
-            game.play(random)
+            game = self.repo.get_by_oid(g.oid, GameDTO, session)
+            game.play()
 
         self.commit(session, commit)
 

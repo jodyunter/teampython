@@ -2,10 +2,10 @@ from unittest import TestCase
 
 from teams.data.repo.game_data_repository import GameDataDTO, GameDataRepository
 from teams.domain.gamedata import GameData
-from tests.teams.repo.test_repository import TestBaseRepository
+from tests.teams.repo.test_repository import BaseRepoTests
 
 
-class TestGameDataRepository(TestBaseRepository, TestCase):
+class GameDataRepoTests(BaseRepoTests, TestCase):
 
     def test_add_record(self):
         pass

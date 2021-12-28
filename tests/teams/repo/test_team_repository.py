@@ -4,13 +4,13 @@ from teams.data.dto.dto_team import TeamDTO
 from teams.data.repo.team_repository import TeamRepository
 from teams.domain.team import Team
 from teams.domain.utility.utility_classes import IDHelper
-from tests.teams.repo.test_repository import TestBaseRepository
+from tests.teams.repo.test_repository import BaseRepoTests
 
 
-class TestTeamRepository(TestBaseRepository, TestCase):
+class TeamRepoTests(BaseRepoTests, TestCase):
 
     def test_update_record(self):
-        TestBaseRepository.test_update_record(self)
+        BaseRepoTests.test_update_record(self)
 
     def get_add_record(self):
         return TeamDTO(Team("team 1", 12, True))

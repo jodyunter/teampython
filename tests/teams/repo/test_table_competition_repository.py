@@ -4,10 +4,10 @@ from teams.data.dto.dto_competition import CompetitionDTO
 from teams.data.dto.dto_table_sub_competition import TableSubCompetitionDTO
 from teams.domain.competition import Competition
 from teams.domain.sub_competition import TableSubCompetition
-from tests.teams.repo.test_repository import TestBaseRepository
+from tests.teams.repo.test_repository import BaseRepoTests
 
 
-class TestTableSubCompetitionRepository(TestBaseRepository, TestCase):
+class TableSubCompetitionRepoTests(BaseRepoTests, TestCase):
 
     def get_add_record(self):
         return TableSubCompetitionDTO(TableSubCompetition("Table Comp", None,

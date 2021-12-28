@@ -31,8 +31,8 @@ class RecordService(BaseService):
         session = self.get_session(session)
         repo = RecordRepository()
         team_repo = TeamRepository()
-        team = team_repo.get_by_oid(team_id, session)
-        record = repo.get_by_oid(oid, session)
+        team = team_repo.get_by_oid(team_id, TeamDTO, session)
+        record = repo.get_by_oid(oid, RecordDTO, session)
         record.team = team
         record.wins = wins
         record.loses = loses

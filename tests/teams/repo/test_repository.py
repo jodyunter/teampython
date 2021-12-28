@@ -8,14 +8,14 @@ from teams.data.repo.repository import Repository
 from teams.domain.utility.utility_classes import IDHelper
 
 
-class TestBaseRepository(ABC):
+class BaseRepoTests(ABC):
     @staticmethod
     def setup_database(connection="sqlite:///:memory:"):
         Database.init_db(connection)
 
     @staticmethod
     def setup_basic_test():
-        TestBaseRepository.setup_database()
+        BaseRepoTests.setup_database()
         session = Database.get_session()
         Database.clean_up_database(session)
         return session
@@ -27,7 +27,7 @@ class TestBaseRepository(ABC):
     def test_add_record(self):
         session = self.setup_basic_test()
         record = self.get_add_record()
-        Repository.add(record, type(record), session);
+        Repository.add(record, type(record), session)
         new_record = Repository.get_by_oid(record.oid, type(record), session)
         self.assertEqual(record, new_record)
 
