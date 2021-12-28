@@ -9,6 +9,9 @@ from tests.teams.repo.test_repository import BaseRepoTests
 
 class TeamRepoTests(BaseRepoTests, TestCase):
 
+    def get_repo(self):
+        return TeamRepository()
+
     def test_update_record(self):
         BaseRepoTests.test_update_record(self)
 
@@ -25,10 +28,10 @@ class TeamRepoTests(BaseRepoTests, TestCase):
         session = self.setup_basic_test()
         team = self.get_add_record()
         team.name = "test Name"
-        TeamRepository.add(team, TeamDTO, session)
+        self.get_repo().add(team, TeamDTO, session)
         session.commit()
 
-        dto = TeamRepository.get_by_name("test Name", session)
+        dto = self.get_repo().get_by_name("test Name", session)
 
         self.assertEqual(team, dto)
 
@@ -36,11 +39,11 @@ class TeamRepoTests(BaseRepoTests, TestCase):
         session = self.setup_basic_test()
 
         for i in range(5):
-            TeamRepository.add(TeamDTO(Team("team " + str(i) + " add_all", i, True)), TeamDTO, session)
+            self.get_repo().add(TeamDTO(Team("team " + str(i) + " add_all", i, True)), TeamDTO, session)
 
         session.commit()
 
-        dto_list = TeamRepository.get_all(TeamDTO, session)
+        dto_list = self.get_repo().get_all(TeamDTO, session)
 
         self.assertEqual(5, len(dto_list))
 
@@ -49,11 +52,11 @@ class TeamRepoTests(BaseRepoTests, TestCase):
 
         for i in range(5):
             oid = IDHelper.get_new_id()
-            TeamRepository.add(TeamDTO(Team("team " + str(i) + " add_all", i, True, oid)), TeamDTO, session)
+            self.get_repo().add(TeamDTO(Team("team " + str(i) + " add_all", i, True, oid)), TeamDTO, session)
 
         session.commit()
 
-        dto = TeamRepository.get_by_oid(oid, TeamDTO, session)
+        dto = self.get_repo().get_by_oid(oid, TeamDTO, session)
 
         self.assertIsNotNone(dto, oid)
         self.assertEqual(dto.oid, oid)
@@ -66,13 +69,13 @@ class TeamRepoTests(BaseRepoTests, TestCase):
             active = True
             if i % 2 == 0:
                 active = False
-            TeamRepository.add(TeamDTO(Team("team " + str(i) + " add_all", i, True, oid)), TeamDTO, session)
+            self.get_repo().add(TeamDTO(Team("team " + str(i) + " add_all", i, True, oid)), TeamDTO, session)
 
         session.commit()
 
-        result = TeamRepository.get_by_active_status(True)
+        result = self.get_repo().get_by_active_status(True)
         self.assertEqual(2, len(result))
-        result = TeamRepository.get_by_active_status(True)
+        result = self.get_repo().get_by_active_status(True)
         self.assertEqual(3, len(result))
 
 

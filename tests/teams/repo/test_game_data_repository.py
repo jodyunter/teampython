@@ -7,6 +7,9 @@ from tests.teams.repo.test_repository import BaseRepoTests
 
 class GameDataRepoTests(BaseRepoTests, TestCase):
 
+    def get_repo(self):
+        return GameDataRepository()
+
     def test_add_record(self):
         pass
 
@@ -29,7 +32,7 @@ class GameDataRepoTests(BaseRepoTests, TestCase):
         session.add(game_data)
         session.commit()
 
-        new_gd = GameDataRepository.get_current_data(session)
+        new_gd = self.get_repo().get_current_data(session)
 
         self.assertEqual(game_data.current_year, new_gd.current_year, "check year")
         self.assertEqual(game_data.current_day, new_gd.current_day, "check day")

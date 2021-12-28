@@ -6,24 +6,19 @@ from teams.data.repo.team_repository import TeamRepository
 class RecordRepository(Repository):
     team_repo = TeamRepository()
 
-    @staticmethod
-    def get_by_year(year, session):
+    def get_by_year(self, year, session):
         return session.query(RecordDTO).filter_by(year=year)
 
-    @staticmethod
-    def get_by_team_and_year(team_id, year, session):
+    def get_by_team_and_year(self, team_id, year, session):
         return session.query(RecordDTO).filter_by(year=year, team_id=team_id).first()
 
-    @staticmethod
-    def get_by_team(team_id, session):
+    def get_by_team(self, team_id, session):
         return session.query(RecordDTO).filter_by(team_id=team_id)
 
-    @staticmethod
-    def get_by_rank(rank, session):
+    def get_by_rank(self, rank, session):
         return session.query(RecordDTO).filter_by(rank=rank)
 
-    @staticmethod
-    def get_list_of_seasons(session):
+    def get_list_of_seasons(self, session):
         return session.query(RecordDTO.year).distinct()
 
 

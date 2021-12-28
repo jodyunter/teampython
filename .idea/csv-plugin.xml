@@ -66,6 +66,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\teams\data\repo\game_repository.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\teams\data\repo\repository.py">
           <value>
             <Attribute>

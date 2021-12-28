@@ -9,6 +9,11 @@ from teams.domain.utility.utility_classes import IDHelper
 
 
 class BaseRepoTests(ABC):
+
+    @abstractmethod
+    def get_repo(self):
+        pass
+
     @staticmethod
     def setup_database(connection="sqlite:///:memory:"):
         Database.init_db(connection)
@@ -27,21 +32,21 @@ class BaseRepoTests(ABC):
     def test_add_record(self):
         session = self.setup_basic_test()
         record = self.get_add_record()
-        Repository.add(record, type(record), session)
-        new_record = Repository.get_by_oid(record.oid, type(record), session)
+        self.get_repo().add(record, type(record), session)
+        new_record = self.get_repo().get_by_oid(record.oid, type(record), session)
         self.assertEqual(record, new_record)
 
     def test_update_record(self):
         session = self.setup_basic_test()
         record = self.get_add_record()
-        Repository.add(record, type(record), session)
+        self.get_repo().add(record, type(record), session)
         session.commit()
 
-        dto = Repository.get_by_oid(record.oid, type(record), session)
+        dto = self.get_repo().get_by_oid(record.oid, type(record), session)
         update_record = self.get_updated_record(dto)
         session.commit()
 
-        dto = Repository.get_by_oid(record.oid, type(record), session)
+        dto = self.get_repo().get_by_oid(record.oid, type(record), session)
 
         self.assertEqual(dto, update_record)
         self.assertNotEqual(dto, record)

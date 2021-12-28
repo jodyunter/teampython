@@ -4,6 +4,5 @@ from teams.data.repo.repository import Repository
 
 class GameRulesRepository(Repository):
 
-    @staticmethod
-    def get_by_name(name, session):
+    def get_by_name(self, name, session):
         return session.query(GameRulesDTO).filter_by(name=name).first()

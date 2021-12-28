@@ -2,12 +2,16 @@ from unittest import TestCase
 
 from teams.data.dto.dto_competition import CompetitionDTO
 from teams.data.dto.dto_table_sub_competition import TableSubCompetitionDTO
+from teams.data.repo.repository import Repository
 from teams.domain.competition import Competition
 from teams.domain.sub_competition import TableSubCompetition
 from tests.teams.repo.test_repository import BaseRepoTests
 
 
 class TableSubCompetitionRepoTests(BaseRepoTests, TestCase):
+
+    def get_repo(self):
+        return Repository()
 
     def get_add_record(self):
         return TableSubCompetitionDTO(TableSubCompetition("Table Comp", None,

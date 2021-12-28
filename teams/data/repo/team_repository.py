@@ -5,12 +5,10 @@ from teams.data.repo.repository import Repository
 class TeamRepository(Repository):
 
 
-    @staticmethod
-    def get_by_name(name, session):
+    def get_by_name(self, name, session):
         return session.query(TeamDTO).filter_by(name=name).first()
 
-    @staticmethod
-    def get_by_active_status(active, session):
+    def get_by_active_status(self, active, session):
         return session.query(TeamDTO).filter_by(active=active)
 
 

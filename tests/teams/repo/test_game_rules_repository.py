@@ -8,6 +8,9 @@ from tests.teams.repo.test_repository import BaseRepoTests
 
 class GameRulesRepoTests(BaseRepoTests, TestCase):
 
+    def get_repo(self):
+        return GameRulesRepository()
+
     def get_add_record(self):
         return GameRulesDTO(GameRules("Rules Name", False))
 
@@ -18,7 +21,7 @@ class GameRulesRepoTests(BaseRepoTests, TestCase):
 
     def test_add(self):
         session = self.setup_basic_test()
-        GameRulesRepository.add(GameRules("My Name", False, self.get_id()), GameRulesDTO, session)
+        self.get_repo().add(GameRules("My Name", False, self.get_id()), GameRulesDTO, session)
         session.commit()
 
-        self.assertEqual(1, len(GameRulesRepository.get_all(GameRulesDTO, session)))
+        self.assertEqual(1, len(self.get_repo().get_all(GameRulesDTO, session)))
