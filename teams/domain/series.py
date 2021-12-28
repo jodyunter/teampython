@@ -247,7 +247,6 @@ class SeriesByGoals(Series):
                           0, 0, False, False, game_rules)
 
 
-# todo: mapping
 class SeriesGame(CompetitionGame):
 
     def __init__(self, series, game_number, competition, sub_competition, day, home_team, away_team, home_score,
