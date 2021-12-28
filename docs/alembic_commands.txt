@@ -9,3 +9,5 @@ alembic --name sqlite_local upgrade head
 
 alembic revision --autogenerate -m "active"
 
+
+

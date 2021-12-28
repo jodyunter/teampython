@@ -2,6 +2,8 @@ from teams.data.database import Database
 from alembic.config import Config
 from alembic import command
 
+# running this file should create a database with the desired configuration up to the most recent revision
+
 alembic_file = "alembic.ini"
 alembic_section = "alembic_section"
 conn_string = "db_string"
