@@ -1,13 +1,10 @@
 from unittest import TestCase
 
-from pytest import mark
-
-from teams.domain.competition import TableRecord, Competition, CompetitionGroup
+from teams.domain.competition import TableRecord, CompetitionGroup
 from teams.domain.competition_configuration import CompetitionGroupConfiguration
 from teams.domain.sub_competition import TableSubCompetition
 from tests.teams.domain.competition import helpers
 from tests.teams.domain.competition.helpers import create_default_competition_for_testing
-from tests.teams.domain.competition.test_configurator import TestCompConfigurator
 
 
 class TestTableSubCompetition(TestCase):

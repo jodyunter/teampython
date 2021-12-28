@@ -5,7 +5,6 @@ from teams.data.dto.dto_base import Base
 from teams.domain.competition import CompetitionGroup
 
 
-# todo: create repo
 class CompetitionGroupDTO(Base, CompetitionGroup):
     __tablename__ = "competitiongroup"
 

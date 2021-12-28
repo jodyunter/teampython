@@ -1,5 +1,3 @@
-from abc import ABC
-
 from sqlalchemy import Column, String, Integer, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
@@ -7,7 +5,6 @@ from teams.data.dto.dto_base import Base
 from teams.domain.sub_competition import SubCompetition
 
 
-# todo: create repo
 class SubCompetitionDTO(Base, SubCompetition):
     __tablename__ = "subcompetitions"
 

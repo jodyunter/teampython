@@ -3,11 +3,6 @@ import random
 from teams.ConsoleUI.views.game_view import GameDayView
 from teams.ConsoleUI.views.playoff_views import SeriesView
 from teams.ConsoleUI.views.record_view import RecordView
-from teams.data.database import Database
-from teams.data.dto.dto_competition import CompetitionDTO
-from teams.data.dto.dto_game import GameDTO
-from teams.data.dto.dto_ranking_group import RankingGroupDTO
-from teams.data.repo.repository import Repository
 from teams.domain.comp_configorator import CompetitionConfigurator
 from teams.domain.competition_configuration import RankingGroupConfiguration, CompetitionConfiguration, \
     TableSubCompetitionConfiguration, CompetitionTeamConfiguration, PlayoffSubCompetitionConfiguration, \

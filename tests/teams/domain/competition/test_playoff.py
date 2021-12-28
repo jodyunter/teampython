@@ -1,10 +1,7 @@
-import random
-from unittest import TestCase
-
 import numpy as np
 from pytest import mark
 
-from teams.domain.competition import Competition, CompetitionGroup, CompetitionRanking
+from teams.domain.competition import CompetitionGroup, CompetitionRanking
 from teams.domain.competition_configuration import CompetitionGroupConfiguration
 from teams.domain.game import GameRules
 from teams.domain.series import SeriesByGoals, SeriesGame, SeriesByWins
@@ -12,7 +9,7 @@ from teams.domain.series_rules import SeriesByGoalsRules, SeriesByWinsRules
 from teams.domain.sub_competition import PlayoffSubCompetition
 from tests.teams.domain.competition import helpers
 from tests.teams.domain.competition.helpers import create_default_competition_for_testing
-from tests.teams.domain.competition.test_configurator import TestCompConfigurator, BaseTeamTestCase
+from tests.teams.domain.competition.test_configurator import BaseTeamTestCase
 
 
 class TestPlayoffSubCompetition(BaseTeamTestCase):

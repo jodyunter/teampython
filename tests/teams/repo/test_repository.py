@@ -1,10 +1,6 @@
 from abc import ABC, abstractmethod
-from unittest import TestCase
-
-import pytest
 
 from teams.data.database import Database
-from teams.data.repo.repository import Repository
 from teams.domain.utility.utility_classes import IDHelper
 
 

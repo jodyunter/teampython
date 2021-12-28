@@ -1,6 +1,5 @@
-from sqlalchemy.ext.declarative import declarative_base
-
 import abc
+
 from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
 
 

@@ -4,7 +4,6 @@ from teams.data.dto.dto_series_rules import SeriesRulesDTO
 from teams.domain.series_rules import SeriesByWinsRules
 
 
-# todo: create repo
 class SeriesByWinsRulesDTO(SeriesRulesDTO, SeriesByWinsRules):
     required_wins = Column(Integer)
 

@@ -1,8 +1,8 @@
 import random
 
 from teams.domain.competition import Competition, CompetitionTeam
-from teams.domain.series import SeriesByWins
 from teams.domain.game import GameRules
+from teams.domain.series import SeriesByWins
 from teams.domain.series_rules import SeriesByWinsRules
 from teams.domain.sub_competition import PlayoffSubCompetition
 from teams.domain.team import Team

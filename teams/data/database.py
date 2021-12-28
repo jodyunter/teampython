@@ -2,14 +2,14 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from teams.data.dto.dto_base import Base
+from teams.data.dto.dto_competition import CompetitionDTO
 from teams.data.dto.dto_competition_game import CompetitionGameDTO
-from teams.data.dto.dto_game_data import GameDataDTO
 from teams.data.dto.dto_game import GameDTO
+from teams.data.dto.dto_game_data import GameDataDTO
 from teams.data.dto.dto_game_rules import GameRulesDTO
 from teams.data.dto.dto_record import RecordDTO
 from teams.data.dto.dto_sub_competition import SubCompetitionDTO
 from teams.data.dto.dto_team import TeamDTO
-from teams.data.dto.dto_competition import CompetitionDTO
 
 engine = None
 Session = sessionmaker()

@@ -4,8 +4,8 @@ import random
 from flask import Flask, render_template, request, jsonify
 
 from app_config import db_connection_string
-from teams.data.database import Database
 from log_config import log_format, log_level, log_date_format
+from teams.data.database import Database
 from teams.services.app_service import AppService
 from teams.services.game_service import GameService, GameRulesService
 from teams.services.standings_service import StandingsService

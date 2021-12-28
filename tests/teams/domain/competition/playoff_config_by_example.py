@@ -2,20 +2,17 @@ import random
 
 from teams.ConsoleUI.views.playoff_views import SeriesView
 from teams.domain.comp_configorator import CompetitionConfigurator
-from teams.domain.competition import CompetitionTeam
 from teams.domain.competition_configuration import CompetitionConfiguration, RankingGroupConfiguration, \
-    SubCompetitionConfiguration, SeriesConfiguration, PlayoffSubCompetitionConfiguration, CompetitionTeamConfiguration
+    SeriesConfiguration, PlayoffSubCompetitionConfiguration, CompetitionTeamConfiguration
 from teams.domain.game import GameRules
 from teams.domain.scheduler import Scheduler
 from teams.domain.series import SeriesByGoals, SeriesByWins
-from teams.domain.series_rules import SeriesRules, SeriesByWinsRules
-from teams.domain.team import Team
+from teams.domain.series_rules import SeriesByWinsRules
 from teams.services.game_service import GameService
 from teams.services.view_models.playoff_view_models import SeriesViewModel
 from teams.services.view_models.team_view_models import TeamViewModel
 from tests.teams.domain.competition.testing_sample_data import western_teams, eastern_teams, pacific_teams, teams, \
     central_teams, atlantic_teams, north_teams
-
 
 playoff_game_rules = GameRules("Playoff Rules", False)
 series_rules = SeriesByWinsRules("Best of 7", 4, playoff_game_rules, [0, 0, 1, 1, 0, 1, 0])

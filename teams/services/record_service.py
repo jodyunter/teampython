@@ -1,5 +1,3 @@
-from teams.data.dto.dto_record import RecordDTO
-from teams.data.dto.dto_team import TeamDTO
 from teams.data.repo.record_repository import RecordRepository
 from teams.data.repo.team_repository import TeamRepository
 from teams.domain.record import Record

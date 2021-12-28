@@ -5,7 +5,6 @@ from teams.data.dto.dto_competition_game import CompetitionGameDTO
 from teams.domain.series import SeriesGame
 
 
-# todo: create repo
 class SeriesGameDTO(CompetitionGameDTO, SeriesGame):
     series_id = Column(String, ForeignKey('series.oid'))
     series = relationship('SeriesDTO', foreign_keys=[series_id])

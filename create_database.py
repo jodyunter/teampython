@@ -1,6 +1,7 @@
-from teams.data.database import Database
-from alembic.config import Config
 from alembic import command
+from alembic.config import Config
+
+from teams.data.database import Database
 
 # running this file should create a database with the desired configuration up to the most recent revision
 

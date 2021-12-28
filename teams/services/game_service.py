@@ -1,8 +1,5 @@
-from teams.data.dto.dto_game import GameDTO
-from teams.data.dto.dto_game_rules import GameRulesDTO
-from teams.data.dto.dto_team import TeamDTO
 from teams.data.repo.game_repository import GameRepository
-from teams.data.repo.game_rules_repository import GameRulesRepository
+from teams.data.repo.rules_repository import GameRulesRepository
 from teams.data.repo.record_repository import RecordRepository
 from teams.data.repo.team_repository import TeamRepository
 from teams.domain.game import Game, GameRules

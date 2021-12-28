@@ -1,16 +1,14 @@
 from unittest import TestCase
 
-from teams.domain.competition import CompetitionTeam, CompetitionGame, Competition
+from teams.domain.competition import CompetitionTeam, CompetitionGame
 from teams.domain.game import GameRules
 from teams.domain.series import SeriesByGoals, SeriesByWins, Series, SeriesGame
 from teams.domain.series_rules import SeriesByWinsRules, SeriesByGoalsRules, SeriesRules
 from teams.domain.sub_competition import PlayoffSubCompetition
 from teams.domain.team import Team
-
 # implementation for testing basic and common methods
 from tests.teams.domain.competition import helpers
 from tests.teams.domain.competition.helpers import create_default_competition_for_testing
-from tests.teams.domain.competition.test_configurator import TestCompConfigurator
 
 
 class SeriesForTests(Series):

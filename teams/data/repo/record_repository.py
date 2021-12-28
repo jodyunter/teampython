@@ -1,6 +1,6 @@
 from teams.data.dto.dto_record import RecordDTO
+from teams.data.dto.dto_table_record import TableRecordDTO
 from teams.data.repo.repository import Repository
-from teams.data.repo.team_repository import TeamRepository
 
 
 class RecordRepository(Repository):
@@ -21,5 +21,11 @@ class RecordRepository(Repository):
 
     def get_list_of_seasons(self, session):
         return session.query(RecordDTO.year).distinct()
+
+
+class TableRecordRepository(RecordRepository):
+
+    def get_type(self):
+        return TableRecordDTO
 
 

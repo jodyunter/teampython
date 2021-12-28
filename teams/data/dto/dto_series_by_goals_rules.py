@@ -5,7 +5,6 @@ from teams.data.dto.dto_series_rules import SeriesRulesDTO
 from teams.domain.series_rules import SeriesByGoalsRules
 
 
-# todo: create repo
 class SeriesByGoalsRulesDTO(SeriesRulesDTO, SeriesByGoalsRules):
     games_to_play = Column(Integer)
     last_game_rules_id = Column(String, ForeignKey('gamerules.oid'))

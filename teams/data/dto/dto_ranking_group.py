@@ -2,7 +2,6 @@ from teams.data.dto.dto_competition_group import CompetitionGroupDTO
 from teams.domain.competition import RankingGroup
 
 
-# todo: create repo
 class RankingGroupDTO(CompetitionGroupDTO, RankingGroup):
     __mapper_args__ = {
         'polymorphic_identity': 'ranking_group'

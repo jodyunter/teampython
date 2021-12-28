@@ -5,7 +5,6 @@ from teams.data.dto.dto_base import Base
 from teams.domain.series_rules import SeriesRules
 
 
-# todo: create repo
 class SeriesRulesDTO(Base, SeriesRules):
     __tablename__ = "seriesrules"
 

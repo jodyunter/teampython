@@ -1,10 +1,8 @@
-from teams.data.database import Database
 from teams.data.dto.dto_series_by_wins_rules import SeriesByWinsRulesDTO
-from teams.data.repo.game_rules_repository import GameRulesRepository
+from teams.data.repo.rules_repository import GameRulesRepository
 from teams.data.repo.repository import BasicRepository
 from teams.domain.series_rules import SeriesByWinsRules
 from teams.services.base_service import BaseService
-from teams.services.game_service import GameRulesService
 
 
 class ConfigurationService(BaseService):

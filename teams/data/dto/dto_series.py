@@ -5,7 +5,6 @@ from teams.data.dto.dto_base import Base
 from teams.domain.series import Series
 
 
-# todo: create repo
 class SeriesDTO(Base, Series):
     __tablename__ = "series"
 

@@ -2,12 +2,8 @@ import numpy as np
 
 from app_config import db_connection_string
 from teams.data.database import Database
-from teams.data.dto.dto_series_by_wins_rules import SeriesByWinsRulesDTO
-from teams.data.repo.repository import BasicRepository
 from teams.domain.competition_configuration import CompetitionConfiguration, TableSubCompetitionConfiguration, \
     RankingGroupConfiguration, CompetitionTeamConfiguration
-from teams.domain.series_rules import SeriesByWinsRules
-from teams.domain.team import Team
 from teams.services.app_service import AppService
 from teams.services.configuration_service import ConfigurationService
 from teams.services.game_service import GameRulesService

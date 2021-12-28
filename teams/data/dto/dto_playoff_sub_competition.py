@@ -2,7 +2,6 @@ from teams.data.dto.dto_sub_competition import SubCompetitionDTO
 from teams.domain.sub_competition import PlayoffSubCompetition
 
 
-# todo: create repo
 class PlayoffSubCompetitionDTO(SubCompetitionDTO, PlayoffSubCompetition):
     __mapper_args__ = {
         'polymorphic_identity': 'playoff_sub_competition'

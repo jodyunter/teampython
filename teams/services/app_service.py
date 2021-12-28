@@ -1,4 +1,3 @@
-from teams.data.dto.dto_game_data import GameDataDTO
 from teams.data.repo.game_data_repository import GameDataRepository
 from teams.domain.gamedata import GameData
 from teams.services.base_service import BaseService

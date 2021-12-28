@@ -4,7 +4,6 @@ from teams.data.dto.dto_series import SeriesDTO
 from teams.domain.series import SeriesByGoals
 
 
-# todo: create repo
 class SeriesByGoalsDTO(SeriesDTO, SeriesByGoals):
     home_goals = Column(Integer)
     away_goals = Column(Integer)

@@ -5,7 +5,6 @@ from teams.data.dto.dto_base import Base
 from teams.domain.competition import CompetitionRanking
 
 
-# todo: create repo
 class CompetitionRankingDTO(Base, CompetitionRanking):
     __tablename__ = "competitionranking"
     oid = Column(String, primary_key=True)

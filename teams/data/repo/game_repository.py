@@ -1,7 +1,9 @@
 from sqlalchemy import select, and_
 from sqlalchemy.sql import or_
 
+from teams.data.dto.dto_competition_game import CompetitionGameDTO
 from teams.data.dto.dto_game import GameDTO
+from teams.data.dto.dto_series_games import SeriesGameDTO
 from teams.data.repo.repository import Repository
 
 
@@ -57,4 +59,13 @@ class GameRepository(Repository):
         return [a[0] for a in result]
 
 
+class CompetitionGameRepository(GameRepository):
 
+    def get_type(self):
+        return CompetitionGameDTO
+
+
+class SeriesGameRepository(CompetitionGameRepository):
+
+    def get_type(self):
+        return SeriesGameDTO
