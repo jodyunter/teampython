@@ -28,7 +28,7 @@ class TeamRepoTests(BaseRepoTests, TestCase):
         session = self.setup_basic_test()
         team = self.get_add_record()
         team.name = "test Name"
-        self.get_repo().add(team, TeamDTO, session)
+        self.get_repo().add(team, session)
         session.commit()
 
         dto = self.get_repo().get_by_name("test Name", session)
@@ -39,11 +39,11 @@ class TeamRepoTests(BaseRepoTests, TestCase):
         session = self.setup_basic_test()
 
         for i in range(5):
-            self.get_repo().add(TeamDTO(Team("team " + str(i) + " add_all", i, True)), TeamDTO, session)
+            self.get_repo().add(TeamDTO(Team("team " + str(i) + " add_all", i, True)), session)
 
         session.commit()
 
-        dto_list = self.get_repo().get_all(TeamDTO, session)
+        dto_list = self.get_repo().get_all(session)
 
         self.assertEqual(5, len(dto_list))
 
@@ -52,11 +52,11 @@ class TeamRepoTests(BaseRepoTests, TestCase):
 
         for i in range(5):
             oid = IDHelper.get_new_id()
-            self.get_repo().add(TeamDTO(Team("team " + str(i) + " add_all", i, True, oid)), TeamDTO, session)
+            self.get_repo().add(TeamDTO(Team("team " + str(i) + " add_all", i, True, oid)), session)
 
         session.commit()
 
-        dto = self.get_repo().get_by_oid(oid, TeamDTO, session)
+        dto = self.get_repo().get_by_oid(oid, session)
 
         self.assertIsNotNone(dto, oid)
         self.assertEqual(dto.oid, oid)
@@ -69,7 +69,7 @@ class TeamRepoTests(BaseRepoTests, TestCase):
             active = True
             if i % 2 == 0:
                 active = False
-            self.get_repo().add(TeamDTO(Team("team " + str(i) + " add_all", i, True, oid)), TeamDTO, session)
+            self.get_repo().add(TeamDTO(Team("team " + str(i) + " add_all", i, True, oid)), session)
 
         session.commit()
 

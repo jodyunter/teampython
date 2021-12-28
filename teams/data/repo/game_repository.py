@@ -7,6 +7,9 @@ from teams.data.repo.repository import Repository
 
 class GameRepository(Repository):
 
+    def get_type(self):
+        return GameDTO
+
     def get_by_unprocessed_and_complete(self, year, first_day, last_day, session):
         return session.query(GameDTO).filter(GameDTO.processed == False, GameDTO.complete == True,
                                              GameDTO.day >= first_day,

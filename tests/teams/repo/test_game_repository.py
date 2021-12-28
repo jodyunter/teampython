@@ -45,18 +45,18 @@ class GameRepoTests(BaseRepoTests, TestCase):
         name_1 = "Team GA1"
         name_2 = "Team GA2"
 
-        team_repo.add(Team(name_1, 12, True, self.get_id()), TeamDTO, session)
-        team_repo.add(Team(name_2, 12, True, self.get_id()), TeamDTO, session)
+        team_repo.add(Team(name_1, 12, True, self.get_id()), session)
+        team_repo.add(Team(name_2, 12, True, self.get_id()), session)
         session.commit()
 
         team_1 = team_repo.get_by_name(name_1, session)
         team_2 = team_repo.get_by_name(name_2, session)
 
         self.get_repo().add(Game(1, 15, team_1, team_2, 5, 4, True, False, GameRules("Rules", True, self.get_id()),
-                                 self.get_id()), GameDTO, session)
+                                 self.get_id()), session)
         session.commit()
 
-        g_list = self.get_repo().get_all(GameDTO, session)
+        g_list = self.get_repo().get_all(session)
         self.assertEqual(1, len(g_list))
 
     def test_add_no_existing_teams(self):
@@ -69,10 +69,10 @@ class GameRepoTests(BaseRepoTests, TestCase):
         team_2 = Team(name_2, 12, True, self.get_id())
 
         self.get_repo().add(Game(1, 15, team_1, team_2, 5, 4, True, False, GameRules("Rules", True, self.get_id()),
-                                 self.get_id()), GameDTO, session)
+                                 self.get_id()), session)
         session.commit()
 
-        g_list = self.get_repo().get_all(GameDTO, session)
+        g_list = self.get_repo().get_all(session)
         self.assertEqual(1, len(g_list))
 
     def test_add_one_existing_team(self):
@@ -82,7 +82,7 @@ class GameRepoTests(BaseRepoTests, TestCase):
         name_1 = "Team GA1"
         name_2 = "Team GA2"
 
-        team_repo.add(Team(name_1, 12, True, self.get_id()), TeamDTO, session)
+        team_repo.add(Team(name_1, 12, True, self.get_id()), session)
 
         session.commit()
 
@@ -90,10 +90,10 @@ class GameRepoTests(BaseRepoTests, TestCase):
         team_2 = Team(name_2, 12, True, self.get_id())
 
         self.get_repo().add(Game(1, 15, team_1, team_2, 5, 4, True, False, GameRules("Rules", True, self.get_id()),
-                      self.get_id()), GameDTO, session)
+                                 self.get_id()), session)
         session.commit()
 
-        g_list = self.get_repo().get_all(GameDTO, session)
+        g_list = self.get_repo().get_all(session)
         self.assertEqual(1, len(g_list))
 
     def test_get_my_complete_and_unprocessed(self):
@@ -104,10 +104,10 @@ class GameRepoTests(BaseRepoTests, TestCase):
 
         team1 = Team("t1", 5, True, "A")
         team2 = Team("t2", 5, True, "B")
-        team_repo.add(team1, TeamDTO, session)
-        team_repo.add(team2, TeamDTO, session)
+        team_repo.add(team1, session)
+        team_repo.add(team2, session)
         gr = GameRules("Rules 12", True, "T")
-        rules_repo.add(gr, GameRulesDTO, session)
+        rules_repo.add(gr, session)
         session.commit()
 
         team1 = team_repo.get_by_name("t1", session)
@@ -125,7 +125,7 @@ class GameRepoTests(BaseRepoTests, TestCase):
 
         games = [game1, game2, game3, game4, game5, game6, game7, game8]
 
-        [self.get_repo().add(g, GameDTO, session) for g in games]
+        [self.get_repo().add(g, session) for g in games]
 
         session.commit()
 
@@ -150,21 +150,21 @@ class GameRepoTests(BaseRepoTests, TestCase):
         team4 = Team("t4", 5, True, "D")
 
         new_teams = [team1, team2, team3, team4]
-        [team_repo.add(team, TeamDTO, session) for team in new_teams]
+        [team_repo.add(team, session) for team in new_teams]
 
         new_gr = GameRules("Rules 12", True, "T")
-        self.get_repo().add(new_gr, GameRulesDTO, session)
+        rules_repo.add(new_gr, session)
         session.commit()
 
         gr = rules_repo.get_by_name("Rules 12", session)
 
-        teams = team_repo.get_all(TeamDTO, session)
+        teams = team_repo.get_all(session)
 
         game1 = Game(1, 5, teams[0], teams[1], 0, 1, True, True, gr, "K")
 
         games = [game1]
 
-        [self.get_repo().add(game, GameDTO, session) for game in games]
+        [self.get_repo().add(game, session) for game in games]
 
         session.commit()
         # first test, should be none because teams[0] plays on day 5
@@ -174,7 +174,7 @@ class GameRepoTests(BaseRepoTests, TestCase):
         self.assertEquals(5, result[0])
 
         game2.day = 1
-        self.get_repo().add(game2, GameDTO, session)
+        self.get_repo().add(game2, session)
         session.commit()
 
         result = self.get_repo().get_list_days_teams_play_on(1, 1, 100, game2, session)

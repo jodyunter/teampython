@@ -4,7 +4,8 @@ from teams.data.repo.team_repository import TeamRepository
 
 
 class RecordRepository(Repository):
-    team_repo = TeamRepository()
+    def get_type(self):
+        return RecordDTO
 
     def get_by_year(self, year, session):
         return session.query(RecordDTO).filter_by(year=year)

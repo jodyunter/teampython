@@ -21,7 +21,7 @@ class GameRulesRepoTests(BaseRepoTests, TestCase):
 
     def test_add(self):
         session = self.setup_basic_test()
-        self.get_repo().add(GameRules("My Name", False, self.get_id()), GameRulesDTO, session)
+        self.get_repo().add(GameRules("My Name", False, self.get_id()), session)
         session.commit()
 
-        self.assertEqual(1, len(self.get_repo().get_all(GameRulesDTO, session)))
+        self.assertEqual(1, len(self.get_repo().get_all(session)))

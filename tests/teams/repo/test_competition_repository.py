@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from teams.data.dto.dto_competition import CompetitionDTO
-from teams.data.repo.repository import Repository
+from teams.data.repo.repository import BasicRepository
 from teams.domain.competition import Competition
 from tests.teams.repo.test_repository import BaseRepoTests
 
@@ -9,7 +9,7 @@ from tests.teams.repo.test_repository import BaseRepoTests
 class CompetitionRepoTests(BaseRepoTests, TestCase):
 
     def get_repo(self):
-        return Repository()
+        return BasicRepository()
 
     def get_add_record(self):
         return CompetitionDTO(Competition("Comp Name", 1, None, None, 2, False, True, False, True))

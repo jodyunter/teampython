@@ -9,12 +9,18 @@ from teams.services.view_models.team_view_models import RecordViewModel
 
 class RecordService(BaseService):
 
+    def get_team_repo(self):
+        return TeamRepository()
+
+    def get_repo(self):
+        return RecordRepository()
+
     def add(self, team_view_list, year, session=None):
         commit = session is None
         session = self.get_session(session)
-        team_list = [TeamRepository.get_by_oid(t.oid, TeamDTO, session) for t in team_view_list]
+        team_list = [self.get_team_repo().get_by_oid(t.oid, session) for t in team_view_list]
         record_list = [Record(-1, t, year, 0, 0, 0, 0, 0, t.skill, self.get_new_id()) for t in team_list]
-        [RecordRepository.add(r, RecordDTO, session) for r in record_list]
+        [self.get_repo().add(r, session) for r in record_list]
         self.commit(session, commit)
 
     def update_records(self, updated_records, session=None):
@@ -29,10 +35,10 @@ class RecordService(BaseService):
     def update_record(self, oid, team_id, wins, loses, ties, goals_for, goals_against, session=None):
         commit = session is None
         session = self.get_session(session)
-        repo = RecordRepository()
-        team_repo = TeamRepository()
-        team = team_repo.get_by_oid(team_id, TeamDTO, session)
-        record = repo.get_by_oid(oid, RecordDTO, session)
+        repo = self.get_repo()
+        team_repo = self.get_team_repo()
+        team = team_repo.get_by_oid(team_id, session)
+        record = repo.get_by_oid(oid, session)
         record.team = team
         record.wins = wins
         record.loses = loses
@@ -44,7 +50,7 @@ class RecordService(BaseService):
     def update_rank(self, year, session=None):
         commit = session is None
         session = self.get_session(session)
-        repo = RecordRepository()
+        repo = self.get_repo()
         result = list(repo.get_by_year(year, session))
         result.sort(key=lambda rec: (-rec.points, -rec.wins, rec.games, -rec.goal_difference))
 
@@ -59,7 +65,7 @@ class RecordService(BaseService):
 
     def get_by_year(self, year):
         session = self.get_session()
-        repo = RecordRepository()
+        repo = self.get_repo()
         view_list = [self.get_view_from_model(r)
                      for r in repo.get_by_year(year, session)]
 
@@ -77,17 +83,17 @@ class RecordService(BaseService):
 
     def get_by_team_and_year(self, team_id, year, session=None):
         session = self.get_session(session)
-        repo = RecordRepository()
+        repo = self.get_repo()
         return RecordService.get_view_from_model(repo.get_by_team_and_year(team_id, year, session))
 
     def get_by_team(self, team_id, session=None):
         session = self.get_session(session)
-        repo = RecordRepository()
+        repo = self.get_repo()
         return [RecordService.get_view_from_model(r) for r in repo.get_by_team(team_id, session)]
 
     def get_all_by_rank(self, rank, session=None):
         session = self.get_session(session)
-        repo = RecordRepository()
+        repo = self.get_repo()
         return [RecordService.get_view_from_model(r) for r in repo.get_by_rank(rank, session)]
 
     @staticmethod
@@ -100,7 +106,7 @@ class RecordService(BaseService):
         standings.sort(key=lambda rec: rec.year)
 
     def get_all_seasons_for_dropdown(self):
-        repo = RecordRepository()
+        repo = self.get_repo()
         session = self.get_session()
         data = repo.get_list_of_seasons(session)
         return [a.year for a in data]
