@@ -129,6 +129,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\teams\services\game_service.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\teams\services\record_service.py">
           <value>
             <Attribute>

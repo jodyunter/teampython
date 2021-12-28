@@ -35,3 +35,12 @@ class GameRepository(Repository):
     def get_incomplete_or_unprocessed_games_by_year_count(year, session):
         return session.query(GameDTO).filter(GameDTO.complete == False or GameDTO.processed == False,
                                              GameDTO.year == year).count()
+
+    @staticmethod
+    def get_available_day_for_game(year, starting_day, game, session):
+        home_id = game.home_team.oid
+        away_id = game.away_team.oid
+
+        session.query(GameDTO).filter(GameDTO.year == year, GameDTO.day >= starting_day,
+                                      )
+
