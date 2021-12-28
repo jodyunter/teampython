@@ -83,7 +83,7 @@ def button_update_team_list_clicked():
                 team_id = request.form["id_" + oid]
                 team_name = request.form["name_" + oid]
                 team_active = RequestUtilities.get_boolean_from_form_input(request.form, "active_" + oid)
-                team_skill = request.form["skill_" + oid]
+                team_skill = int(request.form["skill_" + oid])
                 team_service.update(team_id, team_name, team_skill, team_active)
         pass
     else:
