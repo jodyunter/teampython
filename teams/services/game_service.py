@@ -45,7 +45,7 @@ class GameService(BaseService):
             commit = True
 
         team_a = self.team_repo.get_by_oid(schedule_game.home_team, TeamDTO, session)
-        team_b = self.team_repo.get_by_oid(schedule_game.home_team, TeamDTO, session)
+        team_b = self.team_repo.get_by_oid(schedule_game.away_team, TeamDTO, session)
         rules = self.game_rules_repo.get_by_oid(schedule_game.rules, GameRulesDTO, session)
 
         if team_a is None:

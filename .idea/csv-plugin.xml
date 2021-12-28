@@ -10,6 +10,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\teams\ConsoleUI\views\record_view.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\teams\data\dto\dto_competition.py">
           <value>
             <Attribute>
