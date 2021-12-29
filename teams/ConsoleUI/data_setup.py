@@ -31,7 +31,6 @@ def add_new_teams():
 def get_next_teams(year_string):
     return {
         "0": ["Montreal", "Toronto", "Ottawa", "Calgary", "Edmonton", "Vancouver", "Winnipeg", "Quebec City", "Halifax", "Victoria", "Saskatoon"],
-        "7": ["Saskatoon"],
         "8": ["Detroit"],
         "9": ["Pittsburgh"],
         "10": ["New York"],
