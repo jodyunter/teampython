@@ -11,6 +11,10 @@ class CompetitionGameDTO(GameDTO, CompetitionGame):
     competition_id = Column(String, ForeignKey('competitions.oid'))
     competition = relationship("CompetitionDTO", foreign_keys=[competition_id])
 
+    __mapper_args__ = {
+        'polymorphic_identity': 'competition_game'
+    }
+
     def __init__(self, competition_game):
 
         CompetitionGame.__init__(self, competition_game.competition,

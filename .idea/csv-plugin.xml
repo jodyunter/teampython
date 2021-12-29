@@ -52,6 +52,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\teams\data\dto\dto_series_rules.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\teams\data\dto\dto_sub_competition.py">
           <value>
             <Attribute>
@@ -70,6 +77,13 @@
           <value>
             <Attribute>
               <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\teams\data\repo\competition_repository.py">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
             </Attribute>
           </value>
         </entry>
@@ -312,6 +326,13 @@
           </value>
         </entry>
         <entry key="\tests\teams\repo\test_repository.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\tests\teams\repo\test_series_rules_repository.py">
           <value>
             <Attribute>
               <option name="separator" value="," />

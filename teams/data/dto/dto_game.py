@@ -23,6 +23,12 @@ class GameDTO(Base, Game):
     away_team = relationship("TeamDTO", foreign_keys=[away_team_id])
     rules_id = Column(String, ForeignKey('gamerules.oid'))
     rules = relationship("GameRulesDTO", foreign_keys=[rules_id])
+    type = Column(String)
+
+    __mapper_args__ = {
+        'polymorphic_on': type,
+        'polymorphic_identity': 'game'
+    }
 
     def __init__(self, game):
         home_team_dto = TeamDTO.get_dto(game.home_team)

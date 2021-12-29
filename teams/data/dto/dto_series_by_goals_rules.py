@@ -8,7 +8,7 @@ from teams.domain.series_rules import SeriesByGoalsRules
 class SeriesByGoalsRulesDTO(SeriesRulesDTO, SeriesByGoalsRules):
     games_to_play = Column(Integer)
     last_game_rules_id = Column(String, ForeignKey('gamerules.oid'))
-    last_game_rules = relationship("GameRulesDTO", foreign_key=[last_game_rules_id])
+    last_game_rules = relationship("GameRulesDTO", foreign_keys=[last_game_rules_id])
 
     __mapper_args__ = {
         'polymorphic_identity': 'series_by_wins'

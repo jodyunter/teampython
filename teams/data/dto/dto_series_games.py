@@ -1,6 +1,7 @@
 from sqlalchemy import Column, String, ForeignKey, Integer
 from sqlalchemy.orm import relationship
 
+from teams.data.dto.dto_series import SeriesDTO
 from teams.data.dto.dto_competition_game import CompetitionGameDTO
 from teams.domain.series import SeriesGame
 
@@ -9,6 +10,10 @@ class SeriesGameDTO(CompetitionGameDTO, SeriesGame):
     series_id = Column(String, ForeignKey('series.oid'))
     series = relationship('SeriesDTO', foreign_keys=[series_id])
     game_number = Column(Integer)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'series_game'
+    }
 
     def __init__(self, series_game):
         SeriesGame.__init__(self, series_game.series,

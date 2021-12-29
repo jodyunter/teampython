@@ -1,6 +1,9 @@
 from sqlalchemy import String, ForeignKey, Column
 from sqlalchemy.orm import relationship
 
+# these imports are required to let python know we need these defined BEFORE this class
+from teams.data.dto.dto_sub_competition import SubCompetitionDTO
+from teams.data.dto.dto_table_sub_competition import TableSubCompetitionDTO
 from teams.data.dto.dto_record import RecordDTO
 from teams.domain.competition import TableRecord
 

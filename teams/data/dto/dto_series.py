@@ -1,6 +1,8 @@
 from sqlalchemy import ForeignKey, String, Column, Integer, Boolean
 from sqlalchemy.orm import relationship
 
+from teams.data.dto.dto_competition_group import CompetitionGroupDTO
+from teams.data.dto.dto_playoff_sub_competition import PlayoffSubCompetitionDTO
 from teams.data.dto.dto_base import Base
 from teams.domain.series import Series
 
@@ -8,8 +10,9 @@ from teams.domain.series import Series
 class SeriesDTO(Base, Series):
     __tablename__ = "series"
 
+    oid = Column(String, primary_key=True)
     sub_competition_id = Column(String, ForeignKey('subcompetitions.oid'))
-    sub_competition = relationship("TableSubCompetitionDTO", foreign_keys=[sub_competition_id])
+    sub_competition = relationship("PlayoffSubCompetitionDTO", foreign_keys=[sub_competition_id])
     name = Column(String)
     series_round = Column(Integer)
     home_team_id = Column(String, ForeignKey('teams.oid'))
@@ -31,6 +34,7 @@ class SeriesDTO(Base, Series):
     loser_to_group = relationship("CompetitionGroupDTO", foreign_keys=[loser_to_group_id])
     setup = Column(Boolean)
     post_processed = Column(Boolean)
+    type = Column(String)
 
     __mapper_args__ = {
         'polymorphic_on': type,
