@@ -84,18 +84,21 @@ class TeamRepoTests(BaseRepoTests, TestCase):
         self.assertEqual(3, len(result))
 
 
-class CompetitionTeamRepoTests(TeamRepoTests):
+class CompetitionTeamRepoTests(TeamRepoTests, TestCase):
     def create_object(self, **kwargs):
         return CompetitionTeamDTO(CompetitionTeam(None, Team(kwargs["name"], kwargs["skill"], kwargs["active"]), kwargs["id"]))
 
     def get_repo(self):
         return CompetitionTeamRepository()
 
+    def test_add_record(self):
+        BaseRepoTests.test_add_record(self)
+
     def test_update_record(self):
         BaseRepoTests.test_update_record(self)
 
     def get_add_record(self):
-        return CompetitionTeamDTO(CompetitionTeam(None, Team("team 1", 5, True)))
+        return CompetitionTeamDTO(CompetitionTeam(None, TeamDTO(Team("team 1", 5, True))))
 
     def get_updated_record(self, original_record):
         original_record.name = "Updated Name"
