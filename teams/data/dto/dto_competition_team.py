@@ -16,4 +16,5 @@ class CompetitionTeamDTO(TeamDTO, CompetitionTeam):
     }
 
     def __init__(self, competition_team):
-        CompetitionTeam.__init__(self, competition_team.competition, competition_team.parent_team, competition_team.oid)
+        parent = TeamDTO.get_dto(competition_team.parent_team)
+        CompetitionTeam.__init__(self, competition_team.competition, parent, competition_team.oid)
