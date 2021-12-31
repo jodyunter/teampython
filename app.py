@@ -101,9 +101,6 @@ def button_update_team_list_clicked():
     return get_team_edit_view()
 
 
-
-
-
 @app.route('/updateteam', methods=['POST'])
 def button_update_team_clicked():
     team_id = request.form["id"]
