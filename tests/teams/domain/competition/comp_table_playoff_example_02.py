@@ -9,6 +9,8 @@ from teams.domain.competition_configuration import RankingGroupConfiguration, Co
     SeriesConfiguration
 from teams.domain.game import GameRules
 from teams.domain.scheduler import Scheduler
+from teams.domain.series_by_goals import SeriesByGoals
+from teams.domain.series_by_wins import SeriesByWins
 from teams.domain.series_by_wins_rules import SeriesByWinsRules
 from teams.domain.sub_competition import TableSubCompetition
 from teams.domain.team import Team
@@ -67,7 +69,8 @@ def setup_config(rand, canadian_league_name, american_league_name, playoff_name,
     competition_config = CompetitionConfiguration("Test", [], [], 1, 1, None)
 
     # table config
-    canadian_table_config = TableSubCompetitionConfiguration(canadian_league_name, competition_config, [], [], 1, 1, None)
+    canadian_table_config = TableSubCompetitionConfiguration(canadian_league_name, competition_config, [], [], 1, 1,
+                                                             None)
     american_table_config = TableSubCompetitionConfiguration(american_league_name, competition_config, [], [], 1, 1,
                                                              None)
     competition_config.sub_competitions.append(canadian_table_config)
@@ -79,7 +82,8 @@ def setup_config(rand, canadian_league_name, american_league_name, playoff_name,
 
     american_config = RankingGroupConfiguration("Second Division", american_table_config, None, 1, 1, None)
 
-    all_teams = [calgary, edmonton, toronto, montreal, ottawa, vancouver, quebec_city, winnipeg, boston, detroit, new_york, chicago]
+    all_teams = [calgary, edmonton, toronto, montreal, ottawa, vancouver, quebec_city, winnipeg, boston, detroit,
+                 new_york, chicago]
     western_teams = [calgary, edmonton, vancouver, winnipeg]
     eastern_teams = [toronto, montreal, ottawa, quebec_city]
     american_teams = [boston, detroit, new_york, chicago]
@@ -118,12 +122,15 @@ def setup_config(rand, canadian_league_name, american_league_name, playoff_name,
     playoff_config.competition_groups = [r1_winners, champion, runner_up, american_rep]
 
     # round 1
-    r1s1 = SeriesConfiguration("R1S1", 1, playoff_config, western_config, 1, eastern_config, 2, series_rules, r1_winners,
+    r1s1 = SeriesConfiguration("R1S1", 1, playoff_config, western_config, 1, eastern_config, 2, series_rules,
+                               r1_winners,
                                canadian_config, None, None, 1, None)
-    r1s2 = SeriesConfiguration("R1S2", 1, playoff_config, eastern_config, 1, western_config, 2, series_rules, r1_winners,
+    r1s2 = SeriesConfiguration("R1S2", 1, playoff_config, eastern_config, 1, western_config, 2, series_rules,
+                               r1_winners,
                                canadian_config, None, None, 1, None)
 
-    r1s3 = SeriesConfiguration("AMF", 1, playoff_config, american_config, 1, american_config, 2, series_rules, american_rep,
+    r1s3 = SeriesConfiguration("AMF", 1, playoff_config, american_config, 1, american_config, 2, series_rules,
+                               american_rep,
                                american_config, None, None, 1, None)
     # Final
     final = SeriesConfiguration("Final", 2, playoff_config, r1_winners, 1, r1_winners, 2, series_rules, champion,
@@ -149,8 +156,8 @@ canadian_league_name = "Canadian League"
 american_league_name = "American League"
 playoff_name = "Playoff"
 
-competition_config = setup_config(rand, canadian_league_name, american_league_name, playoff_name, season_game_rules, playoff_game_rules)
-
+competition_config = setup_config(rand, canadian_league_name, american_league_name, playoff_name, season_game_rules,
+                                  playoff_game_rules)
 
 # start year
 # get initial games
@@ -160,79 +167,86 @@ competition_config = setup_config(rand, canadian_league_name, american_league_na
 # process end of day
 # get next games
 
-# start year
-competition = CompetitionConfigurator.setup_competition(competition_config, 1)
+for i in range(5):
+    # start year
+    competition = CompetitionConfigurator.setup_competition(competition_config, i)
 
-# get initial games.  For tables we can't really do this yet.
-days = {}  # this is inplace of the database for now
-scheduler = Scheduler()
+    # get initial games.  For tables we can't really do this yet.
+    days = {}  # this is inplace of the database for now
+    scheduler = Scheduler()
 
-canadian_table = competition.get_sub_competition(canadian_league_name)
-american_table = competition.get_sub_competition(american_league_name)
+    canadian_table = competition.get_sub_competition(canadian_league_name)
+    american_table = competition.get_sub_competition(american_league_name)
 
-games = []
+    games = []
 
-games.extend(create_games(canadian_table.get_groups_by_level(1), 2, season_game_rules, canadian_table.create_game, days, scheduler))
-games.extend(create_games(american_table.get_groups_by_level(1), 6, season_game_rules, american_table.create_game, days, scheduler))
-games.extend(create_games(canadian_table.get_groups_by_level(2), 4, season_game_rules, canadian_table.create_game, days, scheduler))
+    games.extend(
+        create_games(canadian_table.get_groups_by_level(1), 2, season_game_rules, canadian_table.create_game, days,
+                     scheduler))
+    games.extend(
+        create_games(american_table.get_groups_by_level(1), 6, season_game_rules, american_table.create_game, days,
+                     scheduler))
+    games.extend(
+        create_games(canadian_table.get_groups_by_level(2), 4, season_game_rules, canadian_table.create_game, days,
+                     scheduler))
 
+    competition.start_competition()
 
-competition.start_competition()
+    last_day = 1
+    current_day = 1
 
-last_day = 1
-current_day = 1
+    while not competition.finished:
+        print("Current Comp Round: " + str(competition.current_round))
+        new_games = competition.create_new_games(current_games=games)
+        Scheduler.add_games_to_schedule(new_games, days, rand, current_day)
+        games.extend(new_games)
+        if current_day in days:
+            day = days[current_day]
+            for g in day:
+                g.play()
+                competition.process_game(g)
+            competition.process_end_of_day(competition.sort_day_dictionary_to_incomplete_games_dictionary(days))
+            game_day_view_model = GameService.games_to_game_day_view(day)
+            print(GameDayView.get_view(game_day_view_model))
+        else:
+            day = []
+        last_day = current_day
+        current_day += 1
 
+    canadian_table.sort_table_rankings()
+    american_table.sort_table_rankings()
 
-while not competition.finished:
-    print("Current Comp Round: " + str(competition.current_round))
-    new_games = competition.create_new_games(current_games=games)
-    Scheduler.add_games_to_schedule(new_games, days, rand, current_day)
-    games.extend(new_games)
-    if current_day in days:
-        day = days[current_day]
-        for g in day:
-            g.play()
-            competition.process_game(g)
-        competition.process_end_of_day(competition.sort_day_dictionary_to_incomplete_games_dictionary(days))
-        game_day_view_model = GameService.games_to_game_day_view(day)
-        print(GameDayView.get_view(game_day_view_model))
-    else:
-        day = []
-    last_day = current_day
-    current_day += 1
+    print_group("Premier", canadian_table, "Premier")
+    for g in competition.get_groups_by_level_and_comp(2, canadian_league_name):
+        print_group(g.name, canadian_table, g.name)
 
-canadian_table.sort_table_rankings()
-american_table.sort_table_rankings()
+    print_group("Second Division", american_table, "Second Division")
 
-print_group("Premier", canadian_table, "Premier")
-for g in competition.get_groups_by_level_and_comp(2, canadian_league_name):
-    print_group(g.name, canadian_table, g.name)
+    playoff = competition.get_sub_competition(playoff_name)
 
-print_group("Second Division", american_table, "Second Division")
+    for i in range(playoff.current_round):
+        series_list = playoff.get_series_for_round(i + 1)
+        for s in series_list:
+            home_value = -1
+            away_value = -1
+            if isinstance(s, SeriesByGoals):
+                home_value = s.home_goals
+                away_value = s.away_goals
+            elif isinstance(s, SeriesByWins):
+                home_value = s.home_wins
+                away_value = s.away_wins
 
-playoff = competition.get_sub_competition(playoff_name)
+            view_model = SeriesViewModel(s.name, s.sub_competition.competition.year, s.series_round, None,
+                                         TeamViewModel(s.home_team.oid, s.home_team.name, s.home_team.skill, True),
+                                         home_value,
+                                         TeamViewModel(s.away_team.oid, s.away_team.name, s.away_team.skill, True),
+                                         away_value,
+                                         "Done")
+            print(SeriesView.get_basic_series_view(view_model))
 
-for i in range(playoff.current_round):
-    series_list = playoff.get_series_for_round(i + 1)
-    for s in series_list:
-        home_value = -1
-        away_value = -1
-        if isinstance(s, SeriesByGoals):
-            home_value = s.home_goals
-            away_value = s.away_goals
-        elif isinstance(s, SeriesByWins):
-            home_value = s.home_wins
-            away_value = s.away_wins
+    champion = competition.get_group_by_name("Champion")
+    runner_up = competition.get_group_by_name("Runner Up")
+    print("")
+    print(f"Champion: {champion.rankings[0].team.name:15} Runner Up: {runner_up.rankings[0].team.name:15}")
 
-        view_model = SeriesViewModel(s.name, s.sub_competition.competition.year, s.series_round, None,
-                                     TeamViewModel(s.home_team.oid, s.home_team.name, s.home_team.skill, True),
-                                     home_value,
-                                     TeamViewModel(s.away_team.oid, s.away_team.name, s.away_team.skill, True),
-                                     away_value,
-                                     "Done")
-        print(SeriesView.get_basic_series_view(view_model))
-
-champion = competition.get_group_by_name("Champion")
-runner_up = competition.get_group_by_name("Runner Up")
-print("")
-print(f"Champion: {champion.rankings[0].team.name:15} Runner Up: {runner_up.rankings[0].team.name:15}")
+    input("Press enter to continue.")
