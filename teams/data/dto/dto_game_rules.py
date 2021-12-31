@@ -19,7 +19,9 @@ class GameRulesDTO(Base, GameRules):
 
     @staticmethod
     def get_dto(game_rules):
-        if game_rules.__class__ == GameRulesDTO:
+        if game_rules is None:
+            return None
+        elif game_rules.__class__ == GameRulesDTO:
             return game_rules
         else:
             return GameRulesDTO(game_rules)

@@ -1,7 +1,6 @@
 from sqlalchemy import Column, String, ForeignKey, Integer
 from sqlalchemy.orm import relationship
 
-from teams.data.dto.dto_series import SeriesDTO
 from teams.data.dto.dto_competition_game import CompetitionGameDTO
 from teams.domain.series import SeriesGame
 

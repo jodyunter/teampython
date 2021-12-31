@@ -48,3 +48,13 @@ class SubCompetitionDTO(Base, SubCompetition):
             self.started == other.started and \
             self.finished == other.finished and \
             self.post_processed == other.post_processed
+
+    @staticmethod
+    def get_dto(sub_competition):
+        if sub_competition is None:
+            return None
+        elif sub_competition.__class__ == SubCompetitionDTO:
+            return sub_competition
+        else:
+            return SubCompetitionDTO(sub_competition)
+
