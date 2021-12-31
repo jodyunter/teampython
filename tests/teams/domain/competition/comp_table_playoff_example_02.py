@@ -9,8 +9,7 @@ from teams.domain.competition_configuration import RankingGroupConfiguration, Co
     SeriesConfiguration
 from teams.domain.game import GameRules
 from teams.domain.scheduler import Scheduler
-from teams.domain.series import SeriesByWins, SeriesByGoals
-from teams.domain.series_rules import SeriesByWinsRules
+from teams.domain.series_by_wins_rules import SeriesByWinsRules
 from teams.domain.sub_competition import TableSubCompetition
 from teams.domain.team import Team
 from teams.services.game_service import GameService

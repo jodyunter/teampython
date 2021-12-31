@@ -3,7 +3,7 @@ import numpy as np
 from app_config import db_connection_string
 from teams.data.database import Database
 from teams.domain.competition_configuration import CompetitionConfiguration, TableSubCompetitionConfiguration, \
-    RankingGroupConfiguration, CompetitionTeamConfiguration
+    RankingGroupConfiguration, CompetitionTeamConfiguration, PlayoffSubCompetitionConfiguration, SeriesConfiguration
 from teams.services.app_service import AppService
 from teams.services.configuration_service import ConfigurationService
 from teams.services.game_service import GameRulesService
@@ -46,7 +46,7 @@ def setup_series_rules(rules):
 def setup_configuration():
     session = Database.get_session()
 
-    competition_config = CompetitionConfiguration("Test", [], [], 1, 1, None)
+    competition_config = CompetitionConfiguration("League", [], [], 1, 1, None)
 
     table_config = TableSubCompetitionConfiguration("Premier", competition_config, [], [], 1, 1, None)
 
@@ -83,6 +83,17 @@ def setup_configuration():
 
     competition_config.teams = team_configs
 
+    # playoff config
+    playoff_config = PlayoffSubCompetitionConfiguration("Playoff", competition_config, [], [], [], 2, 1, None)
+    competition_config.sub_competitions.append(playoff_config)
+
+    champion = RankingGroupConfiguration("Champion", playoff_config, None, 1, 1, None)
+    runner_up = RankingGroupConfiguration("Runner Up", playoff_config, None, 1, 1, None)
+
+    playoff_config.competition_groups = [champion, runner_up]
+
+    final = SeriesConfiguration("R1S1", 1, playoff_config, western_config, 1, eastern_config, 2, series_rules,
+                               champion, premier_config, runner_up, premier_config, 1, None)
 
     session.commit()
 

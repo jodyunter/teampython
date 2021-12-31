@@ -19,3 +19,5 @@ class ConfigurationService(BaseService):
         repo.add(series_rules, session, SeriesByWinsRules)
 
         self.commit(session, commit)
+
+        return series_rules
