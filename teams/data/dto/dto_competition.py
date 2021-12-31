@@ -38,3 +38,13 @@ class CompetitionDTO(Base, Competition):
             self.finished == other.finished and \
             self.post_processed == other.post_processed
 
+    @staticmethod
+    def get_dto(competition):
+        if competition is None:
+            competition_dto = None
+        elif not competition.__class__ == CompetitionDTO:
+            competition_dto = CompetitionDTO(competition)
+        else:
+            competition_dto = competition
+
+        return competition_dto

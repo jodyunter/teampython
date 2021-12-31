@@ -1,4 +1,5 @@
 from sqlalchemy import String, Integer, Column, Boolean
+from sqlalchemy.orm import relationship
 
 from teams.data.dto.dto_base import Base
 from teams.domain.team import Team
@@ -8,7 +9,7 @@ class TeamDTO(Base, Team):
     __tablename__ = "teams"
 
     oid = Column(String, primary_key=True)
-    name = Column(String, unique=True)
+    name = Column(String)
     skill = Column(Integer, default=5)
     active = Column(Boolean, default=True)
     type = Column(String)

@@ -98,7 +98,7 @@ class CompetitionTeamRepoTests(TeamRepoTests, TestCase):
         BaseRepoTests.test_update_record(self)
 
     def get_add_record(self):
-        return CompetitionTeamDTO(CompetitionTeam(None, TeamDTO(Team("team 1", 5, True))))
+        return CompetitionTeamDTO(CompetitionTeam(None, Team("team 1", 5, True)))
 
     def get_updated_record(self, original_record):
         original_record.name = "Updated Name"
