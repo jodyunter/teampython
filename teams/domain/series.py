@@ -1,11 +1,47 @@
 from abc import ABC, abstractmethod
 
-from teams.domain.competition import CompetitionGame
+from sqlalchemy import Integer, Column, ForeignKey, String, Boolean
+from sqlalchemy.orm import relationship
+
+from teams.data.dto.dto_base import Base
+from teams.domain.series_game import SeriesGame
 from teams.domain.series_rules import SeriesRules
 from teams.domain.utility.utility_classes import IDHelper
 
 
-class Series(ABC):
+class Series(Base, ABC):
+    __tablename__ = "series"
+
+    oid = Column(String, primary_key=True)
+    sub_competition_id = Column(String, ForeignKey('subcompetitions.oid'))
+    sub_competition = relationship("PlayoffSubCompetition", foreign_keys=[sub_competition_id])
+    name = Column(String)
+    series_round = Column(Integer)
+    home_team_id = Column(String, ForeignKey('teams.oid'))
+    home_team = relationship("Team", foreign_keys=[home_team_id])
+    away_team_id = Column(String, ForeignKey('teams.oid'))
+    away_team = relationship("Team", foreign_keys=[away_team_id])
+    series_type = Column(String)
+    series_rules_id = Column(String, ForeignKey('seriesrules.oid'))
+    series_rules = relationship("SeriesRules", foreign_keys=[series_rules_id])
+    home_team_from_group_id = Column(String, ForeignKey('competitiongroup.oid'))
+    home_team_from_group = relationship("CompetitionGroup", foreign_keys=[home_team_from_group_id])
+    home_team_value = Column(Integer)
+    away_team_from_group_id = Column(String, ForeignKey('competitiongroup.oid'))
+    away_team_from_group = relationship("CompetitionGroup", foreign_keys=[away_team_from_group_id])
+    away_team_value = Column(Integer)
+    winner_to_group_id = Column(String, ForeignKey('competitiongroup.oid'))
+    winner_to_group = relationship("CompetitionGroup", foreign_keys=[winner_to_group_id])
+    loser_to_group_id = Column(String, ForeignKey('competitiongroup.oid'))
+    loser_to_group = relationship("CompetitionGroup", foreign_keys=[loser_to_group_id])
+    setup = Column(Boolean)
+    post_processed = Column(Boolean)
+    type = Column(String)
+
+    __mapper_args__ = {
+        'polymorphic_on': type,
+        'polymorphic_identity': 'series'
+    }
 
     def __init__(self, sub_competition, name, series_round, home_team, away_team, series_type, series_rules,
                  home_team_from_group, home_team_value,
@@ -88,173 +124,3 @@ class Series(ABC):
             return self.away_team
         else:
             return self.home_team
-
-
-# TODO: Implement the home pattern.
-class SeriesByWins(Series):
-
-    def __init__(self, sub_competition, name, series_round, home_team, away_team, home_wins, away_wins,
-                 series_rules,
-                 home_team_from_group, home_team_value,
-                 away_team_from_group, away_team_value,
-                 winner_to_group, winner_rank_from,
-                 loser_to_group, loser_rank_from,
-                 setup, post_processed,
-                 oid=None):
-        self.home_wins = home_wins
-        self.away_wins = away_wins
-
-        Series.__init__(self, sub_competition, name, series_round, home_team, away_team,
-                        SeriesRules.WINS_TYPE, series_rules,
-                        home_team_from_group, home_team_value,
-                        away_team_from_group, away_team_value,
-                        winner_to_group, winner_rank_from,
-                        loser_to_group, loser_rank_from,
-                        setup, post_processed,
-                        oid)
-
-    def process_game(self, game):
-        if self.can_process_game(game):
-            if game.get_winner().oid == self.home_team.oid:
-                self.home_wins += 1
-            elif game.get_winner().oid == self.away_team.oid:
-                self.away_wins += 1
-
-            game.processed = True
-
-    def is_complete(self):
-        return self.series_rules.required_wins == self.home_wins or self.series_rules.required_wins == self.away_wins
-
-    def get_winner(self):
-        if self.is_complete():
-            required_wins = self.series_rules.required_wins
-
-            if self.home_wins == required_wins:
-                return self.home_team
-            elif self.away_wins == required_wins:
-                return self.away_team
-
-        return None
-
-    def get_loser(self):
-        if self.is_complete():
-            required_wins = self.series_rules.required_wins
-
-            if self.home_wins == required_wins:
-                return self.away_team
-            elif self.away_wins == required_wins:
-                return self.home_team
-
-        return None
-
-    def get_new_games(self, complete_games, incomplete_games):
-
-        if self.home_wins >= self.away_wins:
-            closest_to_winning = self.home_wins
-        else:
-            closest_to_winning = self.away_wins
-
-        required_wins = self.series_rules.required_wins - closest_to_winning
-        required_games = required_wins - incomplete_games
-
-        last_game_number = complete_games + incomplete_games
-
-        new_games = []
-
-        for i in range(required_games):
-            last_game_number += 1
-            new_games.append(self.create_game(last_game_number))
-
-        return new_games
-
-
-class SeriesByGoals(Series):
-
-    def __init__(self, sub_competition, name, series_round, home_team, away_team, home_goals, away_goals, games_played,
-                 series_rules,
-                 home_team_from_group, home_team_value,
-                 away_team_from_group, away_team_value,
-                 winner_to_group, winner_rank_from,
-                 loser_to_group, loser_rank_from,
-                 setup, post_processed,
-                 oid=None):
-        self.home_goals = home_goals
-        self.away_goals = away_goals
-        self.games_played = games_played
-
-        Series.__init__(self, sub_competition, name, series_round, home_team, away_team,
-                        SeriesRules.GOALS_TYPE, series_rules,
-                        home_team_from_group, home_team_value,
-                        away_team_from_group, away_team_value,
-                        winner_to_group, winner_rank_from,
-                        loser_to_group, loser_rank_from,
-                        setup, post_processed,
-                        oid)
-
-    # this setup isn't really fair
-    # TODO: make this more fair.  The last game shouldn't automatically go to overtime.  Maybe we just keep making games as needed
-    def process_game(self, game):
-        if self.can_process_game(game):
-            self.home_goals += game.home_score
-            self.away_goals += game.away_score
-            game.processed = True
-            self.games_played += 1
-
-    def is_complete(self):
-        return self.series_rules.games_to_play <= self.games_played and self.home_goals != self.away_goals
-
-    def get_winner(self):
-        if self.is_complete():
-            if self.home_goals > self.away_goals:
-                return self.home_team
-            elif self.away_goals > self.home_goals:
-                return self.away_team
-        return None
-
-    def get_loser(self):
-        if self.is_complete():
-            if self.home_goals > self.away_goals:
-                return self.away_team
-            elif self.away_goals > self.home_goals:
-                return self.home_team
-
-        return None
-
-    def get_new_games(self, complete_games, incomplete_games):
-        total_games = complete_games + incomplete_games
-        new_games = []
-        minimum_games = self.series_rules.games_to_play
-
-        #  this will create any missing games
-        while total_games < minimum_games:
-            total_games += 1
-            new_games.append(self.create_game(total_games))
-
-        # if all games are complete, and the goals are tied, create a new game with the special last rules
-        if complete_games == minimum_games and self.home_goals == self.away_goals:
-            new_games.append(self.create_game(total_games + 1))
-
-        return new_games
-
-    def create_game(self, game_number):
-        game_rules = self.series_rules.game_rules
-        if game_number > self.series_rules.games_to_play:
-            game_rules = self.series_rules.last_game_rules
-
-        return SeriesGame(self, game_number, self.sub_competition.competition,
-                          self.sub_competition, -1, self.get_home_team_for_game(game_number),
-                          self.get_away_team_for_game(game_number),
-                          0, 0, False, False, game_rules)
-
-
-class SeriesGame(CompetitionGame):
-
-    def __init__(self, series, game_number, competition, sub_competition, day, home_team, away_team, home_score,
-                 away_score, complete, processed,
-                 rules, oid=None):
-        self.series = series
-        self.game_number = game_number
-
-        CompetitionGame.__init__(self, competition, sub_competition, day, home_team, away_team, home_score, away_score,
-                                 complete, processed,
-                                 rules, oid)

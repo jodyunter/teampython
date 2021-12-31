@@ -31,6 +31,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\teams\data\dto\dto_base.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\teams\data\dto\dto_competition.py">
           <value>
             <Attribute>

@@ -1,16 +1,16 @@
 from sqlalchemy import select, and_
 from sqlalchemy.sql import or_
 
-from teams.data.dto.dto_competition_game import CompetitionGameDTO
-from teams.data.dto.dto_game import GameDTO
-from teams.data.dto.dto_series_games import SeriesGameDTO
 from teams.data.repo.repository import Repository
+from teams.domain.competition_game import CompetitionGame
+from teams.domain.game import Game
+from teams.domain.series import SeriesGame
 
 
 class GameRepository(Repository):
 
     def get_type(self):
-        return GameDTO
+        return Game
 
     def get_by_unprocessed_and_complete(self, year, first_day, last_day, session):
         dto_type = self.get_type()
@@ -71,11 +71,11 @@ class GameRepository(Repository):
         return [a[0] for a in result]
 
 
-# todo: can we get subclasses of GameDTO when we use GameDTO or will we need multiple queries to process a full day?
+# todo: can we get subclasses of Game when we use Game or will we need multiple queries to process a full day?
 class CompetitionGameRepository(GameRepository):
 
     def get_type(self):
-        return CompetitionGameDTO
+        return CompetitionGame
 
     def get_by_competition_and_year(self, session):
         # can we add this to the above queries?
@@ -85,7 +85,7 @@ class CompetitionGameRepository(GameRepository):
 class SeriesGameRepository(CompetitionGameRepository):
 
     def get_type(self):
-        return SeriesGameDTO
+        return SeriesGame
 
     def get_by_series(self):
         # can we add a year or anything else to the above queries?

@@ -1,29 +1,27 @@
-from teams.data.dto.dto_competition import CompetitionDTO
-from teams.data.dto.dto_playoff_sub_competition import PlayoffSubCompetitionDTO
-from teams.data.dto.dto_sub_competition import SubCompetitionDTO
-from teams.data.dto.dto_table_sub_competition import TableSubCompetitionDTO
 from teams.data.repo.repository import Repository
+from teams.domain.competition import Competition
+from teams.domain.sub_competition import SubCompetition, TableSubCompetition, PlayoffSubCompetition
 
 
 class CompetitionRepository(Repository):
 
     def get_type(self):
-        return CompetitionDTO
+        return Competition
 
 
 class SubCompetitionRepository(Repository):
 
     def get_type(self):
-        return SubCompetitionDTO
+        return SubCompetition
 
 
 class TableSubCompetitionRepository(SubCompetitionRepository):
 
     def get_type(self):
-        return TableSubCompetitionDTO
+        return TableSubCompetition
 
 
 class PlayoffSubCompetitionRepository(SubCompetitionRepository):
 
     def get_type(self):
-        return PlayoffSubCompetitionDTO
+        return PlayoffSubCompetition

@@ -1,9 +1,15 @@
 from unittest import TestCase
 
-from teams.domain.competition import CompetitionTeam, CompetitionGame
+from teams.domain.competition_game import CompetitionGame
+from teams.domain.competition_team import CompetitionTeam
 from teams.domain.game import GameRules
-from teams.domain.series import SeriesByGoals, SeriesByWins, Series, SeriesGame
-from teams.domain.series_rules import SeriesByWinsRules, SeriesByGoalsRules, SeriesRules
+from teams.domain.series import Series
+from teams.domain.series_by_goals import SeriesByGoals
+from teams.domain.series_by_goals_rules import SeriesByGoalsRules
+from teams.domain.series_by_wins import SeriesByWins
+from teams.domain.series_by_wins_rules import SeriesByWinsRules
+from teams.domain.series_game import SeriesGame
+from teams.domain.series_rules import SeriesRules
 from teams.domain.sub_competition import PlayoffSubCompetition
 from teams.domain.team import Team
 # implementation for testing basic and common methods

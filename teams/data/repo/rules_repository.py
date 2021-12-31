@@ -1,32 +1,32 @@
-from teams.data.dto.dto_game_rules import GameRulesDTO
-from teams.data.dto.dto_series_by_goals_rules import SeriesByGoalsRulesDTO
-from teams.data.dto.dto_series_by_wins_rules import SeriesByWinsRulesDTO
-from teams.data.dto.dto_series_rules import SeriesRulesDTO
 from teams.data.repo.repository import Repository
+from teams.domain.game import GameRules
+from teams.domain.series_by_goals_rules import SeriesByGoalsRules
+from teams.domain.series_by_wins_rules import SeriesByWinsRules
+from teams.domain.series_rules import SeriesRules
 
 
 class GameRulesRepository(Repository):
 
     def get_type(self):
-        return GameRulesDTO
+        return GameRules
 
     def get_by_name(self, name, session):
-        return session.query(GameRulesDTO).filter_by(name=name).first()
+        return session.query(self.get_type()).filter_by(name=name).first()
 
 
 class SeriesRulesRepository(Repository):
 
     def get_type(self):
-        return SeriesRulesDTO
+        return SeriesRules
 
 
 class SeriesByWinsRulesRepository(Repository):
 
     def get_type(self):
-        return SeriesByWinsRulesDTO
+        return SeriesByWinsRules
 
 
 class SeriesByGoalsRulesRepository(Repository):
 
     def get_type(self):
-        return SeriesByGoalsRulesDTO
+        return SeriesByGoalsRules

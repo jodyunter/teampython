@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from teams.data.repo.game_data_repository import GameDataDTO, GameDataRepository
+from teams.data.repo.game_data_repository import GameDataRepository
 from teams.domain.gamedata import GameData
 from tests.teams.repo.test_repository import BaseRepoTests
 
@@ -17,7 +17,7 @@ class GameDataRepoTests(BaseRepoTests, TestCase):
         pass
 
     def get_add_record(self):
-        return GameDataDTO(GameData("My Name", 5, 12, True, False))
+        return GameData("My Name", 5, 12, True, False)
 
     def get_updated_record(self, original_record):
         original_record.name = "New Name"
@@ -28,7 +28,7 @@ class GameDataRepoTests(BaseRepoTests, TestCase):
 
     def test_get(self):
         session = self.setup_basic_test()
-        game_data = GameDataDTO(GameData("game_data", 35, 1234, True, False))
+        game_data = GameData("game_data", 35, 1234, True, False)
         session.add(game_data)
         session.commit()
 

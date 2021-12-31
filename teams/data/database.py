@@ -2,14 +2,14 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from teams.data.dto.dto_base import Base
-from teams.data.dto.dto_competition import CompetitionDTO
-from teams.data.dto.dto_competition_game import CompetitionGameDTO
-from teams.data.dto.dto_game import GameDTO
-from teams.data.dto.dto_game_data import GameDataDTO
-from teams.data.dto.dto_game_rules import GameRulesDTO
-from teams.data.dto.dto_record import RecordDTO
-from teams.data.dto.dto_sub_competition import SubCompetitionDTO
-from teams.data.dto.dto_team import TeamDTO
+from teams.domain.competition import Competition
+from teams.domain.competition_game import CompetitionGame
+from teams.domain.game import Game
+from teams.domain.game_rules import GameRules
+from teams.domain.gamedata import GameData
+from teams.domain.record import Record
+from teams.domain.sub_competition import SubCompetition
+from teams.domain.team import Team
 
 engine = None
 Session = sessionmaker()
@@ -35,14 +35,14 @@ class Database:
 
     @staticmethod
     def clean_up_database(session):
-        session.query(CompetitionDTO).delete()
-        session.query(SubCompetitionDTO).delete()
-        session.query(CompetitionGameDTO).delete()
-        session.query(GameDTO).delete()
-        session.query(RecordDTO).delete()
-        session.query(TeamDTO).delete()
-        session.query(GameRulesDTO).delete()
-        session.query(GameDataDTO).delete()
+        session.query(Competition).delete()
+        session.query(SubCompetition).delete()
+        session.query(CompetitionGame).delete()
+        session.query(Game).delete()
+        session.query(Record).delete()
+        session.query(Team).delete()
+        session.query(GameRules).delete()
+        session.query(GameData).delete()
         session.commit()
         session.flush()
 

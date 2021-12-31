@@ -1,4 +1,3 @@
-from teams.data.dto.dto_series_by_wins_rules import SeriesByWinsRulesDTO
 from teams.data.repo.rules_repository import GameRulesRepository
 from teams.data.repo.repository import BasicRepository
 from teams.domain.series_rules import SeriesByWinsRules
@@ -17,6 +16,6 @@ class ConfigurationService(BaseService):
 
         series_rules = SeriesByWinsRules(series_name, required_wins, rules, home_progression)
 
-        repo.add(series_rules, session, SeriesByWinsRulesDTO)
+        repo.add(series_rules, session, SeriesByWinsRules)
 
         self.commit(session, commit)

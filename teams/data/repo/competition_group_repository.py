@@ -1,16 +1,15 @@
-from teams.data.dto.dto_competition_group import CompetitionGroupDTO
-from teams.data.dto.dto_ranking_group import RankingGroupDTO
 from teams.data.repo.repository import Repository
+from teams.domain.sub_competition import CompetitionGroup, RankingGroup
 
 
 class CompetitionGroupRepository(Repository):
 
     def get_type(self):
-        return CompetitionGroupDTO
+        return CompetitionGroup
 
 
 class RankingGroupRepository(Repository):
 
     def get_type(self):
-        return RankingGroupDTO
+        return RankingGroup
 

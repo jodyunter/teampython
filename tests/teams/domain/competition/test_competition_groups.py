@@ -2,8 +2,8 @@ from unittest import TestCase
 
 from pytest import mark
 
-from teams.domain.competition import CompetitionGroup
 from teams.domain.competition_configuration import CompetitionGroupConfiguration
+from teams.domain.sub_competition import CompetitionGroup
 from tests.teams.domain.competition import helpers
 
 

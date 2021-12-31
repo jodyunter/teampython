@@ -1,8 +1,6 @@
 from unittest import TestCase
 
 from teams.data.database import Database
-from teams.data.dto.dto_record import RecordDTO
-from teams.data.dto.dto_team import TeamDTO
 from teams.data.repo.record_repository import RecordRepository
 from teams.data.repo.team_repository import TeamRepository
 from teams.domain.record import Record
@@ -26,7 +24,7 @@ class RecordRepoTests(BaseRepoTests, TestCase):
         BaseRepoTests.test_update_record(self)
 
     def get_add_record(self):
-        return RecordDTO(Record(5, TeamDTO(Team("Team Name", 5, True)), 25, 10, 20, 30, 40, 50, 200))
+        return Record(5, Team("Team Name", 5, True), 25, 10, 20, 30, 40, 50, 200)
 
     def get_updated_record(self, original_record):
         original_record.rank = 3
@@ -37,7 +35,7 @@ class RecordRepoTests(BaseRepoTests, TestCase):
         original_record.goals_for = 4
         original_record.goals_against = 5
         original_record.skill = 20
-        original_record.team = TeamDTO(Team("New Team Name", 12, False))
+        original_record.team = Team("New Team Name", 12, False)
 
         return original_record
 
@@ -104,7 +102,7 @@ class RecordRepoTests(BaseRepoTests, TestCase):
             team_list.append(Team("GBYN " + str(i), i, True, new_id))
 
         [self.get_team_repo().add(t, session) for t in team_list]
-        # need them to be DTOs!
+
         team_list = self.get_team_repo().get_all(session)
 
         record_year_30 = [

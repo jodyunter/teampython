@@ -1,4 +1,7 @@
-from teams.domain.competition_configuration import CompetitionGroupConfiguration
+from sqlalchemy import Column, String, Integer, Boolean, ForeignKey
+from sqlalchemy.orm import relationship
+
+from teams.data.dto.dto_base import Base
 from teams.domain.game import Game
 from teams.domain.record import Record
 
@@ -6,9 +9,20 @@ from teams.domain.team import Team
 from teams.domain.utility.utility_classes import IDHelper
 
 
-class Competition:
+class Competition(Base):
+    __tablename__ = "competitions"
 
-    def __init__(self, name, year, sub_competitions, teams, current_round, setup, started, finished, post_processed, oid=None):
+    oid = Column(String, primary_key=True)
+    name = Column(String)
+    year = Column(Integer)
+    current_round = Column(Integer)
+    setup = Column(Boolean)
+    started = Column(Boolean)
+    finished = Column(Boolean)
+    post_processed = Column(Boolean)
+
+    def __init__(self, name, year, sub_competitions, teams, current_round, setup, started, finished, post_processed,
+                 oid=None):
         self.name = name
         self.year = year
         self.setup = setup
@@ -58,7 +72,8 @@ class Competition:
                 return s
 
     def is_round_complete(self, round_number):
-        in_complete_sub_comps = [s for s in self.sub_competitions if s.order == round_number and (not s.started or not s.setup or not s.finished or not s.post_processed)]
+        in_complete_sub_comps = [s for s in self.sub_competitions if s.order == round_number and (
+                    not s.started or not s.setup or not s.finished or not s.post_processed)]
         return in_complete_sub_comps is None or len(in_complete_sub_comps) == 0
 
     # todo:  we need to figure out which sub comps are currently running, which need to be post processed, which need to be setup and which need to be started
@@ -129,103 +144,11 @@ class Competition:
             sub.start()
             sub.started = True
 
-
-# mapped
-class CompetitionTeam(Team):
-
-    def __init__(self, competition, parent_team, oid=None):
-        self.competition = competition
-        self.parent_team = parent_team
-
-        Team.__init__(self, parent_team.name, parent_team.skill, True, oid)
-
-
-# mapped
-class CompetitionGame(Game):
-
-    def __init__(self, competition, sub_competition, day, home_team, away_team, home_score, away_score, complete,
-                 game_processed, rules, oid=None):
-        self.sub_competition = sub_competition
-        self.competition = competition
-
-        Game.__init__(self, competition.year, day, home_team, away_team, home_score, away_score, complete,
-                      game_processed, rules,
-                      oid)
-
-
-# mapped
-class CompetitionGroup:
-
-    def __init__(self, name, parent_group, sub_competition, level, rankings, group_type, oid=None):
-        self.name = name
-        self.parent_group = parent_group
-        self.sub_competition = sub_competition
-        self.group_type = group_type
-        self.level = level
-        self.rankings = rankings
-        self.oid = IDHelper.get_id(oid)
-
-    def add_team_to_group(self, competition_team, rank=None):
-        if rank is None:
-            rank = -1
-        team_in_group = [t for t in self.rankings if t.team.oid == competition_team.oid]
-        if team_in_group is None or len(team_in_group) == 0:
-            self.rankings.append(CompetitionRanking(self, competition_team, rank))
-        else:
-            return
-
-    def get_rank_for_team(self, team):
-        return [r.rank for r in self.rankings if r.team.oid == team.oid][0]
-
-    def get_team_by_rank(self, rank):
-        return [t for t in self.rankings if t.rank == rank][0].team
-
-    def get_ranking_for_team(self, team):
-        return [r for r in self.rankings if r.team.oid == team.oid][0]
-
-    # assume 1 is the first
-    def get_team_by_order(self, order, reverse=False):
-        self.rankings.sort(key=lambda team_rank: team_rank.rank)
-
-        return self.rankings[order - 1]
-
-    def set_rank(self, team, rank):
-        self.get_ranking_for_team(team).rank = rank
-
-
-# mapped
-class RankingGroup(CompetitionGroup):
-
-    def __init__(self, name, parent_group, sub_competition, level, rankings, oid=None):
-        CompetitionGroup.__init__(self, name, parent_group, sub_competition, level, rankings, CompetitionGroupConfiguration.RANKING_TYPE, oid)
-
-
-# mapped
-class CompetitionRanking:
-
-    def __init__(self, competition_group, competition_team, rank, oid=None):
-        self.group = competition_group
-        self.team = competition_team
-        self.rank = rank
-        self.oid = IDHelper.get_id(oid)
-
-    @staticmethod
-    def get_dictionary_of_groups_from_rankings(competition_rankings):
-        ranking_group_dict = {}
-
-        for tr in competition_rankings:
-            if tr.group.name not in ranking_group_dict:
-                ranking_group_dict[tr.group.name] = []
-
-            ranking_group_dict[tr.group.name].append(tr)
-
-        return ranking_group_dict
-
-
-# mapped
-class TableRecord(Record):
-
-    def __init__(self, sub_competition, rank, team, year, wins, loses, ties, goals_for, goals_against, skill, oid=None):
-        self.sub_competition = sub_competition
-
-        Record.__init__(self, rank, team, year, wins, loses, ties, goals_for, goals_against, skill, oid)
+    def __eq__(self, other):
+        return self.oid == other.oid and \
+               self.name == other.name and \
+               self.current_round == other.current_round and \
+               self.setup == other.setup and \
+               self.started == other.started and \
+               self.finished == other.finished and \
+               self.post_processed == other.post_processed

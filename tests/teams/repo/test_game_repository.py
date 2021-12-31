@@ -1,19 +1,14 @@
 from unittest import TestCase
 
 from teams.data.database import Database
-from teams.data.dto.dto_competition import CompetitionDTO
-from teams.data.dto.dto_competition_game import CompetitionGameDTO
-from teams.data.dto.dto_game import GameDTO
-from teams.data.dto.dto_game_rules import GameRulesDTO
-from teams.data.dto.dto_table_sub_competition import TableSubCompetitionDTO
-from teams.data.dto.dto_team import TeamDTO
 from teams.data.repo.game_repository import GameRepository, CompetitionGameRepository, SeriesGameRepository
 from teams.data.repo.rules_repository import GameRulesRepository
 from teams.data.repo.team_repository import TeamRepository
-from teams.domain.competition import CompetitionGame, CompetitionTeam, Competition
-from teams.domain.competition_configuration import SubCompetitionConfiguration
+from teams.domain.competition import Competition
+from teams.domain.competition_game import CompetitionGame
+from teams.domain.competition_team import CompetitionTeam
 from teams.domain.game import Game, GameRules
-from teams.domain.sub_competition import SubCompetition, TableSubCompetition
+from teams.domain.sub_competition import TableSubCompetition
 from teams.domain.team import Team
 from tests.teams.repo.test_repository import BaseRepoTests
 
@@ -27,21 +22,21 @@ class GameRepoTests(BaseRepoTests, TestCase):
         return BaseRepoTests.test_add_record(self)
 
     def get_add_record(self):
-        return GameDTO(Game(1, 2,
-                            TeamDTO(Team("Home team", 250, True)),
-                            TeamDTO(Team("Away Team", 251, False)),
-                            3, 4, False, True, GameRulesDTO(GameRules("Rules Name", False))))
+        return Game(1, 2,
+                    Team("Home team", 250, True),
+                    Team("Away Team", 251, False),
+                    3, 4, False, True, GameRules("Rules Name", False))
 
     def get_updated_record(self, original_record):
         original_record.day = 10
         original_record.year = 20
-        original_record.home_team = TeamDTO(Team("New Home TEam", 249, False))
-        original_record.away_team = TeamDTO(Team("New Away TEam", 244, True))
+        original_record.home_team = Team("New Home TEam", 249, False)
+        original_record.away_team = Team("New Away TEam", 244, True)
         original_record.home_score = 30
         original_record.away_score = 30
         original_record.complete = True
         original_record.processed = False
-        original_record.rules = GameRulesDTO(GameRules("Rules Name 2", False))
+        original_record.rules = GameRules("Rules Name 2", False)
         return original_record
 
     def test_add_existing_teams(self):
@@ -177,7 +172,7 @@ class GameRepoTests(BaseRepoTests, TestCase):
 
         session.commit()
         # first test, should be none because teams[0] plays on day 5
-        game2 = GameDTO(Game(1, -1, teams[0], teams[2], 0, 1, True, True, gr, "L"))
+        game2 = Game(1, -1, teams[0], teams[2], 0, 1, True, True, gr, "L")
         result = self.get_repo().get_list_days_teams_play_on(1, 1, 100, game2, session)
 
         self.assertEquals(5, result[0])
@@ -200,25 +195,25 @@ class CompetitionGameRepoTests(BaseRepoTests, TestCase):
 
     # todo: should test this with a non-none competition
     def get_add_record(self):
-        return CompetitionGameDTO(
-            CompetitionGame(Competition("test", 1, None, None, 1, False, False, False, False),
-                            None, 5,
-                            CompetitionTeam(None, Team("Team 1", 5, True)),
-                            CompetitionTeam(None, Team("Team 2", 5, True)),
-                            5, 4, True, False, None))
+        return CompetitionGame(Competition("test", 1, None, None, 1, False, False, False, False),
+                               None, 5,
+                               CompetitionTeam(None, Team("Team 1", 5, True)),
+                               CompetitionTeam(None, Team("Team 2", 5, True)),
+                               5, 4, True, False, None)
 
     def get_updated_record(self, original_record):
         original_record.day = 10
         original_record.year = 20
-        original_record.home_team = TeamDTO(Team("New Home TEam", 249, False))
-        original_record.away_team = TeamDTO(Team("New Away TEam", 244, True))
+        original_record.home_team = Team("New Home TEam", 249, False)
+        original_record.away_team = Team("New Away TEam", 244, True)
         original_record.home_score = 30
         original_record.away_score = 30
         original_record.complete = True
         original_record.processed = False
-        original_record.rules = GameRulesDTO(GameRules("Rules Name 2", False))
-        original_record.competition = CompetitionDTO(Competition("Test 2", 5, None, None, 1, False, True, True, False))
-        original_record.sub_competition = TableSubCompetitionDTO(TableSubCompetition("Sub Comp", None, original_record.competition, None, 1, True, True, False, False))
+        original_record.rules = GameRules("Rules Name 2", False)
+        original_record.competition = Competition("Test 2", 5, None, None, 1, False, True, True, False)
+        original_record.sub_competition = TableSubCompetition("Sub Comp", None, original_record.competition, None, 1,
+                                                              True, True, False, False)
         return original_record
 
 
@@ -232,23 +227,23 @@ class SeriesGameRepoTests(BaseRepoTests, TestCase):
 
     # todo: should test this with a non-none competition
     def get_add_record(self):
-        return CompetitionGameDTO(
-            CompetitionGame(Competition("test", 1, None, None, 1, False, False, False, False),
-                            None, 5,
-                            CompetitionTeam(None, Team("Team 1", 5, True)),
-                            CompetitionTeam(None, Team("Team 2", 5, True)),
-                            5, 4, True, False, None))
+        return CompetitionGame(Competition("test", 1, None, None, 1, False, False, False, False),
+                               None, 5,
+                               CompetitionTeam(None, Team("Team 1", 5, True)),
+                               CompetitionTeam(None, Team("Team 2", 5, True)),
+                               5, 4, True, False, None)
 
     def get_updated_record(self, original_record):
         original_record.day = 10
         original_record.year = 20
-        original_record.home_team = TeamDTO(Team("New Home TEam", 249, False))
-        original_record.away_team = TeamDTO(Team("New Away TEam", 244, True))
+        original_record.home_team = Team("New Home TEam", 249, False)
+        original_record.away_team = Team("New Away TEam", 244, True)
         original_record.home_score = 30
         original_record.away_score = 30
         original_record.complete = True
         original_record.processed = False
-        original_record.rules = GameRulesDTO(GameRules("Rules Name 2", False))
-        original_record.competition = CompetitionDTO(Competition("Test 2", 5, None, None, 1, False, True, True, False))
-        original_record.sub_competition = TableSubCompetitionDTO(TableSubCompetition("Sub Comp", None, original_record.competition, None, 1, True, True, False, False))
+        original_record.rules = GameRules("Rules Name 2", False)
+        original_record.competition = Competition("Test 2", 5, None, None, 1, False, True, True, False)
+        original_record.sub_competition = TableSubCompetition("Sub Comp", None, original_record.competition, None, 1,
+                                                              True, True, False, False)
         return original_record

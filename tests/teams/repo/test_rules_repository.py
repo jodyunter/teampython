@@ -1,7 +1,5 @@
 from unittest import TestCase
 
-from teams.data.dto.dto_game_rules import GameRulesDTO
-from teams.data.dto.dto_series_rules import SeriesRulesDTO
 from teams.data.repo.rules_repository import GameRulesRepository, SeriesRulesRepository
 from teams.domain.game import GameRules
 from teams.domain.series_rules import SeriesRules
@@ -14,7 +12,7 @@ class GameRulesRepoTests(BaseRepoTests, TestCase):
         return GameRulesRepository()
 
     def get_add_record(self):
-        return GameRulesDTO(GameRules("Rules Name", False))
+        return GameRules("Rules Name", False)
 
     def get_updated_record(self, original_record):
         original_record.name = "New Name"
@@ -37,11 +35,11 @@ class TestSeriesRulesRepository(BaseRepoTests, TestCase):
         return GameRulesRepository()
 
     def get_add_record(self):
-        return SeriesRulesDTO(SeriesRules("Test Rule", GameRules("My Rules", False), SeriesRules.WINS_TYPE, []))
+        return SeriesRules("Test Rule", GameRules("My Rules", False), SeriesRules.WINS_TYPE, [])
 
     def get_updated_record(self, original_record):
         original_record.name = "New Name"
-        original_record.game_rules = GameRulesDTO(GameRules("Updated Rules", False))
+        original_record.game_rules = GameRules("Updated Rules", False)
         original_record.home_pattern = [1, 2, 3, 5]
 
         return original_record
@@ -49,7 +47,7 @@ class TestSeriesRulesRepository(BaseRepoTests, TestCase):
     def test_get_pattern_properly(self):
         session = self.setup_basic_test()
         rules = SeriesRules("Test", GameRules("Rules", True), SeriesRules.WINS_TYPE, [1, 5, 6, 7])
-        self.get_repo().add(SeriesRulesDTO(rules), session)
+        self.get_repo().add(rules, session)
         session.commit()
 
         retrieved_object = self.get_repo().get_by_oid(rules.oid, session)

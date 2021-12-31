@@ -1,7 +1,27 @@
+from sqlalchemy import Column, Integer, ForeignKey, String
+from sqlalchemy.orm import relationship
+
+from teams.data.dto.custom.custom_types import IntArrayString
+from teams.data.dto.dto_base import Base
 from teams.domain.utility.utility_classes import IDHelper
 
 
-class SeriesRules:
+class SeriesRules(Base):
+    __tablename__ = "seriesrules"
+
+    oid = Column(String, primary_key=True)
+    name = Column(String)
+    game_rules_id = Column(String, ForeignKey('gamerules.oid'))
+    game_rules = relationship("GameRules", foreign_keys=[game_rules_id])
+    series_type = Column(String)
+    home_pattern = Column(IntArrayString)
+    type = Column(String)
+
+    __mapper_args__ = {
+        'polymorphic_on': type,
+        'polymorphic_identity': 'series_rules'
+    }
+
     WINS_TYPE = "ByWins"
     GOALS_TYPE = "ByGoals"
 
@@ -12,19 +32,3 @@ class SeriesRules:
         self.home_pattern = home_pattern
         self.oid = IDHelper.get_id(oid)
 
-
-class SeriesByWinsRules(SeriesRules):
-
-    def __init__(self, name, required_wins, game_rules, home_pattern, oid=None):
-        self.required_wins = required_wins
-
-        SeriesRules.__init__(self, name, game_rules, SeriesRules.WINS_TYPE, home_pattern, oid)
-
-
-class SeriesByGoalsRules(SeriesRules):
-
-    def __init__(self, name, games_to_play, game_rules, last_game_rules, home_pattern, oid=None):
-        self.last_game_rules = last_game_rules
-        self.games_to_play = games_to_play
-
-        SeriesRules.__init__(self, name, game_rules, SeriesRules.GOALS_TYPE, home_pattern, oid)

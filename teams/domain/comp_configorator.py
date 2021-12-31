@@ -1,16 +1,21 @@
 #  this class may become a service in the long run
-from teams.domain.competition import CompetitionGroup, CompetitionTeam, Competition, TableRecord
+from teams.domain.competition import Competition
 from teams.domain.competition_configuration import SubCompetitionConfiguration
+from teams.domain.competition_team import CompetitionTeam
 from teams.domain.errors import DomainError
-from teams.domain.series import SeriesByWins, SeriesByGoals
+from teams.domain.series_by_goals import SeriesByGoals
+from teams.domain.series_by_wins import SeriesByWins
 from teams.domain.series_rules import SeriesRules
-from teams.domain.sub_competition import PlayoffSubCompetition, TableSubCompetition
+from teams.domain.sub_competition import PlayoffSubCompetition, TableSubCompetition, CompetitionGroup
 
 
 # TODO: Need to start using the setup flags
 
 #  we need to create the competition, sub competitions,  competition teams, groups and series at the start
 #  later on we need to be able to create and schedule games
+from teams.domain.table_record import TableRecord
+
+
 class CompetitionConfigurator:
 
     @staticmethod

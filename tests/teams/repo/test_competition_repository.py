@@ -1,8 +1,5 @@
 from unittest import TestCase
 
-from teams.data.dto.dto_competition import CompetitionDTO
-from teams.data.dto.dto_playoff_sub_competition import PlayoffSubCompetitionDTO
-from teams.data.dto.dto_table_sub_competition import TableSubCompetitionDTO
 from teams.data.repo.competition_repository import CompetitionRepository, PlayoffSubCompetitionRepository, \
     TableSubCompetitionRepository
 from teams.domain.competition import Competition
@@ -16,7 +13,7 @@ class CompetitionRepoTests(BaseRepoTests, TestCase):
         return CompetitionRepository()
 
     def get_add_record(self):
-        return CompetitionDTO(Competition("Comp Name", 1, None, None, 2, False, True, False, True))
+        return Competition("Comp Name", 1, None, None, 2, False, True, False, True)
 
     def get_updated_record(self, original_record):
         original_record.name = "New Comp Name"
@@ -38,9 +35,9 @@ class TableSubCompetitionRepoTests(BaseRepoTests, TestCase):
         return TableSubCompetitionRepository()
 
     def get_add_record(self):
-        return TableSubCompetitionDTO(TableSubCompetition("Table Comp", None,
-                                      CompetitionDTO(Competition("My Comp", 1, None, None, 1, False, False, False, False)),
-                                                          None, 3, True, True, False, False))
+        return TableSubCompetition("Table Comp", None,
+                                   Competition("My Comp", 1, None, None, 1, False, False, False, False),
+                                   None, 3, True, True, False, False)
 
     def get_updated_record(self, original_record):
         original_record.name = "New Sub Name"
@@ -49,10 +46,9 @@ class TableSubCompetitionRepoTests(BaseRepoTests, TestCase):
         original_record.started = False
         original_record.finished = False
         original_record.post_processed = False
-        original_record.competition = CompetitionDTO(Competition("Next Comp", 1, None, None, 1, False, False, False, False))
+        original_record.competition = Competition("Next Comp", 1, None, None, 1, False, False, False, False)
 
         return original_record
-
 
 
 class PlayoffSubCompetitionRepoTests(BaseRepoTests, TestCase):
@@ -63,9 +59,9 @@ class PlayoffSubCompetitionRepoTests(BaseRepoTests, TestCase):
         BaseRepoTests.test_add_record(self)
 
     def get_add_record(self):
-        return PlayoffSubCompetitionDTO(PlayoffSubCompetition("Table Comp", None,
-                                                              CompetitionDTO(Competition("My Comp", 1, None, None, 1, False, False, False, False)),
-                                                              None, 3, 5, True, True, True, True))
+        return PlayoffSubCompetition("Table Comp", None,
+                                     Competition("My Comp", 1, None, None, 1, False, False, False, False),
+                                     None, 3, 5, True, True, True, True)
 
     def get_updated_record(self, original_record):
         original_record.name = "New Sub Name"
@@ -75,7 +71,6 @@ class PlayoffSubCompetitionRepoTests(BaseRepoTests, TestCase):
         original_record.started = False
         original_record.finished = False
         original_record.post_processed = False
-        original_record.competition = CompetitionDTO(Competition("Next Comp", 1, None, None, 1, False, False, False, False))
+        original_record.competition = Competition("Next Comp", 1, None, None, 1, False, False, False, False)
 
         return original_record
-

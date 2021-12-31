@@ -7,14 +7,11 @@ class Repository(ABC):
 
     @abstractmethod
     def get_type(self):
-        # this will give the default DTO object for the repository
+        # this will give the default object for the repository
         pass
 
     def add(self, new_object, session, object_type=None):
-        if object_type is None:
-            object_type = self.get_type()
-        dto = object_type(new_object)
-        session.add(dto)
+        session.add(new_object)
 
     def get_session(self):
         return Database.get_session()
@@ -31,7 +28,7 @@ class Repository(ABC):
         return list(session.query(object_type).all())
 
 
-# this class can be used when you don't want a full repository object for a DTO
+# this class can be used when you don't want a full repository object for an object
 class BasicRepository(Repository):
     def get_type(self):
         return None

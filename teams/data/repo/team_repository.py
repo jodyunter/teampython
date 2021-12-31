@@ -1,12 +1,12 @@
-from teams.data.dto.dto_competition_team import CompetitionTeamDTO
-from teams.data.dto.dto_team import TeamDTO
 from teams.data.repo.repository import Repository
+from teams.domain.competition_team import CompetitionTeam
+from teams.domain.team import Team
 
 
 class TeamRepository(Repository):
 
     def get_type(self):
-        return TeamDTO
+        return Team
 
     def get_by_name(self, name, session):
         return session.query(self.get_type()).filter_by(name=name).first()
@@ -18,6 +18,6 @@ class TeamRepository(Repository):
 class CompetitionTeamRepository(TeamRepository):
 
     def get_type(self):
-        return CompetitionTeamDTO
+        return CompetitionTeam
 
 

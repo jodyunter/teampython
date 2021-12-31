@@ -1,18 +1,35 @@
 import numpy as np
+from sqlalchemy import Column, String, Integer, ForeignKey, Boolean
+from sqlalchemy.orm import relationship
 
+from teams.data.dto.dto_base import Base
 from teams.domain.utility.utility_classes import IDHelper
-
-
-# mapped
-class GameRules:
-    def __init__(self, name, can_tie, oid=None):
-        self.oid = IDHelper.get_id(oid)
-        self.name = name
-        self.can_tie = can_tie
-
+from teams.domain.game_rules import GameRules
 
 # mapped
-class Game:
+class Game(Base):
+    __tablename__ = "games"
+
+    oid = Column(String, primary_key=True)
+    year = Column(Integer)
+    day = Column(Integer)
+    home_score = Column(Integer)
+    away_score = Column(Integer)
+    complete = Column(Boolean)
+    processed = Column(Boolean)
+    home_team_id = Column(String, ForeignKey('teams.oid'))
+    home_team = relationship("Team", foreign_keys=[home_team_id])
+    away_team_id = Column(String, ForeignKey('teams.oid'))
+    away_team = relationship("Team", foreign_keys=[away_team_id])
+    rules_id = Column(String, ForeignKey('gamerules.oid'))
+    rules = relationship("GameRules", foreign_keys=[rules_id])
+    type = Column(String)
+
+    __mapper_args__ = {
+        'polymorphic_on': type,
+        'polymorphic_identity': 'game'
+    }
+
     def __init__(self, year, day, home_team, away_team, home_score, away_score, complete, processed, rules, oid=None):
         self.year = year
         self.day = day
@@ -54,24 +71,6 @@ class Game:
         else:
             return score
 
-#    def get_score(self, skill_diff, random):
-#        if skill_diff < -10 or skill_diff > 10:
-#            raise ValueError(str(skill_diff) + " is not a valid skill difference.")
-
-#        min_value = 0
-#        max_value = 17975 - 1
-#        modifier = skill_diff * 1000
-
-#        value = random.randint(min_value + modifier, max_value)
-#        #print(str(skill_diff) + " : " + str(modifier) + " : " + str(value))
-#        if value < 0:
-#            return 0
-
-#        for a in self.score_matrix:
-#            possible_score = a[0]
-#            if a[1] <= value < a[2]:
-#                return possible_score
-
         raise ValueError("Matrix didn't have a value.")
 
     def play(self):
@@ -106,3 +105,15 @@ class Game:
                 return self.away_team
 
         return None
+
+    def __eq__(self, other):
+        return self.oid == other.oid and \
+               self.year == other.year and \
+               self.day == other.day and \
+               self.home_team == other.home_team and \
+               self.away_team == other.away_team and \
+               self.home_score == other.home_score and \
+               self.away_score == other.away_score and \
+               self.complete == other.complete and \
+               self.processed == other.processed and \
+               self.rules == other.rules

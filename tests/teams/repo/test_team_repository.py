@@ -1,9 +1,7 @@
 from unittest import TestCase
 
-from teams.data.dto.dto_competition_team import CompetitionTeamDTO
-from teams.data.dto.dto_team import TeamDTO
 from teams.data.repo.team_repository import TeamRepository, CompetitionTeamRepository
-from teams.domain.competition import CompetitionTeam, Competition
+from teams.domain.competition_team import CompetitionTeam
 from teams.domain.team import Team
 from teams.domain.utility.utility_classes import IDHelper
 from tests.teams.repo.test_repository import BaseRepoTests
@@ -11,7 +9,7 @@ from tests.teams.repo.test_repository import BaseRepoTests
 
 class TeamRepoTests(BaseRepoTests, TestCase):
     def create_object(self, **kwargs):
-        return TeamDTO(Team(kwargs["name"], kwargs["skill"], kwargs["active"], kwargs["id"]))
+        return Team(kwargs["name"], kwargs["skill"], kwargs["active"], kwargs["id"])
 
     def get_repo(self):
         return TeamRepository()
@@ -20,7 +18,7 @@ class TeamRepoTests(BaseRepoTests, TestCase):
         BaseRepoTests.test_update_record(self)
 
     def get_add_record(self):
-        return TeamDTO(Team("team 1", 12, True))
+        return Team("team 1", 12, True)
 
     def get_updated_record(self, original_record):
         original_record.name = "Updated Name"
@@ -74,7 +72,7 @@ class TeamRepoTests(BaseRepoTests, TestCase):
             active = True
             if i % 2 == 0:
                 active = False
-            self.get_repo().add(TeamDTO(Team("team " + str(i) + " add_all", i, True, oid)), session)
+            self.get_repo().add(Team("team " + str(i) + " add_all", i, True, oid), session)
 
         session.commit()
 
@@ -86,7 +84,7 @@ class TeamRepoTests(BaseRepoTests, TestCase):
 
 class CompetitionTeamRepoTests(TeamRepoTests, TestCase):
     def create_object(self, **kwargs):
-        return CompetitionTeamDTO(CompetitionTeam(None, Team(kwargs["name"], kwargs["skill"], kwargs["active"]), kwargs["id"]))
+        return CompetitionTeam(None, Team(kwargs["name"], kwargs["skill"], kwargs["active"]), kwargs["id"])
 
     def get_repo(self):
         return CompetitionTeamRepository()
@@ -98,7 +96,7 @@ class CompetitionTeamRepoTests(TeamRepoTests, TestCase):
         BaseRepoTests.test_update_record(self)
 
     def get_add_record(self):
-        return CompetitionTeamDTO(CompetitionTeam(None, Team("team 1", 5, True)))
+        return CompetitionTeam(None, Team("team 1", 5, True))
 
     def get_updated_record(self, original_record):
         original_record.name = "Updated Name"
