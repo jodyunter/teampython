@@ -21,6 +21,9 @@ class GameRepoTests(BaseRepoTests, TestCase):
     def test_add_record(self):
         return BaseRepoTests.test_add_record(self)
 
+    def test_update_record(self):
+        return BaseRepoTests.test_update_record(self)
+
     def get_add_record(self):
         return Game(1, 2,
                     Team("Home team", 250, True),

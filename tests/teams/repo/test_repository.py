@@ -45,7 +45,6 @@ class BaseRepoTests(ABC):
         dto = self.get_repo().get_by_oid(record.oid, session, type(record))
 
         self.assertEqual(dto, update_record)
-        self.assertNotEqual(dto, record)
 
     @abstractmethod
     def get_add_record(self):
