@@ -2,6 +2,8 @@ from sqlalchemy import Column, String, Integer, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
 from teams.data.dto.dto_base import Base
+from teams.data.dto.dto_competition import CompetitionDTO
+from teams.data.dto.dto_competition_group import CompetitionGroupDTO
 from teams.domain.sub_competition import SubCompetition
 
 
@@ -26,11 +28,14 @@ class SubCompetitionDTO(Base, SubCompetition):
     }
 
     def __init__(self, sub_competition):
+        competition = CompetitionDTO.get_dto(sub_competition.compettiion)
+        groups = [CompetitionGroupDTO.get_dto(g) for g in sub_competition.groups]
+
         SubCompetition.__init__(self,
                                 sub_competition.name,
                                 sub_competition.sub_competition_type,
-                                sub_competition.competition,
-                                sub_competition.groups,
+                                competition,
+                                groups,
                                 sub_competition.order,
                                 sub_competition.setup,
                                 sub_competition.started,

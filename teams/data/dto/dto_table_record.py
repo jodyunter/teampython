@@ -2,6 +2,7 @@ from sqlalchemy import String, ForeignKey, Column
 from sqlalchemy.orm import relationship
 
 # these imports are required to let python know we need these defined BEFORE this class
+from teams.data.dto.dto_competition_team import CompetitionTeamDTO
 from teams.data.dto.dto_sub_competition import SubCompetitionDTO
 from teams.data.dto.dto_table_sub_competition import TableSubCompetitionDTO
 from teams.data.dto.dto_record import RecordDTO
@@ -17,10 +18,13 @@ class TableRecordDTO(RecordDTO, TableRecord):
     }
 
     def __init__(self, table_record):
+        sub_competition = TableSubCompetitionDTO.get_dto(table_record.sub_competition)
+        team = CompetitionTeamDTO.get_dto(table_record.team)
+
         TableRecord.__init__(self,
-                             table_record.sub_competition,
+                             sub_competition,
                              table_record.rank,
-                             table_record.team,
+                             team,
                              table_record.year,
                              table_record.wins,
                              table_record.loses,
@@ -29,3 +33,10 @@ class TableRecordDTO(RecordDTO, TableRecord):
                              table_record.goals_against,
                              table_record.skill,
                              table_record.oid)
+
+        @staticmethod
+        def get_dto(record):
+            if record.__class__ == TableRecordDTO:
+                return record
+            else:
+                return TableRecordDTO(record)
