@@ -9,6 +9,12 @@ from tests.teams.services.test_team_service import BaseTestService
 
 class TestStandingsService(BaseTestService, TestCase):
 
+    def test_create(self):
+        pass
+
+    def test_get_all(self):
+        pass
+
     def test_should_get_standings_history_view(self):
         self.setup_test()
         team_service = TeamService()

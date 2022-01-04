@@ -430,6 +430,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\tests\teams\services\test_series_rules_service.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\tests\teams\services\test_service_by_wins_rules_service.py">
           <value>
             <Attribute>

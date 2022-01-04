@@ -3,7 +3,8 @@ from unittest import TestCase
 import numpy as np
 
 from teams.ConsoleUI.views.record_view import RecordView
-from teams.domain.game import Game, GameRules
+from teams.domain.game import Game
+from teams.domain.game_rules import GameRules
 from teams.domain.record import Record
 from teams.domain.team import Team
 from teams.services.record_service import RecordService

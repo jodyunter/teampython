@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from teams.domain.competition_game import CompetitionGame
 from teams.domain.competition_team import CompetitionTeam
-from teams.domain.game import GameRules
+from teams.domain.game_rules import GameRules
 from teams.domain.series import Series
 from teams.domain.series_by_goals import SeriesByGoals
 from teams.domain.series_by_goals_rules import SeriesByGoalsRules

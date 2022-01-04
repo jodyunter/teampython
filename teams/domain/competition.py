@@ -1,11 +1,6 @@
-from sqlalchemy import Column, String, Integer, Boolean, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, String, Integer, Boolean
 
 from teams.data.dto.dto_base import Base
-from teams.domain.game import Game
-from teams.domain.record import Record
-
-from teams.domain.team import Team
 from teams.domain.utility.utility_classes import IDHelper
 
 

@@ -2,7 +2,6 @@ from unittest import TestCase
 
 from teams.services.game_rules_service import GameRulesService
 from teams.services.series_by_goals_rules_service import SeriesByGoalsRulesService
-from teams.services.series_by_wins_rules_service import SeriesByWinsRulesService
 from tests.teams.services.test_team_service import BaseTestService
 
 

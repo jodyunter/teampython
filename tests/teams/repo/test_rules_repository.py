@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from teams.data.repo.rules_repository import GameRulesRepository, SeriesRulesRepository
-from teams.domain.game import GameRules
+from teams.domain.game_rules import GameRules
 from teams.domain.series_rules import SeriesRules
 from tests.teams.repo.test_repository import BaseRepoTests
 

@@ -2,7 +2,6 @@ from teams.data.repo.team_repository import TeamRepository
 from teams.domain.team import Team
 from teams.services.base_service import BaseService
 from teams.services.view_models import get_model
-from teams.services.view_models.team_view_models import TeamViewModel
 
 
 class TeamService(BaseService):
@@ -106,14 +105,6 @@ class TeamService(BaseService):
     def get_by_name(self, name, session=None):
         session = self.get_session(session)
         team = self.get_repo().get_by_name(name, session)
-        if team is None:
-            return None
-        else:
-            return get_model.get_vm(team)
-
-    def get_by_id(self, oid, session=None):
-        session = self.get_session(session)
-        team = self.get_repo().get_by_oid(oid, session)
         if team is None:
             return None
         else:

@@ -6,12 +6,14 @@ from teams.services.view_models.team_view_models import RecordViewModel
 
 
 class RecordService(BaseService):
+    team_repo = TeamRepository()
+    repo = RecordRepository()
 
     def get_team_repo(self):
-        return TeamRepository()
+        return self.team_repo
 
     def get_repo(self):
-        return RecordRepository()
+        return self.repo
 
     def add(self, team_view_list, year, session=None):
         commit = session is None

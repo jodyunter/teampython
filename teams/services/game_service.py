@@ -1,13 +1,13 @@
 from teams.data.repo.game_repository import GameRepository
-from teams.data.repo.rules_repository import GameRulesRepository
 from teams.data.repo.record_repository import RecordRepository
+from teams.data.repo.rules_repository import GameRulesRepository
 from teams.data.repo.team_repository import TeamRepository
 from teams.domain.game import Game
 from teams.domain.scheduler import Scheduler
 from teams.services.base_service import BaseService
 from teams.services.record_service import RecordService
 from teams.services.team_service import TeamService
-from teams.services.view_models.game_view_models import GameViewModel, GameRulesViewModel, GameDayViewModel
+from teams.services.view_models.game_view_models import GameViewModel, GameDayViewModel
 
 
 class GameService(BaseService):

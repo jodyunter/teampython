@@ -7,7 +7,8 @@ from teams.data.repo.team_repository import TeamRepository
 from teams.domain.competition import Competition
 from teams.domain.competition_game import CompetitionGame
 from teams.domain.competition_team import CompetitionTeam
-from teams.domain.game import Game, GameRules
+from teams.domain.game import Game
+from teams.domain.game_rules import  GameRules
 from teams.domain.sub_competition import TableSubCompetition
 from teams.domain.team import Team
 from tests.teams.repo.test_repository import BaseRepoTests

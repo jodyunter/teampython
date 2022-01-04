@@ -2,6 +2,7 @@
 # mapped
 from sqlalchemy import Column, ForeignKey, String
 from sqlalchemy.orm import relationship
+
 from teams.domain.game import Game
 
 

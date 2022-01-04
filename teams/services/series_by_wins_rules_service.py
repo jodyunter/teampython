@@ -1,9 +1,7 @@
 from teams.data.repo.rules_repository import SeriesByWinsRulesRepository, GameRulesRepository
 from teams.domain.series_by_wins_rules import SeriesByWinsRules
 from teams.services.base_service import BaseService
-from teams.services.game_rules_service import GameRulesService
 from teams.services.view_models import get_model
-from teams.services.view_models.playoff_view_models import SeriesByWinsRulesViewModel
 
 
 class SeriesByWinsRulesService(BaseService):

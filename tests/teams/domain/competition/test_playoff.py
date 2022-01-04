@@ -3,7 +3,7 @@ from pytest import mark
 
 from teams.domain.competition_configuration import CompetitionGroupConfiguration
 from teams.domain.competition_ranking import CompetitionRanking
-from teams.domain.game import GameRules
+from teams.domain.game_rules import GameRules
 from teams.domain.series_by_goals import SeriesByGoals
 from teams.domain.series_by_goals_rules import SeriesByGoalsRules
 from teams.domain.series_by_wins import SeriesByWins

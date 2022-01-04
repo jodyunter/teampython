@@ -8,6 +8,9 @@ from teams.services.view_models.standings_view_models import StandingsHistoryVie
 
 class StandingsService(BaseService):
 
+    def get_repo(self):
+        pass
+
     @staticmethod
     def get_standings_history_view(year):
         record_service = RecordService()

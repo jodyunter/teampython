@@ -11,6 +11,14 @@ class BaseService(ABC):
     def get_repo(self):
         pass
 
+    def get_by_id(self, oid, session=None):
+        session = self.get_session(session)
+        o = self.get_repo().get_by_oid(oid, session)
+        if o is None:
+            return None
+        else:
+            return get_model.get_vm(o)
+
     def get_all(self, session=None):
         session = self.get_session(session)
 

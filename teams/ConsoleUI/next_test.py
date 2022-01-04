@@ -7,6 +7,7 @@ from teams.domain.competition_configuration import CompetitionConfiguration, Tab
 from teams.services.app_service import AppService
 from teams.services.configuration_service import ConfigurationService
 from teams.services.game_service import GameRulesService
+from teams.services.series_rules_service import SeriesRulesService
 from teams.services.team_service import TeamService
 
 setup = True
@@ -18,6 +19,7 @@ app_service = AppService()
 game_rules_service = GameRulesService()
 team_service = TeamService()
 config_service = ConfigurationService()
+series_rules_service = SeriesRulesService()
 
 
 def setup():
@@ -31,6 +33,8 @@ all_teams = ["Toronto", "Montreal", "Ottawa", "Quebec City", "Vancouver", "Calga
 western_teams = ["Vancouver", "Calgary", "Edmonton", "Winnipeg"]
 eastern_teams = ["Toronto", "Montreal", "Ottawa", "Quebec City"]
 
+series_rules_name = "Best of 7"
+
 
 def setup_teams():
     min_skill = 0
@@ -40,7 +44,7 @@ def setup_teams():
 
 
 def setup_series_rules(rules):
-    config_service.create_best_of_series_rules("Best of 7", 4, rules.oid, [0, 0, 1, 1, 0, 1, 0])
+    series_rules_service.create_series_by_wins_rules(series_rules_name, 4, rules.oid, [0, 0, 1, 1, 0, 1, 0])
 
 
 def setup_configuration():
