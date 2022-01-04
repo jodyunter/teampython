@@ -1,4 +1,5 @@
 from sqlalchemy import Column, String, Integer, Boolean
+from sqlalchemy.orm import relationship
 
 from teams.data.dto.dto_base import Base
 from teams.domain.utility.utility_classes import IDHelper
@@ -15,6 +16,8 @@ class Competition(Base):
     started = Column(Boolean)
     finished = Column(Boolean)
     post_processed = Column(Boolean)
+    sub_competitions = relationship("SubCompetition", back_populates="competition")
+    teams = relationship("CompetitionTeam", back_populates="competition")
 
     def __init__(self, name, year, sub_competitions, teams, current_round, setup, started, finished, post_processed,
                  oid=None):
@@ -22,8 +25,14 @@ class Competition(Base):
         self.year = year
         self.setup = setup
         self.started = started
-        self.sub_competitions = sub_competitions
-        self.teams = teams
+        if sub_competitions is None:
+            self.sub_competitions = []
+        else:
+            self.sub_competitions = sub_competitions
+        if teams is None:
+            self.teams = []
+        else:
+            self.teams = teams
         self.finished = finished
         self.post_processed = post_processed
         self.oid = IDHelper.get_id(oid)

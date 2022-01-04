@@ -18,8 +18,8 @@ class CompetitionRepoTests(BaseRepoTests, TestCase):
     def get_updated_record(self, original_record):
         original_record.name = "New Comp Name"
         original_record.year = 10
-        original_record.sub_competitions = None
-        original_record.teams = None
+        original_record.sub_competitions = []
+        original_record.teams = []
         original_record.current_round = 3
         original_record.setup = True
         original_record.finished = False

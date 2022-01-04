@@ -2,6 +2,7 @@ import numpy as np
 from pytest import mark
 
 from teams.domain.competition_configuration import CompetitionGroupConfiguration
+from teams.domain.competition_group import CompetitionGroup
 from teams.domain.competition_ranking import CompetitionRanking
 from teams.domain.game_rules import GameRules
 from teams.domain.series_by_goals import SeriesByGoals
@@ -9,7 +10,7 @@ from teams.domain.series_by_goals_rules import SeriesByGoalsRules
 from teams.domain.series_by_wins import SeriesByWins
 from teams.domain.series_by_wins_rules import SeriesByWinsRules
 from teams.domain.series_game import SeriesGame
-from teams.domain.sub_competition import PlayoffSubCompetition, CompetitionGroup
+from teams.domain.sub_competition import PlayoffSubCompetition
 from tests.teams.domain.competition import helpers
 from tests.teams.domain.competition.helpers import create_default_competition_for_testing
 from tests.teams.domain.competition.test_configurator import BaseTeamTestCase

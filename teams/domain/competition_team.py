@@ -8,7 +8,7 @@ from teams.domain.team import Team
 
 class CompetitionTeam(Team):
     competition_id = Column(String, ForeignKey('competitions.oid'))
-    competition = relationship("Competition", foreign_keys=[competition_id])
+    competition = relationship("Competition", foreign_keys=[competition_id], back_populates="teams")
     parent_team_id = Column(String, ForeignKey('teams.oid'))
     parent_team = relationship("Team", remote_side=[Team.oid])
 

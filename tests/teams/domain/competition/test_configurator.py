@@ -7,11 +7,12 @@ from teams.domain.comp_configorator import CompetitionConfigurator
 from teams.domain.competition_configuration import SubCompetitionConfiguration, CompetitionGroupConfiguration, \
     CompetitionTeamConfiguration, SeriesConfiguration, CompetitionConfiguration, PlayoffSubCompetitionConfiguration, \
     TableSubCompetitionConfiguration
+from teams.domain.competition_group import CompetitionGroup
 from teams.domain.competition_team import CompetitionTeam
 from teams.domain.errors import DomainError
 from teams.domain.series_by_goals_rules import SeriesByGoalsRules
 from teams.domain.series_by_wins_rules import SeriesByWinsRules
-from teams.domain.sub_competition import TableSubCompetition, PlayoffSubCompetition, CompetitionGroup
+from teams.domain.sub_competition import TableSubCompetition, PlayoffSubCompetition
 from teams.domain.team import Team
 from tests.teams.domain.competition.helpers import create_default_competition_for_testing
 

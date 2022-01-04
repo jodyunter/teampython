@@ -1,12 +1,13 @@
 #  this class may become a service in the long run
 from teams.domain.competition import Competition
 from teams.domain.competition_configuration import SubCompetitionConfiguration
+from teams.domain.competition_group import CompetitionGroup
 from teams.domain.competition_team import CompetitionTeam
 from teams.domain.errors import DomainError
 from teams.domain.series_by_goals import SeriesByGoals
 from teams.domain.series_by_wins import SeriesByWins
 from teams.domain.series_rules import SeriesRules
-from teams.domain.sub_competition import PlayoffSubCompetition, TableSubCompetition, CompetitionGroup
+from teams.domain.sub_competition import PlayoffSubCompetition, TableSubCompetition
 
 
 # TODO: Need to start using the setup flags
