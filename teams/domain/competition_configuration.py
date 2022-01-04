@@ -1,9 +1,18 @@
+from sqlalchemy import Column, String, Integer
+
 from teams.domain.errors import DomainError
 from teams.domain.utility.utility_classes import YearRestricted, IDHelper
 
 
 # todo: mapping
 class CompetitionConfiguration(YearRestricted):
+    __tablename__ = "competitionconfiguration"
+
+    oid = Column(String, primary_key=True)
+    name = Column(String)
+    order = Column(Integer)
+    first_year = Column(Integer)
+    last_year = Column(Integer)
 
     def __init__(self, name, sub_competition_configs, team_configs, order, first_year, last_year, oid=None):
         self.name = name
