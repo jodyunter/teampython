@@ -1,6 +1,6 @@
 from teams.data.repo.rules_repository import GameRulesRepository
 from teams.data.repo.repository import BasicRepository
-from teams.domain.series_rules import SeriesByWinsRules
+from teams.domain.series_by_wins_rules import SeriesByWinsRules
 from teams.services.base_service import BaseService
 
 

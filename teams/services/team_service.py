@@ -1,17 +1,15 @@
 from teams.data.repo.team_repository import TeamRepository
 from teams.domain.team import Team
 from teams.services.base_service import BaseService
+from teams.services.view_models import GetModel
 from teams.services.view_models.team_view_models import TeamViewModel
 
 
 class TeamService(BaseService):
+    repo = TeamRepository()
 
     def get_repo(self):
-        return TeamRepository()
-
-    @staticmethod
-    def team_to_vm(team):
-        return TeamViewModel(team.oid, team.name, team.skill, team.active)
+        return self.repo
 
     def create(self, name, skill, active, session=None):
         commit = session is None
@@ -21,6 +19,8 @@ class TeamService(BaseService):
         self.get_repo().add(dto, session)
 
         self.commit(session, commit)
+
+        return GetModel.get_vm(dto)
 
     def update(self, oid, name, skill, active, session=None):
         commit = session is None
@@ -94,22 +94,22 @@ class TeamService(BaseService):
         session = self.get_session(session)
 
         team_list = self.get_repo().get_all(session)
-        return [TeamService.team_to_vm(t) for t in team_list]
+        return [GetModel.get_vm(t) for t in team_list]
 
     def get_active_teams(self, session=None):
         session = self.get_session(session)
 
         team_list = self.get_repo().get_by_active_status(True, session)
 
-        return [TeamService.team_to_vm(t) for t in team_list]
+        return [GetModel.get_vm(t) for t in team_list]
 
-    def get_team_by_name(self, name, session=None):
+    def get_by_name(self, name, session=None):
         session = self.get_session(session)
         team = self.get_repo().get_by_name(name, session)
         if team is None:
             return None
         else:
-            return TeamService.team_to_vm(team)
+            return GetModel.get_vm(team)
 
     def get_by_id(self, oid, session=None):
         session = self.get_session(session)
@@ -117,7 +117,7 @@ class TeamService(BaseService):
         if team is None:
             return None
         else:
-            return TeamService.team_to_vm(team)
+            return GetModel.get_vm(team)
 
     #  delete methods need to be more robust
     def delete_team(self, oid, session=None):

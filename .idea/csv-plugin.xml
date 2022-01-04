@@ -185,6 +185,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\teams\services\game_rules_service.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\teams\services\game_service.py">
           <value>
             <Attribute>
@@ -193,6 +200,34 @@
           </value>
         </entry>
         <entry key="\teams\services\record_service.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\teams\services\series_by_goals_rules_service.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\teams\services\series_by_wins_rules_service.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\teams\services\team_service.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\teams\services\view_models\GetModel.py">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -375,6 +410,27 @@
           </value>
         </entry>
         <entry key="\tests\teams\repo\test_team_repository.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\tests\teams\services\test_game_rules_service.py">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\tests\teams\services\test_series_by_goals_rules_service.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\tests\teams\services\test_service_by_wins_rules_service.py">
           <value>
             <Attribute>
               <option name="separator" value="," />

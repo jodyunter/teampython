@@ -10,7 +10,7 @@ class SeriesByGoalsRules(SeriesRules):
     last_game_rules = relationship("GameRules", foreign_keys=[last_game_rules_id])
 
     __mapper_args__ = {
-        'polymorphic_identity': 'series_by_wins'
+        'polymorphic_identity': 'series_by_goals_rules'
     }
 
     def __init__(self, name, games_to_play, game_rules, last_game_rules, home_pattern, oid=None):

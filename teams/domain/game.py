@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 
 from teams.data.dto.dto_base import Base
 from teams.domain.utility.utility_classes import IDHelper
-from teams.domain.game_rules import GameRules
+
 
 # mapped
 class Game(Base):

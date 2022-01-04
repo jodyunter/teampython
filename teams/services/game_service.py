@@ -2,29 +2,12 @@ from teams.data.repo.game_repository import GameRepository
 from teams.data.repo.rules_repository import GameRulesRepository
 from teams.data.repo.record_repository import RecordRepository
 from teams.data.repo.team_repository import TeamRepository
-from teams.domain.game import Game, GameRules
+from teams.domain.game import Game
 from teams.domain.scheduler import Scheduler
 from teams.services.base_service import BaseService
 from teams.services.record_service import RecordService
 from teams.services.team_service import TeamService
 from teams.services.view_models.game_view_models import GameViewModel, GameRulesViewModel, GameDayViewModel
-
-
-class GameRulesService(BaseService):
-    repo = GameRulesRepository()
-
-    def create(self, name, can_tie, session=None):
-        if session is None:
-            session = self.repo.get_session()
-        self.repo.add(GameRules(name, can_tie, self.get_new_id()), session)
-        session.commit()
-
-    def get_by_name(self, name, session=None):
-        if session is None:
-            session = self.repo.get_session()
-
-        rules = self.repo.get_by_name(name, session)
-        return GameRulesViewModel(rules.oid, rules.name, rules.can_tie)
 
 
 class GameService(BaseService):

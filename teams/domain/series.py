@@ -5,7 +5,6 @@ from sqlalchemy.orm import relationship
 
 from teams.data.dto.dto_base import Base
 from teams.domain.series_game import SeriesGame
-from teams.domain.series_rules import SeriesRules
 from teams.domain.utility.utility_classes import IDHelper
 
 

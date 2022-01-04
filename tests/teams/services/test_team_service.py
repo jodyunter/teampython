@@ -1,43 +1,66 @@
 from unittest import TestCase
 
-from teams.data.database import Database
 from teams.services.team_service import TeamService
+from tests.teams.services.base_test_service import BaseTestService
 
 
-class BaseTestService:
-    @staticmethod
-    def setup_test():
-        Database.init_db("sqlite:///:memory:")
+class TestTeamService(BaseTestService, TestCase):
+    service = TeamService()
 
+    def setup_list(self, session=None):
+        commit = session is None
+        session = self.service.get_session(session)
+        team_list = []
+        for i in range(10):
+            vm = self.service.create("Team " + str(i), i*10, True, session)
+            team_list.append(vm)
 
-class TestTeamService(TestCase):
+        self.service.commit(session, commit)
 
-    def test_create_and_get_by_name_and_get_by_oid(self):
-        BaseTestService.setup_test()
-        service = TeamService()
-        service.create("Team 1 create", 12, True)
-        team_view = service.get_team_by_name("Team 1 create")
+        return team_list
 
-        self.assertEqual("Team 1 create", team_view.name)
+    def test_create(self):
+        self.setup_test()
+        name = "Creation Team"
+        team_view = self.service.create(name, 12, True)
+
+        self.assertEqual(name, team_view.name)
         self.assertEqual(12, team_view.skill)
         self.assertIsNotNone(team_view.oid)
 
-        team_view2 = service.get_by_id(team_view.oid)
+    def test_get_by_name(self):
+        self.setup_test()
+        team_list = self.setup_list()
 
-        self.assertEqual(team_view2.oid, team_view.oid)
-        self.assertEqual(team_view2.name, team_view.name)
-        self.assertEqual(team_view2.skill, team_view.skill)
+        team_5 = self.service.get_by_name("Team 5")
+
+        team_from_list = [team for team in team_list if team.name == "Team 5"][0]
+
+        self.assertEqual(team_5.name, team_from_list.name)
+        self.assertEqual(team_5.skill, team_from_list.skill)
+        self.assertIsNotNone(team_5.oid, team_from_list.oid)
+
+    def test_get_by_oid(self):
+        self.setup_test()
+        team_list = self.setup_list()
+
+        team_from_list = [team for team in team_list if team.name == "Team 3"][0]
+
+        team_3 = self.service.get_by_id(team_from_list.oid)
+
+        self.assertEqual(team_3.name, team_from_list.name)
+        self.assertEqual(team_3.skill, team_from_list.skill)
+        self.assertIsNotNone(team_3.oid, team_from_list.oid)
 
     def test_create_and_update(self):
-        BaseTestService.setup_test()
-        service = TeamService()
-        service.create("New Team", 55, True)
+        self.setup_test()
+        self.service.create("New Team", 55, True)
 
-        view = service.get_team_by_name("New Team")
+        view = self.service.get_by_name("New Team")
 
-        service.update(view.oid, "Updated Name", 33, False)
+        self.service.update(view.oid, "Updated Name", 33, False)
 
-        view2 = service.get_by_id(view.oid)
+        view2 = self.service.get_by_id(view.oid)
 
         self.assertEqual(view.oid, view2.oid)
         self.assertEqual("Updated Name", view2.name)
@@ -45,12 +68,11 @@ class TestTeamService(TestCase):
         self.assertFalse(view2.active)
 
     def test_get_all(self):
-        BaseTestService.setup_test()
-        service = TeamService()
-        current = len(service.get_all())
+        self.setup_test()
+        current = len(self.service.get_all())
         for k in range(10):
-            service.create("Team Get All " + str(k), k, True)
+            self.service.create("Team Get All " + str(k), k, True)
 
-        all_data = service.get_all()
+        all_data = self.service.get_all()
 
         self.assertEqual(10 + current, len(all_data))

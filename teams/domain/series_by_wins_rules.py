@@ -7,7 +7,7 @@ class SeriesByWinsRules(SeriesRules):
     required_wins = Column(Integer)
 
     __mapper_args__ = {
-        'polymorphic_identity': 'series_by_wins'
+        'polymorphic_identity': 'series_by_wins_rules'
     }
 
     def __init__(self, name, required_wins, game_rules, home_pattern, oid=None):

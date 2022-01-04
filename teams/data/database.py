@@ -8,6 +8,8 @@ from teams.domain.game import Game
 from teams.domain.game_rules import GameRules
 from teams.domain.gamedata import GameData
 from teams.domain.record import Record
+from teams.domain.series import Series
+from teams.domain.series_rules import SeriesRules
 from teams.domain.sub_competition import SubCompetition
 from teams.domain.team import Team
 
@@ -35,6 +37,8 @@ class Database:
 
     @staticmethod
     def clean_up_database(session):
+        session.query(SeriesRules).delete()
+        session.query(Series).delete()
         session.query(Competition).delete()
         session.query(SubCompetition).delete()
         session.query(CompetitionGame).delete()

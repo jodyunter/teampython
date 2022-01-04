@@ -60,10 +60,10 @@ def setup_configuration():
     western = []
     eastern = []
     for name in western_teams:
-        western.append(team_service.get_team_by_name(name, session))
+        western.append(team_service.get_by_name(name, session))
 
     for name in eastern_teams:
-        eastern.append(team_service.get_team_by_name(name, session))
+        eastern.append(team_service.get_by_name(name, session))
 
     team_group_map = {
         western_config.name: {"config": western_config, "teams": western_teams, "sub_comp": table_config},

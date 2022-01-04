@@ -1,5 +1,5 @@
 from teams.data.repo.repository import Repository
-from teams.domain.game import GameRules
+from teams.domain.game_rules import GameRules
 from teams.domain.series_by_goals_rules import SeriesByGoalsRules
 from teams.domain.series_by_wins_rules import SeriesByWinsRules
 from teams.domain.series_rules import SeriesRules
@@ -20,13 +20,13 @@ class SeriesRulesRepository(Repository):
         return SeriesRules
 
 
-class SeriesByWinsRulesRepository(Repository):
+class SeriesByWinsRulesRepository(SeriesRulesRepository):
 
     def get_type(self):
         return SeriesByWinsRules
 
 
-class SeriesByGoalsRulesRepository(Repository):
+class SeriesByGoalsRulesRepository(SeriesRulesRepository):
 
     def get_type(self):
         return SeriesByGoalsRules

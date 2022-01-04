@@ -1,8 +1,25 @@
+from abc import ABC, abstractmethod
+
 from teams.data.database import Database
 from teams.domain.utility.utility_classes import IDHelper
+from teams.services.view_models import GetModel
 
 
-class BaseService:
+class BaseService(ABC):
+
+    @abstractmethod
+    def get_repo(self):
+        pass
+
+    def get_all(self, session=None):
+        session = self.get_session(session)
+
+        rules = self.get_repo().get_all(session)
+
+        vms = [GetModel.get_vm(r) for r in rules]
+
+        return vms
+
     @staticmethod
     def get_new_id():
         return IDHelper.get_new_id()
