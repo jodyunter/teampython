@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from teams.data.database import Database
 from teams.domain.utility.utility_classes import IDHelper
-from teams.services.view_models import GetModel
+from teams.services.view_models import get_model
 
 
 class BaseService(ABC):
@@ -16,7 +16,7 @@ class BaseService(ABC):
 
         rules = self.get_repo().get_all(session)
 
-        vms = [GetModel.get_vm(r) for r in rules]
+        vms = [get_model.get_vm(r) for r in rules]
 
         return vms
 

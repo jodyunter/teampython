@@ -1,7 +1,7 @@
 from teams.data.repo.team_repository import TeamRepository
 from teams.domain.team import Team
 from teams.services.base_service import BaseService
-from teams.services.view_models import GetModel
+from teams.services.view_models import get_model
 from teams.services.view_models.team_view_models import TeamViewModel
 
 
@@ -20,7 +20,7 @@ class TeamService(BaseService):
 
         self.commit(session, commit)
 
-        return GetModel.get_vm(dto)
+        return get_model.get_vm(dto)
 
     def update(self, oid, name, skill, active, session=None):
         commit = session is None
@@ -94,14 +94,14 @@ class TeamService(BaseService):
         session = self.get_session(session)
 
         team_list = self.get_repo().get_all(session)
-        return [GetModel.get_vm(t) for t in team_list]
+        return [get_model.get_vm(t) for t in team_list]
 
     def get_active_teams(self, session=None):
         session = self.get_session(session)
 
         team_list = self.get_repo().get_by_active_status(True, session)
 
-        return [GetModel.get_vm(t) for t in team_list]
+        return [get_model.get_vm(t) for t in team_list]
 
     def get_by_name(self, name, session=None):
         session = self.get_session(session)
@@ -109,7 +109,7 @@ class TeamService(BaseService):
         if team is None:
             return None
         else:
-            return GetModel.get_vm(team)
+            return get_model.get_vm(team)
 
     def get_by_id(self, oid, session=None):
         session = self.get_session(session)
@@ -117,7 +117,7 @@ class TeamService(BaseService):
         if team is None:
             return None
         else:
-            return GetModel.get_vm(team)
+            return get_model.get_vm(team)
 
     #  delete methods need to be more robust
     def delete_team(self, oid, session=None):

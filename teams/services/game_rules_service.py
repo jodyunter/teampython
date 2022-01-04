@@ -1,7 +1,7 @@
 from teams.data.repo.rules_repository import GameRulesRepository
 from teams.domain.game_rules import GameRules
 from teams.services.base_service import BaseService
-from teams.services.view_models import GetModel
+from teams.services.view_models import get_model
 
 
 class GameRulesService(BaseService):
@@ -19,11 +19,11 @@ class GameRulesService(BaseService):
 
         self.commit(session, commit)
 
-        return GetModel.get_vm(rules)
+        return get_model.get_vm(rules)
 
     def get_by_name(self, name, session=None):
         session = self.get_session(session)
 
         rules = self.get_repo().get_by_name(name, session)
 
-        return GetModel.get_vm(rules)
+        return get_model.get_vm(rules)

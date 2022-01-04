@@ -2,7 +2,7 @@ from teams.data.repo.rules_repository import SeriesByWinsRulesRepository, GameRu
 from teams.domain.series_by_wins_rules import SeriesByWinsRules
 from teams.services.base_service import BaseService
 from teams.services.game_rules_service import GameRulesService
-from teams.services.view_models import GetModel
+from teams.services.view_models import get_model
 from teams.services.view_models.playoff_view_models import SeriesByWinsRulesViewModel
 
 
@@ -26,6 +26,6 @@ class SeriesByWinsRulesService(BaseService):
 
         self.commit(session, commit)
 
-        return GetModel.get_vm(series_rules)
+        return get_model.get_vm(series_rules)
 
 
