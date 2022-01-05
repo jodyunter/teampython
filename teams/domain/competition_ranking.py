@@ -3,7 +3,7 @@
 from sqlalchemy import String, Column, ForeignKey, Integer
 from sqlalchemy.orm import relationship
 
-from teams.data.dto.dto_base import Base
+from teams.domain.base import Base
 from teams.domain.utility.utility_classes import IDHelper
 
 

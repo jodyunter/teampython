@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from sqlalchemy import Integer, Column, ForeignKey, String, Boolean
 from sqlalchemy.orm import relationship
 
-from teams.data.dto.dto_base import Base
+from teams.domain.base import Base
 from teams.domain.series_game import SeriesGame
 from teams.domain.utility.utility_classes import IDHelper
 

@@ -68,7 +68,8 @@ class CompetitionConfigurator:
                                          1,
                                          False, False, False, False)
 
-        competition.sub_competitions.append(sub_comp)
+        # maybe remove this because once sql alchemy is in place it automatically adds it
+        # competition.sub_competitions.append(sub_comp)
 
         CompetitionConfigurator.create_sub_competition_groups(sub_competition_config, competition)
 

@@ -1,7 +1,7 @@
 # mapped
 from sqlalchemy import Column, String, Integer, Boolean
 
-from teams.data.dto.dto_base import Base
+from teams.domain.base import Base
 
 
 class GameData(Base):

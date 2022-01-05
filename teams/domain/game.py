@@ -2,8 +2,9 @@ import numpy as np
 from sqlalchemy import Column, String, Integer, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
-from teams.data.dto.dto_base import Base
+from teams.domain.base import Base
 from teams.domain.utility.utility_classes import IDHelper
+from teams.domain.game_rules import GameRules
 
 
 # mapped

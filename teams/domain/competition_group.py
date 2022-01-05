@@ -2,11 +2,10 @@
 from sqlalchemy import Column, String, ForeignKey, Integer
 from sqlalchemy.orm import relationship
 
-from teams.data.dto.dto_base import Base
+from teams.domain.base import Base
 from teams.domain.competition_ranking import CompetitionRanking
 from teams.domain.utility.utility_classes import IDHelper
-from teams.domain.sub_competition import SubCompetition
-from teams.domain.game_rules import GameRules
+
 
 class CompetitionGroup(Base):
     __tablename__ = "competitiongroups"
@@ -32,7 +31,10 @@ class CompetitionGroup(Base):
         self.sub_competition = sub_competition
         self.group_type = group_type
         self.level = level
-        self.rankings = rankings
+        if rankings is None:
+            self.rankings = []
+        else:
+            self.rankings = rankings
         self.oid = IDHelper.get_id(oid)
 
     def add_team_to_group(self, competition_team, rank=None):

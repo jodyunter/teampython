@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from sqlalchemy import Column, String, ForeignKey, Integer, Boolean
 from sqlalchemy.orm import relationship
 
-from teams.data.dto.dto_base import Base
+from teams.domain.base import Base
 from teams.domain.competition_configuration import SubCompetitionConfiguration
 from teams.domain.competition_game import CompetitionGame
 from teams.domain.competition_ranking import CompetitionRanking
@@ -44,7 +44,10 @@ class SubCompetition(Base, ABC):
         self.started = started
         self.finished = finished
         self.post_processed = post_processed
-        self.groups = groups
+        if groups is None:
+            self.groups = []
+        else:
+            self.groups = groups
         self.oid = IDHelper.get_id(oid)
 
     @abstractmethod

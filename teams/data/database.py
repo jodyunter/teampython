@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from teams.data.dto.dto_base import Base
+from teams.domain.base import Base
 from teams.domain.competition import Competition
 from teams.domain.competition_game import CompetitionGame
 from teams.domain.competition_group import CompetitionGroup

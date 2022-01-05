@@ -39,11 +39,11 @@ class TestPlayoffSubCompetition(BaseTeamTestCase):
         competition.sub_competitions.append(playoff)
 
         league = CompetitionGroup("League", None, None, 1, [], CompetitionGroupConfiguration.RANKING_TYPE)
-        r1_winners_group = CompetitionGroup("R1 Winners", None, 1, playoff, [], CompetitionGroupConfiguration.RANKING_TYPE)
-        r1_losers_group = CompetitionGroup("R1 Losers", None, 1, playoff, [], CompetitionGroupConfiguration.RANKING_TYPE)
-        r2_winners_group = CompetitionGroup("R2 Winners", None, 1, playoff, [], CompetitionGroupConfiguration.RANKING_TYPE)
-        r2_losers_group = CompetitionGroup("R2 Losers", None, 1, playoff, [], CompetitionGroupConfiguration.RANKING_TYPE)
-        eliminated = CompetitionGroup("Eliminated Group", None, 1, playoff, [], CompetitionGroupConfiguration.RANKING_TYPE)
+        r1_winners_group = CompetitionGroup("R1 Winners", None, playoff, 1, [], CompetitionGroupConfiguration.RANKING_TYPE)
+        r1_losers_group = CompetitionGroup("R1 Losers", None, playoff, 1, [], CompetitionGroupConfiguration.RANKING_TYPE)
+        r2_winners_group = CompetitionGroup("R2 Winners", None, playoff, 1, [], CompetitionGroupConfiguration.RANKING_TYPE)
+        r2_losers_group = CompetitionGroup("R2 Losers", None, playoff, 1, [], CompetitionGroupConfiguration.RANKING_TYPE)
+        eliminated = CompetitionGroup("Eliminated Group", None, playoff, 1, [], CompetitionGroupConfiguration.RANKING_TYPE)
 
         league.rankings = [
             CompetitionRanking(league, helpers.new_comp_team(competition, "Team 1", 5), 1),

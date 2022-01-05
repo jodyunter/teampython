@@ -2,7 +2,7 @@ from sqlalchemy import Column, ForeignKey, String
 from sqlalchemy.orm import relationship
 
 from teams.data.dto.custom.custom_types import IntArrayString
-from teams.data.dto.dto_base import Base
+from teams.domain.base import Base
 from teams.domain.utility.utility_classes import IDHelper
 
 
