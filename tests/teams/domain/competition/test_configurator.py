@@ -89,10 +89,11 @@ class TestCompConfiguratorSubCompetition(BaseTeamTestCase):
 
     def test_create_sub_com_sub_comp_already_created(self):
         with pytest.raises(DomainError, match="Sub competition My Sub Comp is already setup."):
-            sub_comp = SubCompetitionConfiguration("My Sub Comp", None, None, None, 1, None, 1, None)
+            sub_competition_configuration = SubCompetitionConfiguration("My Sub Comp", None, None, None, 1, None, 1, None)
+            sub_comp = TableSubCompetition("My Sub Comp", [], None, [], 1, False, False, False, False)
             competition = create_default_competition_for_testing("My Comp", 5, [sub_comp])
 
-            CompetitionConfigurator.create_sub_competition(sub_comp, competition)
+            CompetitionConfigurator.create_sub_competition(sub_competition_configuration, competition)
 
     def test_create_playoff_sub_comp(self):
         sub_competition_config = PlayoffSubCompetitionConfiguration("Playoff Comp", None, [], [], [], 3, 1, None)
@@ -406,14 +407,15 @@ class TestCompConfiguratorTeams(BaseTeamTestCase):
             CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration, competition)
 
     def test_should_fail_too_many_groups(self):
-        with pytest.raises(DomainError, match="Group Team Group 1 has multiple groups 2."):
+        with pytest.raises(DomainError, match="Group with name: Group_First appears more than once: 2."):
             competition = create_default_competition_for_testing("My Comp")
             sub_comp = TableSubCompetition("My Sub Comp", None, competition, [], 1, False, False, False, False)
 
-            comp_group_config = CompetitionGroupConfiguration("Team Group 1", sub_comp, None, 1,
+            comp_group_config = CompetitionGroupConfiguration("Group_First", sub_comp, None, 1,
                                                               CompetitionGroupConfiguration.RANKING_TYPE, 1, None)
 
             comp_group = CompetitionConfigurator.create_competition_group(comp_group_config, competition)
+            sub_comp.groups.append(comp_group)
 
             team = Team("My Team", 5, True)
             competition_team_configuration = CompetitionTeamConfiguration(team, None, comp_group_config, 1, None)
@@ -500,7 +502,7 @@ class TestCompConfiguratorTeams(BaseTeamTestCase):
         comp_group_config = CompetitionGroupConfiguration("Team Group 1", sub_comp, parent_comp_group_config, 1,
                                                           CompetitionGroupConfiguration.RANKING_TYPE, 1, None)
         comp_group = CompetitionConfigurator.create_competition_group(comp_group_config, competition)
-        self.assertEqual(2, len(competition.get_all_groups()))
+        self.assertEqual(2, len(competition.get_all_groups()), "Get all groups")
         team = Team("My Team", 5, True)
         team2 = Team("My Team", 5, True)
         competition_team_configuration = CompetitionTeamConfiguration(team, None, comp_group_config, 1, None)
@@ -510,9 +512,9 @@ class TestCompConfiguratorTeams(BaseTeamTestCase):
         CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration, competition)
         CompetitionConfigurator.process_competition_team_configuration(competition_team_configuration2, competition)
 
-        self.assertEqual(2, len(competition.teams))
-        self.assertEqual(2, len(comp_group.rankings))
-        self.assertEqual(2, len(comp_group.parent_group.rankings))
+        self.assertEqual(2, len(competition.teams), "teams")
+        self.assertEqual(2, len(comp_group.rankings), "rankings")
+        self.assertEqual(2, len(comp_group.parent_group.rankings), "parent rankings")
         self.assertEqual(comp_team.oid, comp_group.rankings[0].team.oid)
         self.assertEqual(comp_team.oid, comp_group.parent_group.rankings[0].team.oid)
         self.assertEqual(competition.teams[1].oid, comp_group.rankings[1].team.oid)

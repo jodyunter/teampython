@@ -151,7 +151,7 @@ class CompetitionConfigurator:
             raise DomainError(f'Group {team_configuration.group_configuration.name} has not been created yet.')
         elif len(groups_with_name) > 1:
             raise DomainError(
-                f'Group {team_configuration.group_configuration.name} has multiple groups {len(groups_with_name)}.')
+                f'Group with name: {team_configuration.group_configuration.name} appears more than once: {len(groups_with_name)}.')
         else:
             group = groups_with_name[0]
 
@@ -164,7 +164,6 @@ class CompetitionConfigurator:
                 table_comp.records.append(
                     TableRecord(table_comp, -1, team, competition.year, 0, 0, 0, 0, 0, team.skill)
                 )
-            competition.teams.append(team)
         elif len(team_created) > 1:
             raise DomainError(f'Team {team_configuration.team.name} has too many {len(team_created)} teams created.')
         else:

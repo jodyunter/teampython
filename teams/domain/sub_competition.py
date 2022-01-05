@@ -112,7 +112,10 @@ class TableSubCompetition(SubCompetition):
         self.post_processed = True
 
     def __init__(self, name, records, competition, groups, order, setup, started, finished, post_processed, oid=None):
-        self.records = records
+        if records is None:
+            self.records = []
+        else:
+            self.records = records
 
         SubCompetition.__init__(self, name, SubCompetitionConfiguration.TABLE_TYPE, competition, groups, order, setup, started,
                                 finished, post_processed,
