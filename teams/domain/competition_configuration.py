@@ -32,10 +32,20 @@ class SubCompetitionConfiguration(YearRestricted):
     def __init__(self, name, competition_configuration, competition_group_configs, competition_team_configs, order, sub_competition_type, first_year, last_year, oid=None):
         self.name = name
         self.competition_configuration = competition_configuration
-        self.competition_groups = competition_group_configs
+
+        if competition_group_configs is None:
+            self.competition_group_configs = []
+        else:
+            self.competition_groups = competition_group_configs
+
         self.order = order
         self.sub_competition_type = sub_competition_type
-        self.competition_teams = competition_team_configs
+
+        if competition_team_configs is None:
+            self.competition_teams = competition_team_configs
+        else:
+            self.competition_teams = []
+
         self.oid = IDHelper.get_id(oid)
 
         YearRestricted.__init__(self, first_year, last_year)
