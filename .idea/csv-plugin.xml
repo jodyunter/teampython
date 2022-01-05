@@ -24,6 +24,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\teams\ConsoleUI\views\data_test_no_services.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\teams\ConsoleUI\views\record_view.py">
           <value>
             <Attribute>

@@ -6,7 +6,8 @@ from teams.ConsoleUI import data_setup
 from teams.ConsoleUI.views.record_view import RecordView
 from teams.data.database import Database
 from teams.services.app_service import AppService
-from teams.services.game_service import GameService, GameRulesService
+from teams.services.game_rules_service import GameRulesService
+from teams.services.game_service import GameService
 from teams.services.record_service import RecordService
 from teams.services.team_service import TeamService
 
