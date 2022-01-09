@@ -1,113 +1,27 @@
 from sqlalchemy import Column, String, Integer
+from sqlalchemy.orm import relationship
 
-from teams.domain.errors import DomainError
+from teams.domain import Base
 from teams.domain.utility.utility_classes import YearRestricted, IDHelper
 
 
-# todo: mapping
-class CompetitionConfiguration(YearRestricted):
-    __tablename__ = "competitionconfiguration"
+# todo change configs to configurations
+class CompetitionConfiguration(Base, YearRestricted):
+    __tablename__ = "competitionconfigurations"
 
     oid = Column(String, primary_key=True)
     name = Column(String)
     order = Column(Integer)
     first_year = Column(Integer)
     last_year = Column(Integer)
+    sub_competition_configs = relationship("SubCompetitionConfiguration", back_populates="competition_configuration")
+    team_configs = relationship("CompetitionTeamConfiguration", back_populates="competition_configuration")
 
     def __init__(self, name, sub_competition_configs, team_configs, order, first_year, last_year, oid=None):
         self.name = name
         self.order = order
         self.sub_competitions = sub_competition_configs
         self.teams = team_configs
-        self.oid = IDHelper.get_id(oid)
-
-        YearRestricted.__init__(self, first_year, last_year)
-
-
-# todo: mapping
-class SubCompetitionConfiguration(YearRestricted):
-    PLAYOFF_TYPE = "Playoff"
-    TABLE_TYPE = "Table"
-
-    def __init__(self, name, competition_configuration, competition_group_configs, competition_team_configs, order, sub_competition_type, first_year, last_year, oid=None):
-        self.name = name
-        self.competition_configuration = competition_configuration
-
-        if competition_group_configs is None:
-            self.competition_group_configs = []
-        else:
-            self.competition_groups = competition_group_configs
-
-        self.order = order
-        self.sub_competition_type = sub_competition_type
-
-        if competition_team_configs is None:
-            self.competition_teams = competition_team_configs
-        else:
-            self.competition_teams = []
-
-        self.oid = IDHelper.get_id(oid)
-
-        YearRestricted.__init__(self, first_year, last_year)
-
-
-# todo: mapping
-class PlayoffSubCompetitionConfiguration(SubCompetitionConfiguration):
-
-    def __init__(self, name, competition_configuration, competition_group_configs, competition_team_configs, series_configs, order,
-                 first_year, last_year, oid=None):
-        self.series = series_configs
-
-        SubCompetitionConfiguration.__init__(self, name, competition_configuration, competition_group_configs, competition_team_configs, order,
-                                             SubCompetitionConfiguration.PLAYOFF_TYPE, first_year, last_year, oid)
-
-
-# todo: mapping
-class TableSubCompetitionConfiguration(SubCompetitionConfiguration):
-    def __init__(self, name, competition_configuration, competition_group_configs, competition_team_configs, order,
-                 first_year, last_year, oid=None):
-
-        SubCompetitionConfiguration.__init__(self, name, competition_configuration, competition_group_configs, competition_team_configs, order,
-                                             SubCompetitionConfiguration.TABLE_TYPE, first_year, last_year, oid)
-
-
-# todo: mapping
-# todo: do we need regional groups if they are just the same thing?
-class CompetitionGroupConfiguration(YearRestricted):
-    REGIONAL_TYPE = "Regional"
-    RANKING_TYPE = "Ranking"
-
-    def __init__(self, name, sub_competition_configuration, parent_group_configuration, group_level, group_type,
-                 first_year, last_year, oid=None):
-        self.name = name
-        if sub_competition_configuration is None:
-            raise DomainError("CompetitionGroupConfiguration must be part of a sub competition.")
-        self.sub_competition_configuration = sub_competition_configuration
-        self.parent_group_configuration = parent_group_configuration
-        self.group_level = group_level
-        self.group_type = group_type
-        self.oid = IDHelper.get_id(oid)
-
-        YearRestricted.__init__(self, first_year, last_year)
-
-
-# todo: mapping
-class RankingGroupConfiguration(CompetitionGroupConfiguration):
-
-    def __init__(self, name, sub_competition_configuration, parent_group_configuration, group_level,
-                 first_year, last_year, oid=None):
-
-        CompetitionGroupConfiguration.__init__(self, name, sub_competition_configuration, parent_group_configuration, group_level,
-                                               CompetitionGroupConfiguration.RANKING_TYPE, first_year, last_year, oid)
-
-
-# todo: mapping
-class CompetitionTeamConfiguration(YearRestricted):
-
-    def __init__(self, team, competition_configuration, group_configuration, first_year, last_year, oid=None):
-        self.team = team
-        self.competition_configuration = competition_configuration
-        self.group_configuration = group_configuration
         self.oid = IDHelper.get_id(oid)
 
         YearRestricted.__init__(self, first_year, last_year)

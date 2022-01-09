@@ -99,7 +99,7 @@ r3s2 = SeriesConfiguration("R3S2", 4, playoff_config, east_r2_winners, 1, east_r
 # Final
 r4s1 = SeriesConfiguration("R4S1", 5, playoff_config, r3_winners, 1, r3_winners, 2, series_rules, champion, league_config, runner_up, league_config, 1, None)
 
-playoff_config.series = [r1s1, r1s2, r1s3, r1s4, r1s5, r1s6, r1s7, r1s8, r2s1, r2s2, r2s3, r2s4, r3s1, r3s2, r4s1, rqs1, rqs2, rqs3, rqs4]
+playoff_config.series_configurations = [r1s1, r1s2, r1s3, r1s4, r1s5, r1s6, r1s7, r1s8, r2s1, r2s2, r2s3, r2s4, r3s1, r3s2, r4s1, rqs1, rqs2, rqs3, rqs4]
 
 competition = CompetitionConfigurator.setup_competition(competition_config, 1)
 playoff = competition.sub_competitions[0]
@@ -145,7 +145,7 @@ while not playoff.is_complete():
         #print(GameDayView.get_view(game_day_view_model))
         current_day += 1
 
-    for s in [ps for ps in playoff.series if ps.series_round == playoff.current_round]:
+    for s in [ps for ps in playoff.series_configurations if ps.series_round == playoff.current_round]:
         home_value = -1
         away_value = -1
         if isinstance(s, SeriesByGoals):

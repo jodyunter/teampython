@@ -132,7 +132,7 @@ def setup_config(rand, canadian_league_name, american_league_name, playoff_name,
 
     series_config = [r1s1, r1s2, r1s3, final, can_am]
 
-    playoff_config.series = series_config
+    playoff_config.series_configurations = series_config
     # configuration done
 
     return competition_config
@@ -209,7 +209,7 @@ while not playoff.is_complete():
         # print(GameDayView.get_view(game_day_view_model))
         current_day += 1
 
-    for s in [ps for ps in playoff.series if ps.series_round == playoff.current_round]:
+    for s in [ps for ps in playoff.series_configurations if ps.series_round == playoff.current_round]:
         home_value = -1
         away_value = -1
         if isinstance(s, SeriesByGoals):

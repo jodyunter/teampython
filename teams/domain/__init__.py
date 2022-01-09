@@ -16,7 +16,8 @@ from teams.domain.series_by_wins_rules import SeriesByWinsRules
 from teams.domain.series_game import SeriesGame
 from teams.domain.series_rules import SeriesRules
 from teams.domain.sub_competition import SubCompetition
-from teams.domain.sub_competition import TableSubCompetition
-from teams.domain.sub_competition import PlayoffSubCompetition
+from teams.domain.table_sub_competition import TableSubCompetition
+from teams.domain.playoff_sub_competition import PlayoffSubCompetition
 from teams.domain.table_record import TableRecord
 from teams.domain.team import Team
+from teams.domain.competition_configuration import CompetitionConfiguration

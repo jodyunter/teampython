@@ -3,6 +3,7 @@ from sqlalchemy import Column, String, ForeignKey, Integer
 from sqlalchemy.orm import relationship
 
 from teams.domain.base import Base
+from teams.domain.competition_group_configuration import CompetitionGroupConfiguration
 from teams.domain.competition_ranking import CompetitionRanking
 from teams.domain.utility.utility_classes import IDHelper
 
@@ -16,6 +17,7 @@ class CompetitionGroup(Base):
     parent_group = relationship("CompetitionGroup", remote_side=[oid])
     sub_competition_id = Column(String, ForeignKey('subcompetitions.oid'))
     sub_competition = relationship("SubCompetition", foreign_keys=[sub_competition_id], back_populates="groups")
+    rankings = relationship("CompetitionRanking", back_populates="competition_group")
     level = Column(Integer)
     group_type = Column(String)
     type = Column(String)
@@ -72,5 +74,6 @@ class RankingGroup(CompetitionGroup):
     }
 
     def __init__(self, name, parent_group, sub_competition, level, rankings, oid=None):
-        CompetitionGroup.__init__(self, name, parent_group, sub_competition, level, rankings, CompetitionGroupConfiguration.RANKING_TYPE, oid)
+        CompetitionGroup.__init__(self, name, parent_group, sub_competition, level, rankings,
+                                  CompetitionGroupConfiguration.RANKING_TYPE, oid)
 

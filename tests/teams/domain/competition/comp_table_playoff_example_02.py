@@ -142,7 +142,7 @@ def setup_config(rand, canadian_league_name, american_league_name, playoff_name,
 
     series_config = [r1s1, r1s2, r1s3, final, can_am]
 
-    playoff_config.series = series_config
+    playoff_config.series_configurations = series_config
     # configuration done
 
     return competition_config

@@ -103,7 +103,7 @@ class TestCompConfiguratorSubCompetition(BaseTeamTestCase):
         sub_comp = CompetitionConfigurator.create_sub_competition(sub_competition_config, competition)
 
         self.assertEqual(sub_competition_config.name, sub_comp.name)
-        self.assertEqual(0, len(sub_comp.series))
+        self.assertEqual(0, len(sub_comp.series_configurations))
         self.assertEqual(competition.oid, sub_comp.competition.oid)
         self.assertEqual(sub_competition_config.order, sub_comp.order)
         self.assertFalse(sub_comp.setup)
@@ -145,7 +145,7 @@ class TestCompConfiguratorPlayoffSubComp(BaseTeamTestCase):
         sub_comp = CompetitionConfigurator.create_playoff_sub_competition(sub_competition_config, competition)
 
         self.assertEqual(sub_competition_config.name, sub_comp.name)
-        self.assertEqual(0, len(sub_comp.series))
+        self.assertEqual(0, len(sub_comp.series_configurations))
         self.assertEqual(competition.oid, sub_comp.competition.oid)
         self.assertEqual(sub_competition_config.order, sub_comp.order)
         self.assertFalse(sub_comp.setup)
@@ -667,8 +667,8 @@ class TestCompConfiguratorSeriesGames(BaseTeamTestCase):
 
         CompetitionConfigurator.process_series_configuration(series_config, playoff_comp)
 
-        self.assertEqual(1, len(competition.sub_competitions[0].series))
-        new_series = competition.sub_competitions[0].series[0]
+        self.assertEqual(1, len(competition.sub_competitions[0].series_configurations))
+        new_series = competition.sub_competitions[0].series_configurations[0]
         self.assertEqual("Series 1", new_series.name)
         self.assertEqual(3, len(competition.get_all_groups()))
 

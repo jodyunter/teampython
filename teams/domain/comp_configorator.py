@@ -70,7 +70,7 @@ class CompetitionConfigurator:
 
         CompetitionConfigurator.create_sub_competition_groups(sub_competition_config, competition)
 
-        for s in sub_competition_config.series:
+        for s in sub_competition_config.series_configurations:
             CompetitionConfigurator.process_series_configuration(s, sub_comp)
 
         return sub_comp
