@@ -26,7 +26,7 @@ class PlayoffSubCompetition(SubCompetition):
 
     def process_game(self, game):
         if game.complete and not game.processed:
-            series = game.series_configurations
+            series = game.series
             series.process_game(game)
             game.processed = True
 

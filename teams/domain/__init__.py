@@ -20,4 +20,13 @@ from teams.domain.table_sub_competition import TableSubCompetition
 from teams.domain.playoff_sub_competition import PlayoffSubCompetition
 from teams.domain.table_record import TableRecord
 from teams.domain.team import Team
+# check each of these to see if they are fully mapped
 from teams.domain.competition_configuration import CompetitionConfiguration
+from teams.domain.competition_group_configuration import CompetitionGroupConfiguration
+from teams.domain.sub_competition_configuration import SubCompetitionConfiguration
+from teams.domain.playoff_sub_competition_configuration import PlayoffSubCompetitionConfiguration
+from teams.domain.table_sub_competition_configuration import TableSubCompetitionConfiguration
+from teams.domain.competition_team_configuration import CompetitionTeamConfiguration
+from teams.domain.series_configuration import SeriesConfiguration
+from teams.domain.table_game_configuration import TableGameConfiguration
+

@@ -6,7 +6,7 @@ from teams.domain.record import Record
 
 
 class TableRecord(Record):
-    sub_competition_id = Column(String, ForeignKey('subcompetitions.oid'))
+    sub_competition_id = Column(String, ForeignKey('SubCompetitions.oid'))
     sub_competition = relationship("TableSubCompetition", foreign_keys=[sub_competition_id])
 
     __mapper_args__ = {

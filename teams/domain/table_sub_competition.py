@@ -1,4 +1,8 @@
-from teams.domain import SubCompetition, CompetitionGame, CompetitionRanking, TableRecord
+from teams.domain.sub_competition import SubCompetition
+from teams.domain.competition_game import CompetitionGame
+from teams.domain.competition_ranking import CompetitionRanking
+from teams.domain.table_record import TableRecord
+
 from teams.domain.sub_competition_configuration import SubCompetitionConfiguration
 
 

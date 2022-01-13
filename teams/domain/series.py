@@ -12,7 +12,7 @@ class Series(Base, ABC):
     __tablename__ = "series"
 
     oid = Column(String, primary_key=True)
-    sub_competition_id = Column(String, ForeignKey('subcompetitions.oid'))
+    sub_competition_id = Column(String, ForeignKey('SubCompetitions.oid'))
     sub_competition = relationship("PlayoffSubCompetition", foreign_keys=[sub_competition_id])
     name = Column(String)
     series_round = Column(Integer)
@@ -21,7 +21,7 @@ class Series(Base, ABC):
     away_team_id = Column(String, ForeignKey('teams.oid'))
     away_team = relationship("Team", foreign_keys=[away_team_id])
     series_type = Column(String)
-    series_rules_id = Column(String, ForeignKey('seriesrules.oid'))
+    series_rules_id = Column(String, ForeignKey('SeriesRules.oid'))
     series_rules = relationship("SeriesRules", foreign_keys=[series_rules_id])
     home_team_from_group_id = Column(String, ForeignKey('competitiongroups.oid'))
     home_team_from_group = relationship("CompetitionGroup", foreign_keys=[home_team_from_group_id])

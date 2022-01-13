@@ -10,7 +10,7 @@ from teams.domain.series_by_wins import SeriesByWins
 from teams.domain.series_by_wins_rules import SeriesByWinsRules
 from teams.domain.series_game import SeriesGame
 from teams.domain.series_rules import SeriesRules
-from teams.domain.sub_competition import PlayoffSubCompetition
+from teams.domain.playoff_sub_competition import PlayoffSubCompetition
 from teams.domain.team import Team
 # implementation for testing basic and common methods
 from tests.teams.domain.competition import helpers

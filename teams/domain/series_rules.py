@@ -7,11 +7,11 @@ from teams.domain.utility.utility_classes import IDHelper
 
 
 class SeriesRules(Base):
-    __tablename__ = "seriesrules"
+    __tablename__ = "SeriesRules"
 
     oid = Column(String, primary_key=True)
     name = Column(String)
-    game_rules_id = Column(String, ForeignKey('gamerules.oid'))
+    game_rules_id = Column(String, ForeignKey('GameRules.oid'))
     game_rules = relationship("GameRules", foreign_keys=[game_rules_id])
     series_type = Column(String)
     home_pattern = Column(IntArrayString)

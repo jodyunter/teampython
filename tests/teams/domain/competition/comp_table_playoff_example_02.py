@@ -73,8 +73,8 @@ def setup_config(rand, canadian_league_name, american_league_name, playoff_name,
                                                              None)
     american_table_config = TableSubCompetitionConfiguration(american_league_name, competition_config, [], [], 1, 1,
                                                              None)
-    competition_config.sub_competitions.append(canadian_table_config)
-    competition_config.sub_competitions.append(american_table_config)
+    competition_config.sub_competition_configurations.append(canadian_table_config)
+    competition_config.sub_competition_configurations.append(american_table_config)
 
     canadian_config = RankingGroupConfiguration("Premier", canadian_table_config, None, 1, 1, None)
     western_config = RankingGroupConfiguration("Div A", canadian_table_config, canadian_config, 2, 1, None)
@@ -107,11 +107,11 @@ def setup_config(rand, canadian_league_name, american_league_name, playoff_name,
 
         sub_comp.competition_groups.append(config)
 
-    competition_config.teams = team_configs
+    competition_config.team_configurations = team_configs
 
     # playoff config
     playoff_config = PlayoffSubCompetitionConfiguration(playoff_name, competition_config, [], [], [], 2, 1, None)
-    competition_config.sub_competitions.append(playoff_config)
+    competition_config.sub_competition_configurations.append(playoff_config)
 
     r1_winners = RankingGroupConfiguration("R1 Winners", playoff_config, None, 1, 1, None)
     american_rep = RankingGroupConfiguration("American Champion", playoff_config, None, 1, 1, None)

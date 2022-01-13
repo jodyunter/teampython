@@ -6,7 +6,7 @@ from teams.domain.utility.utility_classes import IDHelper
 
 
 class GameRules(Base):
-    __tablename__ = "gamerules"
+    __tablename__ = "GameRules"
 
     oid = Column(String, primary_key=True)
     name = Column(String, unique=True)

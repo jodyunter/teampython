@@ -14,23 +14,25 @@ class CompetitionGroupConfiguration(Base, YearRestricted):
 
     __tablename__ = "CompetitionGroupConfigurations"
 
-    __mapper_args__ = {
-        'polymorphic_on': type,
-        'polymorphic_identity': 'competition_group_configuration'
-    }
-
     oid = Column(String, primary_key=True)
     name = Column(String)
-    parent_group_configuration_id = Column(String, ForeignKey('competitiongroupconfigurations.oid'))
+    parent_group_configuration_id = Column(String, ForeignKey('CompetitionGroupConfigurations.oid'))
     parent_group_configuration = relationship("CompetitionGroupConfiguration", remote_side=[oid])
-    sub_competition_configuration_id = Column(String, ForeignKey('subcompetitionconfigurations.oid'))
+    sub_competition_configuration_id = Column(String, ForeignKey('SubCompetitionConfigurations.oid'))
     sub_competition_configuration = relationship("SubCompetitionConfiguration",
                                                  foreign_keys=[sub_competition_configuration_id],
                                                  back_populates="competition_group_configs")
+
     group_level = Column(Integer)
     group_type = Column(String)
     first_year = Column(Integer)
     last_year = Column(Integer)
+    type = Column(String)
+
+    __mapper_args__ = {
+        'polymorphic_on': type,
+        'polymorphic_identity': 'competition_group_configuration'
+    }
 
     def __init__(self, name, sub_competition_configuration, parent_group_configuration, group_level, group_type,
                  first_year, last_year, oid=None):

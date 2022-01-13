@@ -164,7 +164,28 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\teams\domain\competition_group.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\teams\domain\competition_ranking.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\teams\domain\game.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\teams\domain\playoff_sub_competition_configuration.py">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -178,7 +199,35 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\teams\domain\series_configuration.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\teams\domain\sub_competition.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\teams\domain\sub_competition_configuration.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\teams\domain\table_game_configuration.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\teams\domain\table_sub_competition_configuration.py">
           <value>
             <Attribute>
               <option name="separator" value="," />

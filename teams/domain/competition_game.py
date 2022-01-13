@@ -7,7 +7,7 @@ from teams.domain.game import Game
 
 
 class CompetitionGame(Game):
-    sub_competition_id = Column(String, ForeignKey('subcompetitions.oid'))
+    sub_competition_id = Column(String, ForeignKey('SubCompetitions.oid'))
     sub_competition = relationship("SubCompetition", foreign_keys=[sub_competition_id])
     competition_id = Column(String, ForeignKey('competitions.oid'))
     competition = relationship("Competition", foreign_keys=[competition_id])

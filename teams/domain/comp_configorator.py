@@ -1,13 +1,14 @@
 #  this class may become a service in the long run
 from teams.domain.competition import Competition
-from teams.domain.competition_configuration import SubCompetitionConfiguration
+from teams.domain.sub_competition_configuration import SubCompetitionConfiguration
 from teams.domain.competition_group import CompetitionGroup
 from teams.domain.competition_team import CompetitionTeam
 from teams.domain.errors import DomainError
 from teams.domain.series_by_goals import SeriesByGoals
 from teams.domain.series_by_wins import SeriesByWins
 from teams.domain.series_rules import SeriesRules
-from teams.domain.sub_competition import PlayoffSubCompetition, TableSubCompetition
+from teams.domain.playoff_sub_competition import PlayoffSubCompetition
+from teams.domain.table_sub_competition import TableSubCompetition
 
 
 # TODO: Need to start using the setup flags
@@ -23,14 +24,14 @@ class CompetitionConfigurator:
     def setup_competition(competition_config, year):
         competition = Competition(competition_config.name, year, [], [], False, False, False, False, False)
 
-        competition_config.sub_competitions.sort(key=lambda sc: sc.order)
+        competition_config.sub_competition_configurations.sort(key=lambda sc: sc.order)
 
-        for sub in competition_config.sub_competitions:
+        for sub in competition_config.sub_competition_configurations:
             CompetitionConfigurator.create_sub_competition(sub, competition)
 
 
         # create teams
-        for team_config in competition_config.teams:
+        for team_config in competition_config.team_configurations:
             CompetitionConfigurator.process_competition_team_configuration(team_config, competition)
 
         # setup initial games

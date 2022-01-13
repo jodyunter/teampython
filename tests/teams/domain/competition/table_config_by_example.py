@@ -18,7 +18,7 @@ season_game_rules = GameRules("Season Rules", True)
 competition_config = CompetitionConfiguration("Table Test", [], [], 1, 1, None)
 
 table_config = TableSubCompetitionConfiguration("Table League", competition_config, [], [], 1, 1, None)
-competition_config.sub_competitions.append(table_config)
+competition_config.sub_competition_configurations.append(table_config)
 
 team_configs = []
 # seeding group
@@ -45,12 +45,12 @@ for t in atlantic_teams:
 for t in north_teams:
     team_configs.append(CompetitionTeamConfiguration(t, competition_config, north_config, 1, None))
 
-competition_config.teams = team_configs
+competition_config.team_configurations = team_configs
 
 table_config.competition_groups = [league_config, western_config, eastern_config, pacific_config, central_config, north_config, atlantic_config]
 
 competition = CompetitionConfigurator.setup_competition(competition_config, 1)
-table = competition.sub_competitions[0]
+table = competition.sub_competition_configurations[0]
 
 r = random
 
@@ -59,7 +59,7 @@ for g in table.groups:
     rankings.extend(g.rankings)
 
 scheduler = Scheduler()
-games = scheduler.schedule_games(competition.teams, season_game_rules, 1, 1, True, table.create_game)
+games = scheduler.schedule_games(competition.team_configurations, season_game_rules, 1, 1, True, table.create_game)
 days = Scheduler.organize_games_into_days(games)
 
 for cg in [competition.get_group_by_name(western_config.name),

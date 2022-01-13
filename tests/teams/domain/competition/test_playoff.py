@@ -1,7 +1,7 @@
 import numpy as np
 from pytest import mark
 
-from teams.domain.competition_configuration import CompetitionGroupConfiguration
+from teams.domain.competition_group_configuration import CompetitionGroupConfiguration
 from teams.domain.competition_group import CompetitionGroup
 from teams.domain.competition_ranking import CompetitionRanking
 from teams.domain.game_rules import GameRules
@@ -10,7 +10,7 @@ from teams.domain.series_by_goals_rules import SeriesByGoalsRules
 from teams.domain.series_by_wins import SeriesByWins
 from teams.domain.series_by_wins_rules import SeriesByWinsRules
 from teams.domain.series_game import SeriesGame
-from teams.domain.sub_competition import PlayoffSubCompetition
+from teams.domain.playoff_sub_competition import PlayoffSubCompetition
 from tests.teams.domain.competition import helpers
 from tests.teams.domain.competition.helpers import create_default_competition_for_testing
 from tests.teams.domain.competition.test_configurator import BaseTeamTestCase
@@ -89,7 +89,7 @@ class TestPlayoffSubCompetition(BaseTeamTestCase):
         series7 = SeriesByGoals(playoff, "Series 7", 2, None, None, 0, 0, 0, series_rules_by_goals_1,
                                 r1_losers_group, 1, league, 2, r1_losers_group, eliminated, league, eliminated, league, False, False)
 
-        playoff.series_configurations.extend([series1, series2, series3, series4, series5, series6, series7])
+        playoff.series.extend([series1, series2, series3, series4, series5, series6, series7])
 
         return playoff
 
@@ -98,14 +98,14 @@ class TestPlayoffSubCompetition(BaseTeamTestCase):
         playoff = TestPlayoffSubCompetition.create_default_playoff(groups)
         self.assertIsNotNone(groups)
         self.assertEqual(6, len(groups))
-        series = playoff.series_configurations[2]
+        series = playoff.series[2]
 
         game = SeriesGame(series, 1, series.sub_competition.competition, series.sub_competition, 5,
                           series.home_team, series.away_team, 5, 3, True, False, None)
 
         playoff.process_game(game)
 
-        for s in [s for s in playoff.series_configurations if s.series_round == 1]:
+        for s in [s for s in playoff.series if s.series_round == 1]:
             if s.oid == series.oid:
                 self.assertEqual(1, s.games_played)
             else:
@@ -123,8 +123,8 @@ class TestPlayoffSubCompetition(BaseTeamTestCase):
         playoff.setup_round(1)
         new_games = playoff.create_new_games(current_games=[])
 
-        for s in [s for s in playoff.series_configurations if s.series_round == 1]:
-            games = [g for g in new_games if g.series_configurations.oid == s.oid]
+        for s in [s for s in playoff.series if s.series_round == 1]:
+            games = [g for g in new_games if g.series.oid == s.oid]
             number_of_games = len(games)
             if s.name == "Series 1":
                 self.assertEqual(2, number_of_games)
@@ -148,10 +148,10 @@ class TestPlayoffSubCompetition(BaseTeamTestCase):
         playoff.setup_round(1)
         new_games = playoff.create_new_games(current_games=[])
 
-        series1_games = [g for g in new_games if g.series_configurations.name == "Series 1"]
-        series2_games = [g for g in new_games if g.series_configurations.name == "Series 2"]
-        series3_games = [g for g in new_games if g.series_configurations.name == "Series 3"]
-        series4_games = [g for g in new_games if g.series_configurations.name == "Series 4"]
+        series1_games = [g for g in new_games if g.series.name == "Series 1"]
+        series2_games = [g for g in new_games if g.series.name == "Series 2"]
+        series3_games = [g for g in new_games if g.series.name == "Series 3"]
+        series4_games = [g for g in new_games if g.series.name == "Series 4"]
 
         series3_games[0].complete = True
         series3_games[0].processed = True
@@ -164,8 +164,8 @@ class TestPlayoffSubCompetition(BaseTeamTestCase):
 
         status_map = playoff.create_series_map(new_games)
 
-        for s in playoff.series_configurations:
-            games = [g for g in new_games if g.series_configurations.oid == s.oid]
+        for s in playoff.series:
+            games = [g for g in new_games if g.series.oid == s.oid]
             number_of_games = len(games)
             if s.name == "Series 1":
                 self.assertEqual(1, status_map["Complete Games"][s.oid], "S1C")
@@ -189,7 +189,7 @@ class TestPlayoffSubCompetition(BaseTeamTestCase):
 
         playoff.setup_round(1)
 
-        for s in playoff.series_configurations:
+        for s in playoff.series:
             if s.name == "Series 1":
                 self.assertEqual("Team 1", s.home_team.name, "S1H")
                 self.assertEqual("Team 8", s.away_team.name, "S1A")
@@ -249,7 +249,7 @@ class TestPlayoffSubCompetition(BaseTeamTestCase):
 
         playoff.post_process_round(playoff.current_round)
 
-        for s in [a for a in playoff.series_configurations if a.series_round == 1]:
+        for s in [a for a in playoff.series if a.series_round == 1]:
             self.assertTrue(s.is_complete())
             self.assertTrue(s.post_processed)
 

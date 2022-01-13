@@ -54,7 +54,7 @@ def setup_configuration():
 
     table_config = TableSubCompetitionConfiguration("Premier", competition_config, [], [], 1, 1, None)
 
-    competition_config.sub_competitions.append(table_config)
+    competition_config.sub_competition_configurations.append(table_config)
 
     premier_config = RankingGroupConfiguration("Premier", table_config, None, 1, 1, None)
     western_config = RankingGroupConfiguration("Div A", table_config, premier_config, 2, 1, None)
@@ -85,11 +85,11 @@ def setup_configuration():
 
         sub_comp.competition_groups.append(config)
 
-    competition_config.teams = team_configs
+    competition_config.team_configurations = team_configs
 
     # playoff config
     playoff_config = PlayoffSubCompetitionConfiguration("Playoff", competition_config, [], [], [], 2, 1, None)
-    competition_config.sub_competitions.append(playoff_config)
+    competition_config.sub_competition_configurations.append(playoff_config)
 
     champion = RankingGroupConfiguration("Champion", playoff_config, None, 1, 1, None)
     runner_up = RankingGroupConfiguration("Runner Up", playoff_config, None, 1, 1, None)

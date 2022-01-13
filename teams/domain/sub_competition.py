@@ -4,17 +4,12 @@ from sqlalchemy import Column, String, ForeignKey, Integer, Boolean
 from sqlalchemy.orm import relationship
 
 from teams.domain.base import Base
-from teams.domain.competition_configuration import SubCompetitionConfiguration
-from teams.domain.competition_game import CompetitionGame
-from teams.domain.competition_ranking import CompetitionRanking
-from teams.domain.series_game import SeriesGame
-from teams.domain.table_record import TableRecord
 from teams.domain.utility.utility_classes import IDHelper
 
 
 # mapped
 class SubCompetition(Base, ABC):
-    __tablename__ = "subcompetitions"
+    __tablename__ = "SubCompetitions"
 
     oid = Column(String, primary_key=True)
     name = Column(String)

@@ -3,7 +3,8 @@ from unittest import TestCase
 from teams.data.repo.competition_repository import CompetitionRepository, PlayoffSubCompetitionRepository, \
     TableSubCompetitionRepository
 from teams.domain.competition import Competition
-from teams.domain.sub_competition import PlayoffSubCompetition, TableSubCompetition
+from teams.domain.playoff_sub_competition import PlayoffSubCompetition
+from teams.domain.table_sub_competition import TableSubCompetition
 from tests.teams.repo.test_repository import BaseRepoTests
 
 
@@ -18,8 +19,8 @@ class CompetitionRepoTests(BaseRepoTests, TestCase):
     def get_updated_record(self, original_record):
         original_record.name = "New Comp Name"
         original_record.year = 10
-        original_record.sub_competitions = []
-        original_record.teams = []
+        original_record.sub_competition_configurations = []
+        original_record.team_configurations = []
         original_record.current_round = 3
         original_record.setup = True
         original_record.finished = False

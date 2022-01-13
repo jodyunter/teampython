@@ -21,7 +21,7 @@ series_rules_3 = SeriesByWinsRules("Best of 3", 2, playoff_game_rules, [0, 0, 1]
 competition_config = CompetitionConfiguration("Playoff Test", [], [], 1, 1, None)
 
 playoff_config = PlayoffSubCompetitionConfiguration("Playoff", competition_config, [], [], [], 1, 1, None)
-competition_config.sub_competitions.append(playoff_config)
+competition_config.sub_competition_configurations.append(playoff_config)
 
 team_configs = []
 # seeding group
@@ -47,7 +47,7 @@ for t in atlantic_teams:
 for t in north_teams:
     team_configs.append(CompetitionTeamConfiguration(t, competition_config, north_config, 1, None))
 
-competition_config.teams = team_configs
+competition_config.team_configurations = team_configs
 
 # playoff groups
 west_q1_winners = RankingGroupConfiguration("West Q1 Winners", playoff_config, None, 1, 1, None)
@@ -102,7 +102,7 @@ r4s1 = SeriesConfiguration("R4S1", 5, playoff_config, r3_winners, 1, r3_winners,
 playoff_config.series_configurations = [r1s1, r1s2, r1s3, r1s4, r1s5, r1s6, r1s7, r1s8, r2s1, r2s2, r2s3, r2s4, r3s1, r3s2, r4s1, rqs1, rqs2, rqs3, rqs4]
 
 competition = CompetitionConfigurator.setup_competition(competition_config, 1)
-playoff = competition.sub_competitions[0]
+playoff = competition.sub_competition_configurations[0]
 league = competition.get_group_by_name(league_config.name)
 western = competition.get_group_by_name(western_config.name)
 eastern = competition.get_group_by_name(eastern_config.name)
@@ -113,7 +113,7 @@ north = competition.get_group_by_name(north_config.name)
 
 r = random
 
-r.shuffle(competition.teams)
+r.shuffle(competition.team_configurations)
 ranks = {}
 count = 1
 for t in teams:

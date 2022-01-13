@@ -1,6 +1,8 @@
 from teams.data.repo.repository import Repository
 from teams.domain.competition import Competition
-from teams.domain.sub_competition import SubCompetition, TableSubCompetition, PlayoffSubCompetition
+from teams.domain.sub_competition import SubCompetition
+from teams.domain.table_sub_competition import TableSubCompetition
+from teams.domain.playoff_sub_competition import PlayoffSubCompetition
 
 
 class CompetitionRepository(Repository):

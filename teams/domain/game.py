@@ -22,7 +22,7 @@ class Game(Base):
     home_team = relationship("Team", foreign_keys=[home_team_id])
     away_team_id = Column(String, ForeignKey('teams.oid'))
     away_team = relationship("Team", foreign_keys=[away_team_id])
-    rules_id = Column(String, ForeignKey('gamerules.oid'))
+    rules_id = Column(String, ForeignKey('GameRules.oid'))
     rules = relationship("GameRules", foreign_keys=[rules_id])
     type = Column(String)
 

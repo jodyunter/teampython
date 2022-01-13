@@ -6,7 +6,7 @@ from teams.domain.series_rules import SeriesRules
 
 class SeriesByGoalsRules(SeriesRules):
     games_to_play = Column(Integer)
-    last_game_rules_id = Column(String, ForeignKey('gamerules.oid'))
+    last_game_rules_id = Column(String, ForeignKey('GameRules.oid'))
     last_game_rules = relationship("GameRules", foreign_keys=[last_game_rules_id])
 
     __mapper_args__ = {
