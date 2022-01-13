@@ -92,7 +92,7 @@ class CompetitionConfigurator:
 
     @staticmethod
     def create_sub_competition_groups(sub_comp_config, competition):
-        for g in sub_comp_config.competition_groups:
+        for g in sub_comp_config.competition_group_configs:
             CompetitionConfigurator.create_competition_group(g, competition)
 
     @staticmethod
