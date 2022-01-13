@@ -36,7 +36,7 @@ class SeriesConfiguration(Base, YearRestricted):
                                              foreign_keys=[loser_group_configuration_id])
     loser_rank_from_configuration_id = Column(String, ForeignKey('CompetitionGroupConfigurations.oid'))
     loser_rank_from_configuration = relationship("CompetitionGroupConfiguration",
-                                                 foreign_keys=[winner_rank_from_configuration_id])
+                                                 foreign_keys=[loser_rank_from_configuration_id])
     first_year = Column(Integer)
     last_year = Column(Integer)
 

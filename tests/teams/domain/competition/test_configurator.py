@@ -494,11 +494,14 @@ class TestCompConfiguratorTeams(BaseTeamTestCase):
     def test_should_add_multiple_teams(self):
         competition = create_default_competition_for_testing("My Comp")
         sub_comp = TableSubCompetition("My Sub Comp", [], competition, [], 1, False, False, False, False)
+        competition.sub_competitions.append(sub_comp)
+        sub_comp_config = TableSubCompetitionConfiguration("My Sub Comp", None, [], 1, 1, 5)
 
-        parent_comp_group_config = CompetitionGroupConfiguration("Parent Group 1", sub_comp, None, 1,
+        parent_comp_group_config = CompetitionGroupConfiguration("Parent Group 1", sub_comp_config, None, 1,
                                                                  CompetitionGroupConfiguration.RANKING_TYPE, 1, None)
-        comp_group_config = CompetitionGroupConfiguration("Team Group 1", sub_comp, parent_comp_group_config, 1,
+        comp_group_config = CompetitionGroupConfiguration("Team Group 1", sub_comp_config, parent_comp_group_config, 1,
                                                           CompetitionGroupConfiguration.RANKING_TYPE, 1, None)
+
         comp_group = CompetitionConfigurator.create_competition_group(comp_group_config, competition)
         self.assertEqual(2, len(competition.get_all_groups()), "Get all groups")
         team = Team("My Team", 5, True)
