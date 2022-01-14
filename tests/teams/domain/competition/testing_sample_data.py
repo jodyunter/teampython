@@ -126,6 +126,8 @@ comp_repo = CompetitionRepository()
 comp_repo.add(competition, session)
 session.commit()
 
+test_comp = comp_repo.get_by_oid(competition.oid, session)
+
 last_day = 1
 current_day = 1
 
@@ -154,7 +156,3 @@ standings_table.sort_table_rankings()
 print_group("Premier", standings_table, "Standings")
 
 session.commit()
-
-recordService = RecordService()
-for r in recordService.get_all(session):
-    print(r.name + " " + r.points)

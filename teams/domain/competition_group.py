@@ -44,7 +44,8 @@ class CompetitionGroup(Base):
             rank = -1
         team_in_group = [t for t in self.rankings if t.team.oid == competition_team.oid]
         if team_in_group is None or len(team_in_group) == 0:
-            self.rankings.append(CompetitionRanking(self, competition_team, rank))
+            CompetitionRanking(self, competition_team, rank)
+            # self.rankings.append(CompetitionRanking(self, competition_team, rank))
         else:
             return
 
