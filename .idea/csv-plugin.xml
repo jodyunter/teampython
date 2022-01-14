@@ -381,6 +381,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\tests\teams\domain\competition\testing_sample_data.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\tests\teams\domain\test_game.py">
           <value>
             <Attribute>
