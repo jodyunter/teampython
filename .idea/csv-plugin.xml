@@ -227,6 +227,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\teams\domain\table_sub_competition.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\teams\domain\table_sub_competition_configuration.py">
           <value>
             <Attribute>

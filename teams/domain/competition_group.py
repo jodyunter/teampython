@@ -17,7 +17,7 @@ class CompetitionGroup(Base):
     parent_group = relationship("CompetitionGroup", remote_side=[oid])
     sub_competition_id = Column(String, ForeignKey('SubCompetitions.oid'))
     sub_competition = relationship("SubCompetition", foreign_keys=[sub_competition_id], back_populates="groups")
-    rankings = relationship("CompetitionRanking", back_populates="competition_group")
+    rankings = relationship("CompetitionRanking", back_populates="group")
     level = Column(Integer)
     group_type = Column(String)
     type = Column(String)

@@ -12,10 +12,10 @@ class CompetitionRanking(Base):
     oid = Column(String, primary_key=True)
     competition_id = Column(String, ForeignKey('competitions.oid'))
     competition = relationship("Competition", foreign_keys=[competition_id])
-    parent_team_id = Column(String, ForeignKey('teams.oid'))
-    parent_team = relationship("Team", foreign_keys=[parent_team_id])
-    competition_group_id = Column(String, ForeignKey('competitiongroups.oid'))
-    competition_group = relationship("CompetitionGroup", foreign_keys=[competition_group_id], back_populates="rankings")
+    team_id = Column(String, ForeignKey('teams.oid'))
+    team = relationship("Team", foreign_keys=[team_id])
+    group_id = Column(String, ForeignKey('competitiongroups.oid'))
+    group = relationship("CompetitionGroup", foreign_keys=[group_id], back_populates="rankings")
     rank = Column(Integer)
 
     def __init__(self, competition_group, competition_team, rank, oid=None):
