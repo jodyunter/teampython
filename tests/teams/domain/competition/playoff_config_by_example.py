@@ -20,7 +20,7 @@ series_rules_3 = SeriesByWinsRules("Best of 3", 2, playoff_game_rules, [0, 0, 1]
 
 competition_config = CompetitionConfiguration("Playoff Test", [], [], 1, 1, None)
 
-playoff_config = PlayoffSubCompetitionConfiguration("Playoff", competition_config, [], [], [], 1, 1, None)
+playoff_config = PlayoffSubCompetitionConfiguration("Playoff", competition_config, [], [], 1, 1, None)
 competition_config.sub_competition_configurations.append(playoff_config)
 
 team_configs = []
@@ -155,7 +155,7 @@ while not playoff.is_complete():
             home_value = s.home_wins
             away_value = s.away_wins
 
-        view_model = SeriesViewModel(s.name, s.sub_competition.competition.year, s.series_round, None,
+        view_model = SeriesViewModel(s.oid, s.name, s.sub_competition.competition.year, s.series_round, None,
                                      TeamViewModel(s.home_team.oid, s.home_team.name, s.home_team.skill, True),
                                      home_value,
                                      TeamViewModel(s.away_team.oid, s.away_team.name, s.away_team.skill, True),
