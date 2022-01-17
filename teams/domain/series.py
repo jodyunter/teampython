@@ -13,7 +13,7 @@ class Series(Base, ABC):
 
     oid = Column(String, primary_key=True)
     sub_competition_id = Column(String, ForeignKey('SubCompetitions.oid'))
-    sub_competition = relationship("PlayoffSubCompetition", foreign_keys=[sub_competition_id])
+    sub_competition = relationship("PlayoffSubCompetition", foreign_keys=[sub_competition_id], back_populates="series")
     name = Column(String)
     series_round = Column(Integer)
     home_team_id = Column(String, ForeignKey('teams.oid'))

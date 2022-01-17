@@ -89,7 +89,8 @@ class TestPlayoffSubCompetition(BaseTeamTestCase):
         series7 = SeriesByGoals(playoff, "Series 7", 2, None, None, 0, 0, 0, series_rules_by_goals_1,
                                 r1_losers_group, 1, league, 2, r1_losers_group, eliminated, league, eliminated, league, False, False)
 
-        playoff.series.extend([series1, series2, series3, series4, series5, series6, series7])
+        # todo: remove because we shouldn't be addeding to lists with the ORM in place
+        #  playoff.series.extend([series1, series2, series3, series4, series5, series6, series7])
 
         return playoff
 
@@ -141,6 +142,7 @@ class TestPlayoffSubCompetition(BaseTeamTestCase):
     def test_is_complete(self):
         pass
 
+    # todo: create a parameterized test instead here
     def test_create_status_map(self):
         groups = []
         playoff = TestPlayoffSubCompetition.create_default_playoff(groups)

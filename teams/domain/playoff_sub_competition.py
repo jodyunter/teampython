@@ -1,3 +1,5 @@
+from sqlalchemy.orm import relationship
+
 from teams.domain import SubCompetition, SeriesGame
 from teams.domain.sub_competition_configuration import SubCompetitionConfiguration
 
@@ -7,6 +9,19 @@ class PlayoffSubCompetition(SubCompetition):
         'polymorphic_identity': 'playoff_sub_competition'
     }
 
+    series = relationship("Series", back_populates="sub_competition")
+
+    def __init__(self, name, series, competition, groups, order, current_round, setup, started, finished, post_processed,
+                 oid=None):
+        if series is None:
+            self.series = []
+        else:
+            self.series = series
+        self.current_round = current_round
+
+        SubCompetition.__init__(self, name, SubCompetitionConfiguration.PLAYOFF_TYPE, competition, groups, order,
+                                setup, started, finished, post_processed, oid)
+
     def start(self):
         self.current_round = 1
         if not self.is_round_setup(self.current_round):
@@ -15,14 +30,6 @@ class PlayoffSubCompetition(SubCompetition):
     def post_process(self, **kwargs):
         # at this point all rounds have been processed and teams assigned to groups.
         pass
-
-    def __init__(self, name, series, competition, groups, order, current_round, setup, started, finished, post_processed,
-                 oid=None):
-        self.series = series
-        self.current_round = current_round
-
-        SubCompetition.__init__(self, name, SubCompetitionConfiguration.PLAYOFF_TYPE, competition, groups, order,
-                                setup, started, finished, post_processed, oid)
 
     def process_game(self, game):
         if game.complete and not game.processed:

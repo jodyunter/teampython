@@ -1,1 +1,3 @@
 pip install -r requirements.txt
+
+When creating new objects, if you link the objects in the constructor you should NOT also add them to the parent object list.  This doubles the objects
