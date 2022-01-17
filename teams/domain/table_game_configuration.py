@@ -1,5 +1,5 @@
 # todo this is for future schedule rules
-from teams.domain.utility.utility_classes import YearRestricted
+from teams.domain.utility.utility_classes import YearRestricted, IDHelper
 
 
 class TableGameConfiguration(YearRestricted):
@@ -22,7 +22,10 @@ class TableGameConfiguration(YearRestricted):
 
         self.name = name
         self.sub_competition_configuration = sub_competition_configuration
-        self.oid = oid
+        if oid is None:
+            self.oid = IDHelper.get_id(oid)
+        else:
+            self.oid = oid
         YearRestricted.__init__(first_year, last_year)
 
     @staticmethod

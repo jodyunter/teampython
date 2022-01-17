@@ -8,6 +8,7 @@ class ScheduleService(BaseService):
     def get_repo(self):
         return self.game_repo
 
+    # this is using a domain object in the game
     def add_game_to_schedule(self, game, starting_day, session=None):
         commit = session is None
         session = self.get_session(session)
@@ -25,6 +26,6 @@ class ScheduleService(BaseService):
             else:
                 day += 1
 
-        self.get_repo().add(game)
+        self.get_repo().add(game, session)
 
         self.commit(session, commit)

@@ -35,7 +35,10 @@ class Competition(Base):
             self.teams = teams
         self.finished = finished
         self.post_processed = post_processed
-        self.oid = IDHelper.get_id(oid)
+        if oid is None:
+            self.oid = IDHelper.get_id(oid)
+        else:
+            self.oid = oid
         self.current_round = current_round
 
     def create_new_games(self, **kwargs):

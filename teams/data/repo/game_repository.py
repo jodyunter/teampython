@@ -44,27 +44,25 @@ class GameRepository(Repository):
         return session.query(dto_type).filter(dto_type.complete == False or dto_type.processed == False,
                                               dto_type.year == year).count()
 
-    def get_list_days_team_play_on_stmt(self, year, starting_day, ending_day, game):
+    def get_list_days_team_play_on_stmt(self, year, starting_day, ending_day, team_ids):
         dto_type = self.get_type()
 
-        home_id = game.home_team.oid
-        away_id = game.away_team.oid
+        # home_id = game.home_team.oid
+        # away_id = game.away_team.oid
 
         stmt = select(dto_type.day).where(and_(
             dto_type.year == year,
             dto_type.day >= starting_day,
             dto_type.day <= ending_day,
             or_(
-                dto_type.home_team_id == home_id,
-                dto_type.home_team_id == away_id,
-                dto_type.away_team_id == home_id,
-                dto_type.away_team_id == away_id
+                dto_type.home_team_id.in_(team_ids),
+                dto_type.away_team_id.in_(team_ids)
             )))
 
         return stmt
 
     def get_list_days_teams_play_on(self, year, starting_day, ending_day, game, session):
-        stmt = self.get_list_days_team_play_on_stmt(year, starting_day, ending_day, game)
+        stmt = self.get_list_days_team_play_on_stmt(year, starting_day, ending_day, [game.home_team.oid, game.away_team.oid])
 
         result = session.execute(stmt).fetchall()
 

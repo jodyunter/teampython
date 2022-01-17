@@ -666,10 +666,10 @@ class TestCompConfiguratorSeriesGames(BaseTeamTestCase):
         series_config = SeriesConfiguration("Series 1", 5, playoff_comp_config,
                                             group1, 1,
                                             group1, 2,
-                                            SeriesByWinsRules("My Rules", 5, None, None, None), None,
+                                            SeriesByWinsRules("My Rules", 5, None, None), None,
                                             group3, group4,
                                             group3, group4,
-                                            1, None)
+                                            1)
 
         competition = create_default_competition_for_testing("My Comp", 1)
         playoff_comp = PlayoffSubCompetition("Playoff Comp", [], competition, [], None, None, None, None, None, None)

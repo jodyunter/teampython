@@ -43,7 +43,10 @@ class CompetitionGroupConfiguration(Base, YearRestricted):
         self.parent_group_configuration = parent_group_configuration
         self.group_level = group_level
         self.group_type = group_type
-        self.oid = IDHelper.get_id(oid)
+        if oid is None:
+            self.oid = IDHelper.get_id(oid)
+        else:
+            self.oid = oid
 
         YearRestricted.__init__(self, first_year, last_year)
 

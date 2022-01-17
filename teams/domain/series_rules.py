@@ -30,5 +30,8 @@ class SeriesRules(Base):
         self.series_type = series_type
         self.game_rules = game_rules
         self.home_pattern = home_pattern
-        self.oid = IDHelper.get_id(oid)
+        if oid is None:
+            self.oid = IDHelper.get_id(oid)
+        else:
+            self.oid = oid
 

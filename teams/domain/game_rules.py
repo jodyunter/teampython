@@ -13,7 +13,10 @@ class GameRules(Base):
     can_tie = Column(Boolean)
 
     def __init__(self, name, can_tie, oid=None):
-        self.oid = IDHelper.get_id(oid)
+        if oid is None:
+            self.oid = IDHelper.get_id(oid)
+        else:
+            self.oid = oid
         self.name = name
         self.can_tie = can_tie
 

@@ -37,7 +37,10 @@ class CompetitionGroup(Base):
             self.rankings = []
         else:
             self.rankings = rankings
-        self.oid = IDHelper.get_id(oid)
+        if oid is None:
+            self.oid = IDHelper.get_id(oid)
+        else:
+            self.oid = oid
 
     def add_team_to_group(self, competition_team, rank=None):
         if rank is None:

@@ -25,6 +25,9 @@ class CompetitionTeamConfiguration(Base, YearRestricted):
         self.team = team
         self.competition_configuration = competition_configuration
         self.group_configuration = group_configuration
-        self.oid = IDHelper.get_id(oid)
+        if oid is None:
+            self.oid = IDHelper.get_id(oid)
+        else:
+            self.oid = oid
 
         YearRestricted.__init__(self, first_year, last_year)

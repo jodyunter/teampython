@@ -3,7 +3,7 @@ from sqlalchemy import Column, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 
 from teams.domain import Base
-from teams.domain.utility.utility_classes import YearRestricted
+from teams.domain.utility.utility_classes import YearRestricted, IDHelper
 
 
 class SeriesConfiguration(Base, YearRestricted):
@@ -61,6 +61,9 @@ class SeriesConfiguration(Base, YearRestricted):
 
         self.name = name
         self.sub_competition_configuration = sub_competition_configuration
-        self.oid = oid
+        if oid is None:
+            self.oid = IDHelper.get_id(oid)
+        else:
+            self.oid = oid
 
         YearRestricted.__init__(self, first_year, last_year)

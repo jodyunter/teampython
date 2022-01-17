@@ -28,7 +28,10 @@ class Record(Base):
     }
 
     def __init__(self, rank, team, year, wins, loses, ties, goals_for, goals_against, skill, oid=None):
-        self.oid = IDHelper.get_id(oid)
+        if oid is None:
+            self.oid = IDHelper.get_id(oid)
+        else:
+            self.oid = oid
         self.rank = rank
         self.team = team
         self.year = year

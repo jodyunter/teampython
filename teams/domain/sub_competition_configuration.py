@@ -43,6 +43,9 @@ class SubCompetitionConfiguration(Base, YearRestricted):
         self.order = order
         self.sub_competition_type = sub_competition_type
 
-        self.oid = IDHelper.get_id(oid)
+        if oid is None:
+            self.oid = IDHelper.get_id(oid)
+        else:
+            self.oid = oid
 
         YearRestricted.__init__(self, first_year, last_year)

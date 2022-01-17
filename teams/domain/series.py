@@ -66,7 +66,10 @@ class Series(Base, ABC):
         self.loser_rank_from = loser_rank_from
         self.setup = setup
         self.post_processed = post_processed
-        self.oid = IDHelper.get_id(oid)
+        if oid is None:
+            self.oid = IDHelper.get_id(oid)
+        else:
+            self.oid = oid
 
     @abstractmethod
     def process_game(self, game):

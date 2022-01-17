@@ -22,7 +22,10 @@ class CompetitionRanking(Base):
         self.group = competition_group
         self.team = competition_team
         self.rank = rank
-        self.oid = IDHelper.get_id(oid)
+        if oid is None:
+            self.oid = IDHelper.get_id(oid)
+        else:
+            self.oid = oid
 
     @staticmethod
     def get_dictionary_of_groups_from_rankings(competition_rankings):

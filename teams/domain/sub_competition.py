@@ -43,7 +43,10 @@ class SubCompetition(Base, ABC):
             self.groups = []
         else:
             self.groups = groups
-        self.oid = IDHelper.get_id(oid)
+        if oid is None:
+            self.oid = IDHelper.get_id(oid)
+        else:
+            self.oid = oid
 
     @abstractmethod
     def start(self):

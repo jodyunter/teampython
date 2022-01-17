@@ -39,7 +39,10 @@ class Game(Base):
         self.home_score = home_score
         self.away_score = away_score
         self.complete = complete
-        self.oid = IDHelper.get_id(oid)
+        if oid is None:
+            self.oid = IDHelper.get_id(oid)
+        else:
+            self.oid = oid
         self.rules = rules
         self.processed = processed
 

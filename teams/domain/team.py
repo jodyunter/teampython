@@ -22,7 +22,10 @@ class Team(Base):
         self.name = name
         self.skill = skill
         self.active = active
-        self.oid = IDHelper.get_id(oid)
+        if oid is None:
+            self.oid = IDHelper.get_id(oid)
+        else:
+            self.oid = oid
 
     def __eq__(self, other):
         return self.name == other.name and \
