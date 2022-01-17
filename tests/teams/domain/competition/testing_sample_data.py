@@ -56,12 +56,15 @@ team_data = {
     "Ottawa": [5, True],
     "Winnipeg": [5, True],
     "Calgary": [5, True],
-    "Vancouver": [5, True]
+    "Vancouver": [5, True],
+    "Edmonton": [5, True],
+    "Quebec City": [5, True]
 }
+
 skill = 0
 active = 1
 
-teams = ["Toronto", "Montreal", "Ottawa", "Winnipeg", "Calgary", "Vancouver"]
+# teams = ["Toronto", "Montreal", "Ottawa", "Winnipeg", "Calgary", "Vancouver"]
 
 team_service = TeamService()
 team_repo = TeamRepository()
@@ -98,61 +101,65 @@ session.commit()
 # premier has all
 [competition_team_config_repo.add(
     CompetitionTeamConfiguration(team, competition_config, premier_division_config, 1, None), session)
-    for team in [team_repo.get_by_name(name, session) for name in teams]]
+    for team in [team_repo.get_by_name(name, session) for name in team_data]]
 session.commit()
 
 
-comp_config = competition_config_repo.get_by_oid(competition_config.oid, session)
+for i in range(5):
 
-competition = CompetitionConfigurator.setup_competition(comp_config, 1)
+    comp_config = competition_config_repo.get_by_oid(competition_config.oid, session)
 
-# get initial games.  For tables we can't really do this yet.
-days = {}  # this is inplace of the database for now
-scheduler = Scheduler()
+    competition = CompetitionConfigurator.setup_competition(comp_config, i + 1)
 
-standings_table = competition.get_sub_competition("Standings")
+    # get initial games.  For tables we can't really do this yet.
+    days = {}  # this is inplace of the database for now
+    scheduler = Scheduler()
 
-games = []
-season_rules = game_rules_repo.get_by_name("Season Rules", session)
+    standings_table = competition.get_sub_competition("Standings")
 
-games.extend(
-    create_games(standings_table.get_groups_by_level(1), 2, season_rules, standings_table.create_game, days,
-                 scheduler))
+    games = []
+    season_rules = game_rules_repo.get_by_name("Season Rules", session)
 
+    games.extend(
+        create_games(standings_table.get_groups_by_level(1), 4, season_rules, standings_table.create_game, days,
+                     scheduler))
 
-competition.start_competition()
+    competition.start_competition()
 
-comp_repo = CompetitionRepository()
-comp_repo.add(competition, session)
-session.commit()
+    comp_repo = CompetitionRepository()
+    comp_repo.add(competition, session)
+    session.commit()
 
-test_comp = comp_repo.get_by_oid(competition.oid, session)
+    test_comp = comp_repo.get_by_oid(competition.oid, session)
 
-last_day = 1
-current_day = 1
+    last_day = 1
+    current_day = 1
 
-rand = random
+    rand = random
 
-while not competition.finished:
-    print("Current Comp Round: " + str(competition.current_round))
-    new_games = competition.create_new_games(current_games=games)
-    Scheduler.add_games_to_schedule(new_games, days, rand, current_day)
-    games.extend(new_games)
-    if current_day in days:
-        day = days[current_day]
-        for g in day:
-            g.play()
-            competition.process_game(g)
-        competition.process_end_of_day(competition.sort_day_dictionary_to_incomplete_games_dictionary(days))
-        game_day_view_model = GameService.games_to_game_day_view(day)
-        print(GameDayView.get_view(game_day_view_model))
-    else:
-        day = []
-    last_day = current_day
-    current_day += 1
+    while not competition.finished:
+        print(competition.name + " Year: " + str(competition.year))
+        new_games = competition.create_new_games(current_games=games)
+        Scheduler.add_games_to_schedule(new_games, days, rand, current_day)
+        games.extend(new_games)
+        if current_day in days:
+            day = days[current_day]
+            for g in day:
+                g.play()
+                competition.process_game(g)
+            competition.process_end_of_day(competition.sort_day_dictionary_to_incomplete_games_dictionary(days))
+            game_day_view_model = GameService.games_to_game_day_view(day)
+            print(GameDayView.get_view(game_day_view_model))
+        else:
+            day = []
+        last_day = current_day
+        current_day += 1
 
-standings_table.sort_table_rankings()
+    standings_table.sort_table_rankings()
 
-print_group("Premier", standings_table, "Standings")
+    print_group("Premier", standings_table, "Standings " + str(competition.year))
 
-session.commit()
+    session.commit()
+
+    input("Press enter to continue.")
+
