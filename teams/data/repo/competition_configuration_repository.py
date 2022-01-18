@@ -1,5 +1,6 @@
 from teams.data.repo.repository import Repository
-from teams.domain import CompetitionConfiguration, TableSubCompetitionConfiguration, CompetitionTeamConfiguration
+from teams.domain import CompetitionConfiguration, TableSubCompetitionConfiguration, CompetitionTeamConfiguration, \
+    SeriesConfiguration
 from teams.domain.competition_group_configuration import RankingGroupConfiguration
 
 
@@ -21,3 +22,9 @@ class RankingGroupConfigurationRepository(Repository):
 class CompetitionTeamConfigurationRepository(Repository):
     def get_type(self):
         return CompetitionTeamConfiguration
+
+
+class SeriesConfigurationRepository(Repository):
+    def get_type(self):
+        return SeriesConfiguration
+

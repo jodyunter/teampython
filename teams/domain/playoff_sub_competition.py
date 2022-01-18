@@ -1,3 +1,4 @@
+from sqlalchemy import Column, Integer
 from sqlalchemy.orm import relationship
 
 from teams.domain import SubCompetition, SeriesGame
@@ -9,6 +10,7 @@ class PlayoffSubCompetition(SubCompetition):
         'polymorphic_identity': 'playoff_sub_competition'
     }
 
+    current_round = Column(Integer)
     series = relationship("Series", back_populates="sub_competition")
 
     def __init__(self, name, series, competition, groups, order, current_round, setup, started, finished, post_processed,

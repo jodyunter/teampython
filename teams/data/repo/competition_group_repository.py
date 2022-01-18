@@ -1,5 +1,5 @@
 from teams.data.repo.repository import Repository
-from teams.domain.sub_competition import CompetitionGroup, RankingGroup
+from teams.domain.competition_group import CompetitionGroup, RankingGroup
 
 
 class CompetitionGroupRepository(Repository):

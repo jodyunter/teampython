@@ -1,16 +1,20 @@
 import random
 
 from teams.ConsoleUI.views.game_view import GameDayView
+from teams.ConsoleUI.views.playoff_views import SeriesView
 from teams.ConsoleUI.views.record_view import RecordView
 from teams.data.database import Database
 from teams.data.repo.competition_configuration_repository import CompetitionConfigurationRepository, \
     TableSubCompetitionConfigurationRepository, RankingGroupConfigurationRepository, \
-    CompetitionTeamConfigurationRepository
+    CompetitionTeamConfigurationRepository, SeriesConfigurationRepository
+from teams.data.repo.competition_group_repository import CompetitionGroupRepository
 from teams.data.repo.competition_repository import CompetitionRepository
-from teams.data.repo.rules_repository import GameRulesRepository
+from teams.data.repo.game_repository import GameRepository
+from teams.data.repo.rules_repository import GameRulesRepository, SeriesRulesRepository
 from teams.data.repo.team_repository import TeamRepository
 from teams.domain import CompetitionConfiguration, TableSubCompetitionConfiguration, CompetitionTeamConfiguration, \
-    GameRules, TableSubCompetition
+    GameRules, TableSubCompetition, Game, PlayoffSubCompetitionConfiguration, SeriesConfiguration, SeriesByWinsRules, \
+    SeriesByGoals, SeriesByWins, CompetitionGroup
 from teams.domain.comp_configorator import CompetitionConfigurator
 from teams.domain.competition_group_configuration import RankingGroupConfiguration
 from teams.domain.scheduler import Scheduler
@@ -18,6 +22,8 @@ from teams.domain.team import Team
 from teams.services.game_service import GameService
 from teams.services.record_service import RecordService
 from teams.services.team_service import TeamService
+from teams.services.view_models.playoff_view_models import SeriesViewModel
+from teams.services.view_models.team_view_models import TeamViewModel
 
 
 def create_games(groups, rounds, rules, create_game_method, day_dict, scheduler):
@@ -44,6 +50,7 @@ def print_group(group_name, table_to_print, description):
     for r in recs:
         print(RecordView.get_table_row(RecordService.get_view_from_model(r)))
 
+
 connection = "sqlite:///:memory:"
 Database.init_db(connection)
 session = Database.get_session()
@@ -69,13 +76,16 @@ active = 1
 team_service = TeamService()
 team_repo = TeamRepository()
 game_rules_repo = GameRulesRepository()
-
+game_repo = GameRepository()
+series_rules_repo = SeriesRulesRepository()
+series_config_repo = SeriesConfigurationRepository()
 competition_config_repo = CompetitionConfigurationRepository()
 table_config_repo = TableSubCompetitionConfigurationRepository()
 ranking_group_config_repo = RankingGroupConfigurationRepository()
 competition_team_config_repo = CompetitionTeamConfigurationRepository()
 
 game_rules_repo.add(GameRules("Season Rules", True), session)
+game_rules_repo.add(GameRules("Playoff Rules", False), session)
 session.commit()
 
 # create all the teams
@@ -105,7 +115,39 @@ session.commit()
 session.commit()
 
 
-for i in range(5):
+playoff_game_rules = game_rules_repo.get_by_name("Playoff Rules", session)
+
+series_rules = SeriesByWinsRules("Best of 7", 2, playoff_game_rules, [0, 0, 1, 1, 0, 1, 0])
+series_rules_repo.add(series_rules, session)
+session.commit()
+
+playoff_config = PlayoffSubCompetitionConfiguration("Playoffs", competition_config, [], [], 2, 1, None)
+competition_config_repo.add(playoff_config, session)
+session.commit()
+
+r1_winners = RankingGroupConfiguration("R1 Winners", playoff_config, None, 1, 1, None)
+champion = RankingGroupConfiguration("Champion", playoff_config, None, 1, 1, None)
+runner_up = RankingGroupConfiguration("Runner Up", playoff_config, None, 1, 1, None)
+ranking_group_config_repo.add(r1_winners, session)
+ranking_group_config_repo.add(champion, session)
+ranking_group_config_repo.add(runner_up, session)
+session.commit()
+
+r1s1 = SeriesConfiguration("R1S1", 1, playoff_config, premier_division_config, 1, premier_division_config, 4, series_rules,
+                           r1_winners, premier_division_config, None, None, 1, None)
+r1s2 = SeriesConfiguration("R1S2", 1, playoff_config, premier_division_config, 2, premier_division_config, 3, series_rules,
+                           r1_winners, premier_division_config, None, None, 1, None)
+
+final = SeriesConfiguration("Final", 2, playoff_config, r1_winners, 1, r1_winners, 2, series_rules, champion,
+                            premier_division_config, runner_up, premier_division_config, 1, None)
+
+series_config_repo.add(r1s1, session)
+series_config_repo.add(r1s2, session)
+series_config_repo.add(final, session)
+session.commit()
+
+for i in range(50):
+    print("Beginning year " + str(i + 1))
 
     comp_config = competition_config_repo.get_by_oid(competition_config.oid, session)
 
@@ -120,9 +162,12 @@ for i in range(5):
     games = []
     season_rules = game_rules_repo.get_by_name("Season Rules", session)
 
-    games.extend(
-        create_games(standings_table.get_groups_by_level(1), 4, season_rules, standings_table.create_game, days,
-                     scheduler))
+    new_games = create_games(standings_table.get_groups_by_level(1), 4, season_rules, standings_table.create_game, days,
+                             scheduler)
+    [game_repo.add(g, session) for g in new_games]
+
+    session.commit()
+    games.extend(new_games)
 
     competition.start_competition()
 
@@ -138,9 +183,10 @@ for i in range(5):
     rand = random
 
     while not competition.finished:
-        print(competition.name + " Year: " + str(competition.year))
+        # print(competition.name + " Year: " + str(competition.year))
         new_games = competition.create_new_games(current_games=games)
         Scheduler.add_games_to_schedule(new_games, days, rand, current_day)
+        [game_repo.add(g, session) for g in new_games]
         games.extend(new_games)
         if current_day in days:
             day = days[current_day]
@@ -149,17 +195,49 @@ for i in range(5):
                 competition.process_game(g)
             competition.process_end_of_day(competition.sort_day_dictionary_to_incomplete_games_dictionary(days))
             game_day_view_model = GameService.games_to_game_day_view(day)
-            print(GameDayView.get_view(game_day_view_model))
+            # print(GameDayView.get_view(game_day_view_model))
         else:
             day = []
         last_day = current_day
         current_day += 1
 
+    session.commit()
+
     standings_table.sort_table_rankings()
 
-    print_group("Premier", standings_table, "Standings " + str(competition.year))
+    # print_group("Premier", standings_table, "Standings " + str(competition.year))
 
     session.commit()
 
-    input("Press enter to continue.")
+    playoff = competition.get_sub_competition("Playoffs")
+    for i in range(playoff.current_round):
+        series_list = playoff.get_series_for_round(i + 1)
+        for s in series_list:
+            home_value = -1
+            away_value = -1
+            if isinstance(s, SeriesByGoals):
+                home_value = s.home_goals
+                away_value = s.away_goals
+            elif isinstance(s, SeriesByWins):
+                home_value = s.home_wins
+                away_value = s.away_wins
 
+            view_model = SeriesViewModel(s.oid, s.name, s.sub_competition.competition.year, s.series_round, None,
+                                         TeamViewModel(s.home_team.oid, s.home_team.name, s.home_team.skill, True),
+                                         home_value,
+                                         TeamViewModel(s.away_team.oid, s.away_team.name, s.away_team.skill, True),
+                                         away_value,
+                                         "Done")
+            # print(SeriesView.get_basic_series_view(view_model))
+
+    # input("Press enter to continue.")
+
+competition_group_repo = CompetitionGroupRepository()
+
+groups = session.query(CompetitionGroup).filter(CompetitionGroup.name == "Champion")
+
+new_list = sorted(groups, key=lambda x: x.sub_competition.competition.year, reverse=True)
+
+print("Champions list")
+for g in new_list:
+    print(str(g.sub_competition.competition.year) + " " + g.rankings[0].team.name)
