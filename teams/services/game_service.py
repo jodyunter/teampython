@@ -2,6 +2,7 @@ from teams.data.repo.game_repository import GameRepository
 from teams.data.repo.record_repository import RecordRepository
 from teams.data.repo.rules_repository import GameRulesRepository
 from teams.data.repo.team_repository import TeamRepository
+from teams.domain import CompetitionGame
 from teams.domain.game import Game
 from teams.domain.scheduler import Scheduler
 from teams.services.base_service import BaseService
@@ -125,11 +126,8 @@ class GameService(BaseService):
         games_to_process = self.repo.get_by_unprocessed_and_complete(year, first_day, last_day, session)
 
         for game in games_to_process:
-            home_record = self.record_repo.get_by_team_and_year(game.home_team.oid, year, session)
-            away_record = self.record_repo.get_by_team_and_year(game.away_team.oid, year, session)
-
-            home_record.process_game(game.home_score, game.away_score)
-            away_record.process_game(game.away_score, game.home_score)
+            if game is CompetitionGame:
+                game.competition.process_game(game)
 
             game.processed = True
 

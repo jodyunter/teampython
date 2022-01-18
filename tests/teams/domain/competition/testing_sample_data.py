@@ -187,7 +187,7 @@ for i in range(50):
         new_games = competition.create_new_games(current_games=games)
         Scheduler.add_games_to_schedule(new_games, days, rand, current_day)
         [game_repo.add(g, session) for g in new_games]
-        games.extend(new_games)
+
         if current_day in days:
             day = days[current_day]
             for g in day:
