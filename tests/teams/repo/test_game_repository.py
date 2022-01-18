@@ -187,7 +187,20 @@ class GameRepoTests(BaseRepoTests, TestCase):
         session.commit()
 
         result = self.get_repo().get_list_days_teams_play_on(1, 1, 100, game2, session)
-        print(result)
+        self.assertTrue(5 in result)
+        self.assertTrue(1 in result)
+
+        result = self.get_repo().get_list_days_teams_play_on(1, 5, 100, game2, session)
+        self.assertTrue(5 in result)
+
+        result = self.get_repo().get_list_days_teams_play_on(1, 1, 4, game2, session)
+        self.assertTrue(1 in result)
+
+        result = self.get_repo().get_list_days_teams_play_on(1, 2, 4, game2, session)
+        self.assertEquals(0, len(result))
+
+        result = self.get_repo().get_list_days_teams_play_on(1, 6, 100, game2, session)
+        self.assertEquals(0, len(result))
 
 
 # todo: should probably generify the above methods to test
