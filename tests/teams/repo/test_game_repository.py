@@ -178,7 +178,7 @@ class GameRepoTests(BaseRepoTests, TestCase):
         session.commit()
         # first test, should be none because teams[0] plays on day 5
         game2 = Game(1, -1, teams[0], teams[2], 0, 1, True, True, gr, "L")
-        result = self.get_repo().get_list_days_teams_play_on(1, 1, 100, game2, session)
+        result = self.get_repo().get_invalid_schedule_days(1, 1, 100, [game2.home_team.oid, game2.away_team.oid], session)
 
         self.assertEquals(5, result[0])
 
@@ -186,20 +186,20 @@ class GameRepoTests(BaseRepoTests, TestCase):
         self.get_repo().add(game2, session)
         session.commit()
 
-        result = self.get_repo().get_list_days_teams_play_on(1, 1, 100, game2, session)
+        result = self.get_repo().get_invalid_schedule_days(1, 1, 100, [game2.home_team.oid, game2.away_team.oid], session)
         self.assertTrue(5 in result)
         self.assertTrue(1 in result)
 
-        result = self.get_repo().get_list_days_teams_play_on(1, 5, 100, game2, session)
+        result = self.get_repo().get_invalid_schedule_days(1, 5, 100, [game2.home_team.oid, game2.away_team.oid], session)
         self.assertTrue(5 in result)
 
-        result = self.get_repo().get_list_days_teams_play_on(1, 1, 4, game2, session)
+        result = self.get_repo().get_invalid_schedule_days(1, 1, 4, [game2.home_team.oid, game2.away_team.oid], session)
         self.assertTrue(1 in result)
 
-        result = self.get_repo().get_list_days_teams_play_on(1, 2, 4, game2, session)
+        result = self.get_repo().get_invalid_schedule_days(1, 2, 4, [game2.home_team.oid, game2.away_team.oid], session)
         self.assertEquals(0, len(result))
 
-        result = self.get_repo().get_list_days_teams_play_on(1, 6, 100, game2, session)
+        result = self.get_repo().get_invalid_schedule_days(1, 6, 100, [game2.home_team.oid, game2.away_team.oid], session)
         self.assertEquals(0, len(result))
 
 
