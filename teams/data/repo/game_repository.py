@@ -61,6 +61,19 @@ class GameRepository(Repository):
 
         return stmt
 
+    # based on a single team cannot play twice on the same day
+    def get_invalid_schedule_days(self, year, starting_day, ending_day, games, session):
+        home_id_list = [g.home_team.oid for g in games]
+        away_id_list = [g.away_team.oid for g in games]
+
+        id_list = [].append(home_id_list).append(away_id_list)
+
+        stmt = self.get_list_days_team_play_on_stmt(year, starting_day, ending_day, id_list, session)
+
+        result = session.execute(stmt).fetchall()
+
+        return [a[0] for a in result]
+
     def get_list_days_teams_play_on(self, year, starting_day, ending_day, game, session):
         stmt = self.get_list_days_team_play_on_stmt(year, starting_day, ending_day, [game.home_team.oid, game.away_team.oid])
 

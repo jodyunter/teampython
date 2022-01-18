@@ -146,6 +146,7 @@ class GameRepoTests(BaseRepoTests, TestCase):
         result = list(self.get_repo().get_by_unprocessed_and_complete(2, 1, 25, session))
         self.assertEqual(1, len(result))
 
+    # todo: still incomplete, how should we parameterized this?
     def test_get_first_day_for_game(self):
         session = self.setup_basic_test()
         Database.clean_up_database(session)
