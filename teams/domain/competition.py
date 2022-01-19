@@ -129,6 +129,7 @@ class Competition(Base):
         return self.finished
 
     # this is to accommodate the table sub comp's way of saying it's complete
+    # this should be a count of incomplete games
     # todo: this isn't great to do it this way
     def sort_day_dictionary_to_incomplete_games_dictionary(self, day_dictionary):
         incomplete_dictionary = {}
@@ -136,9 +137,9 @@ class Competition(Base):
             for game in day_dictionary[d]:
                 sub_comp_id = game.sub_competition.oid
                 if sub_comp_id not in incomplete_dictionary:
-                    incomplete_dictionary[sub_comp_id] = []
+                    incomplete_dictionary[sub_comp_id] = 0
                 if not game.complete or not game.processed:
-                    incomplete_dictionary[sub_comp_id].append(game)
+                    incomplete_dictionary[sub_comp_id] += 1
         return incomplete_dictionary
 
     def start_competition(self):

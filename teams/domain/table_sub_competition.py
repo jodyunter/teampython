@@ -55,7 +55,7 @@ class TableSubCompetition(SubCompetition):
     def is_complete(self, **kwargs):
         incomplete_games = kwargs.get("incomplete_games", None)
 
-        if incomplete_games is None or len(incomplete_games) == 0:
+        if incomplete_games is None or incomplete_games == 0:
             return True
         else:
             return False
