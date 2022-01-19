@@ -90,6 +90,7 @@ class AppService(BaseService):
 
         return day_is_complete
 
+    # todo: this should be about competitions being complete
     def is_year_complete(self, session=None):
         session = self.get_session(session)
         game_service = GameService()
@@ -101,7 +102,7 @@ class AppService(BaseService):
             return game_service.get_incomplete_games_by_year_count(game_data.current_year,
                                                                    session) <= 0
 
-    def play_and_process_games_for_current_day(self, r, session=None):
+    def play_and_process_games_for_current_day(self, rand, session=None):
         commit = session is None
         session = self.get_session(session)
 
@@ -111,7 +112,7 @@ class AppService(BaseService):
         game_data = repo.get_current_data(session)
 
         if not self.is_day_complete(session):
-            game_service.play_games_for_days(game_data.current_year, game_data.current_day, game_data.current_day, r,
+            game_service.play_games_for_days(game_data.current_year, game_data.current_day, game_data.current_day, rand,
                                              session)
             game_service.process_games_for_days(game_data.current_year, game_data.current_day, game_data.current_day,
                                                 session)
