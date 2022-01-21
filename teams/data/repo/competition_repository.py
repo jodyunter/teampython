@@ -10,6 +10,19 @@ class CompetitionRepository(Repository):
     def get_type(self):
         return Competition
 
+    def get_by_year(self, year, session):
+        dto_type = self.get_type()
+
+        return session.query(dto_type).filter(dto_type.year == year)
+
+    def get_by_year_and_status(self, setup, started, finished, post_processed, session):
+
+        dto_type = self.get_type()
+
+        return session.query(dto_type).filter(dto_type.setup == setup, dto_type.finished == finished,
+                                              dto_type.post_processed == post_processed,
+                                              dto_type.started == started)
+
 
 class SubCompetitionRepository(Repository):
 
